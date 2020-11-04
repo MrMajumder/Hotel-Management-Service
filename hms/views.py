@@ -68,7 +68,7 @@ def insert(request):
 
         connection.commit()
         cursor.close()
-        return render(request, 'index.html', {'login' : conf.login, 'sign' : True, 'user' : conf.getuser()})
+        return render(request, 'index.html', {'loginid' :count + 100, 'login' : conf.login, 'sign' : True, 'user' : conf.getuser()})
 
     return render(request, 'signup.html', {'sign' : False})
     
