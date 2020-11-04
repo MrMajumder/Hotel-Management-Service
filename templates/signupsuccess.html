@@ -1,0 +1,17 @@
+{% extends 'starter.html' %}
+
+{% block title %} signup successfull {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+{% block body %}
+{% load static %}
+
+<h1>
+    sign up successfully done.
+</h1>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% load static %}
+<!-- Modal -->
+<style>
+    .modal-dialog {
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: 300px;
+        overflow: auto;
+        overflow-y: auto;
+    }
+</style>
+<div class="modal fade" id="usermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header d-block text-center my-0 pt-3 pb-0">
+                <img src="{% static 'img/user.png' %}" height='60' width='60' alt=" user">
+                <h5 class="modal-title" id="usermodal">{% block uname %}{% endblock %}</h5>
+                <p class="text-secondary">{% block email %}{% endblock %}</p>
+            </div>
+            <div class="modal-body m-0 p-0">
+                <!-- <a class="text-light" href="#">Profile</a> <br>
+                <a class="text-light" href="#">Reservations</a> <br>
+                <a class="text-light" href="#">User History</a><br>
+                <a class="text-light" href="#">Services</a><br>
+                <a class="text-light" href="#">Complaint</a><br> -->
+                <table class="table table-sm table-dark w-100 m-0 p-0 table-hover">
+                    <tbody class="text-center">
+                        <tr>
+                            <td><a href="{% block l1 %}{% endblock %}" class="text-light">Profile</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{% block l2 %}{% endblock %}" class="text-light">Reservations</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{% block l3 %}{% endblock %}" class="text-light">User History</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{% block l4 %}{% endblock %}" class="text-light">Services</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{% block l5 %}{% endblock %}" class="text-light">Complaint</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- <ul>
+                    <li>Profile</li>
+                    <li>Reservations</li>
+                    <li>User History</li>
+                    <li>Services</li>
+                    <li>Complaint</li>
+                </ul> -->
+            </div>
+            <div class="modal-footer ">
+                <form class="form-inline mx-auto">
+                    <a class="btn btn-primary mx-auto" href="{{ HTTP_HOST }}/logout/" role="button">Log Out</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

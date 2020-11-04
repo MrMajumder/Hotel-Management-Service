@@ -1,0 +1,172 @@
+{% extends 'starter.html' %}
+
+{% block title %} signup {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+
+
+{% block body %}
+{% load static %}
+
+{% if sign %}
+<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+    <strong>Please fill up the form.</strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% else %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+    <strong>Signup Unsuccessful!</strong> Please recheck your password.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+
+<div class="container text-center">
+    <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
+    <h3>
+        Sign Up Form
+    </h3>
+    <p>------------------------------</p>
+</div>
+
+<!--form section-->
+<form action='{{ HTTP_HOST }}/signsuccess/' method='post' class="needs-validation my-4 container" novalidate>
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="validationCustom01">First name</label>
+            <input type="text" class="form-control" name='user' id="validationCustom01" value="Mark" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="validationCustom02">Last name</label>
+            <input type="text" class="form-control" name='lastn' id="validationCustom02" value="Otto" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="validationCustom04">Password</label>
+            <input type="password" name='pass' class="form-control" id="validationCustom03" required>
+            <div class="invalid-feedback">
+                Please select a valid password.
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="validationCustom05">Rewrite Password</label>
+            <input type="password" name='repass' class="form-control" id="validationCustom04" required>
+            <div class="invalid-feedback">
+                Please confirm your password.
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="validationCustom03">Email</label>
+            <input type="email" name='email' class="form-control" id="validationCustom05" required >
+            <div class="invalid-feedback">
+                Please provide a valid email.
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">House No</label>
+            <input type="text" name='house' class="form-control" id="validationCustom06">
+
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">Road No</label>
+            <input type="text" name='road' class="form-control" id="validationCustom07">
+
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom01">Phone number</label>
+            <input type="text" name='phnumber' class="form-control" id="validationCustom08" required >
+
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">Id card no</label>
+            <input type="number" name='idcard' class="form-control" id="validationCustom09">
+
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">credit card no</label>
+            <input type="number" name='creditcard' class="form-control" id="validationCustom10">
+
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">passport no</label>
+            <input type="number" name='passport' class="form-control" id="validationCustom11">
+
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom03">City</label>
+            <input type="text" name='city' class="form-control" id="validationCustom12">
+            <div class="invalid-feedback">
+                Please provide a valid city.
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom04">Country</label>
+            <input type="text" name='country' class="form-control" id="validationCustom13">
+            <div class="invalid-feedback">
+                Please provide a valid Country.
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+            <label class="form-check-label" for="invalidCheck">
+                Agree to terms and conditions
+            </label>
+            <div class="invalid-feedback">
+                You must agree before submitting.
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Sign Up</button>
+</form>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

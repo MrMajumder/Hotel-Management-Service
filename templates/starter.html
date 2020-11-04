@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>{% block title %} {% endblock %}</title>
+    <style>{% block style %} {% endblock %}</style>
+</head>
+
+<body>
+    {% load static %}
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a href="/" class="navbar-brand">
+                <img src="{% static 'img/logo.png' %}" height='70' width='70' class="d-inline-block" alt="logo">
+                <h4 class='text-light d-inline-block'>X Hotel International</h4>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{{ HTTP_HOST }}/about/">About <span class="sr-only">(current)</span></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ HTTP_HOST }}/contact/">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            {% block navshow %}
+                {% if login %}
+                <img src="{% static 'img/user.png' %}" class="mx-2" alt="" width="30" height="30" data-toggle="modal" data-target="#usermodal">
+                {% else %}
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="btn btn-dark my-2 mx-2 my-sm-0" href="{{ HTTP_HOST }}/login/" role="button">Log In</a>
+                    <a class="btn btn-primary my-2 my-sm-0" href="{{ HTTP_HOST }}/signup/" role="button">Sign Up</a>
+                </form>
+                {% endif %}
+            {% endblock navshow %}
+        </div>
+    </nav>
+
+    {% block body %} {% endblock %}
+
+    <!-- footer -->
+    <footer class="container-fluid bg-dark text-light">
+        <div class="row text-center">
+            <div class="col-4">
+                <hr style="color:white" />
+                <img src="{% static 'img/logo.png' %}" height='50' width='50' alt="logo">
+                <hr style="color:white" />
+                <p>+880 000 000 000 0</p>
+                <p>email@email.com</p>
+                <p>100, street name</p>
+            </div>
+            <div class="col-4">
+                <div class="col"><hr></div>
+                <div class="col-auto">Office Hours</div>
+                <div class="col"><hr></div>
+                <p>Check In: 9am to 5 pm</p>
+                <p>Check Out: 9am to 2 pm</p>
+                <p>Open Everyday</p>
+            </div>
+            <div class="col-4">
+                <hr style="color:white" />
+                <p>Social Media</p>
+                <hr style="color:white" />
+                <p>Facebook</p>
+                <p>LinkedIn</p>
+                <p>Instagram</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

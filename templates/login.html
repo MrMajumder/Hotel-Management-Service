@@ -1,0 +1,69 @@
+{% extends 'starter.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+{% block body %}
+{% load static %}
+
+{% if alerttoggle %}
+<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+    <strong>Log into your Account.</strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% else %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+    <strong>Login Unsuccessful!</strong> Please recheck your password/or other details.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+
+<!--form section-->
+<div class="container text-center my-5">
+    <form action='{{ HTTP_HOST }}/loginsuccess/' method='post' class="form-signin">
+        {% csrf_token %}
+        <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+        <label for="inputEmail" class="sr-only">LOGIN ID</label>
+        <input type="number" name='id' id="inputid" class="form-control mx-auto" style="width: 500px;"
+            placeholder="LOGIN ID" required="" autofocus="">
+
+        <label for="inputEmail" class="sr-only">User Name/First name</label>
+        <input type="text" name='user' id="inputEmail" class="form-control mx-auto" style="width: 500px;"
+            placeholder="User Name/ First Name" required="" autofocus="">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name='password' id="inputPassword" class="form-control mx-auto" style="width: 500px;"
+            placeholder="Password" required="">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="AcCheck" id="inlineRadio1" value="employee" required>
+            <label class="form-check-label" for="inlineRadio1">Employee</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="AcCheck" id="inlineRadio2" value="customer">
+            <label class="form-check-label" for="inlineRadio2">Customer</label>
+        </div>
+        <div class="checkbox mb-3 my-2">
+            <!-- <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label> -->
+            <button class="btn btn-lg btn-primary btn-bloc mx-auto" style="width: 200px;" type="submit">Sign in</button>
+
+        </div>
+        <!-- <button class="btn btn-lg btn-primary btn-bloc mx-auto" style="width: 200px;" type="submit">Sign in</button> -->
+
+
+    </form>
+
+</div>
+
+{% endblock %}
