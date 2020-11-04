@@ -21,7 +21,7 @@
         <div class="container-fluid">
             <a href="/" class="navbar-brand">
                 <img src="{% static 'img/logo.png' %}" height='70' width='70' class="d-inline-block" alt="logo">
-                <h4 class='text-light d-inline-block'>X Hotel International</h4>
+                <h4 class='text-light d-inline-block'>Hard Rock Hotel</h4>
             </a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -60,27 +60,26 @@
     {% block body %} {% endblock %}
 
     <!-- footer -->
-    <footer class="container-fluid bg-dark text-light">
+    <footer class="navbar-static-bottom container-fluid bg-dark text-light">
         <div class="row text-center">
             <div class="col-4">
                 <hr style="color:white" />
-                <img src="{% static 'img/logo.png' %}" height='50' width='50' alt="logo">
-                <hr style="color:white" />
+                <img src="{% static 'img/logo.png' %}"  class="mb-1 mt-0" height='70' width='70' alt="logo">
                 <p>+880 000 000 000 0</p>
                 <p>email@email.com</p>
                 <p>100, street name</p>
             </div>
             <div class="col-4">
                 <div class="col"><hr></div>
-                <div class="col-auto">Office Hours</div>
+                <div class="col-auto h5">Office Hours</div>
                 <div class="col"><hr></div>
                 <p>Check In: 9am to 5 pm</p>
                 <p>Check Out: 9am to 2 pm</p>
-                <p>Open Everyday</p>
+                <p>(Open Everyday)</p>
             </div>
             <div class="col-4">
                 <hr style="color:white" />
-                <p>Social Media</p>
+                <p class="h5">Social Media</p>
                 <hr style="color:white" />
                 <p>Facebook</p>
                 <p>LinkedIn</p>
