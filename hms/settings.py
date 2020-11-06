@@ -26,7 +26,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'customer'
+    'customer',
+    'employee'
 ]
 
 MIDDLEWARE = [
@@ -67,8 +68,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'ORCL',
-        'USER': 'sourov',
-        'PASSWORD': '1234',
+        'USER': 'shahal',
+        'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '1521'
     }
