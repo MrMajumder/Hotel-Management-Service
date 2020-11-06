@@ -90,7 +90,7 @@ def enter_account(request):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     id = request.POST.get('id', 'default')
-    user = request.POST.get('user', 'default')
+
     password = request.POST.get('password', 'default')
     Atype = request.POST.get('AcCheck', 'default')
     id = int(id)
@@ -102,7 +102,7 @@ def enter_account(request):
     cursor.close()
 
     for r in result:
-        if(r[0] == id and r[1] == user and hashing.verify_password(r[2], password) and r[3] == Atype):
+        if(r[0] == id and hashing.verify_password(r[2], password) and r[3] == Atype):
             conf.login = True
             cursor = connection.cursor()
             sql = ("SELECT * FROM ACCOUNT_HOLDER WHERE LOGIN_ID=%s" %r[0])
