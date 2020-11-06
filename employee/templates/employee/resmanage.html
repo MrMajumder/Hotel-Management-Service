@@ -1,0 +1,17 @@
+{% extends 'starter.html' %}
+
+{% block title %} Reservation Management {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+{% block body %}
+{% load static %}
+{% include 'modal.html' with user=user %}
+
+<h1>reservation management</h1>here show reservations, make reservations, delete reservations
+
+{% endblock %}

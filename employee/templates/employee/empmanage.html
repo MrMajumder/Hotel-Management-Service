@@ -1,0 +1,17 @@
+{% extends 'starter.html' %}
+
+{% block title %} Employee Management {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+{% block body %}
+{% load static %}
+{% include 'modal.html' with user=user %}
+
+<h1>employee management</h1> managers can manage their managed employees
+
+{% endblock %}

@@ -1,8 +1,86 @@
-{% extends 'modalb.html' %}
-{% block uname %}{{user.name}}{% endblock %}
-{% block email %}{{user.email}}{% endblock %}
-{% block l1 %}{{ HTTP_HOST }}/customer/profile/{% endblock %}
-{% block l2 %}{{ HTTP_HOST }}/customer/reservations/{% endblock %}
-{% block l3 %}{{ HTTP_HOST }}/customer/history/{% endblock %}
-{% block l4 %}{{ HTTP_HOST }}/customer/services/{% endblock %}
-{% block l5 %}{{ HTTP_HOST }}/customer/complaint/{% endblock %}
+{% load static %}
+<!-- Modal -->
+<style>
+    .modal-dialog {
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: 300px;
+        overflow: auto;
+        overflow-y: auto;
+    }
+</style>
+<div class="modal fade" id="usermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header d-block text-center my-0 pt-3 pb-0">
+                <img src="{% static 'img/user.png' %}" height='60' width='60' alt=" user">
+                <h5 class="modal-title" id="usermodal">{{user.username}}</h5>
+                <p class="text-secondary">{{user.email}}</p>
+            </div>
+            <div class="modal-body m-0 p-0">
+                <!-- <a class="text-light" href="#">Profile</a> <br>
+                <a class="text-light" href="#">Reservations</a> <br>
+                <a class="text-light" href="#">User History</a><br>
+                <a class="text-light" href="#">Services</a><br>
+                <a class="text-light" href="#">Complaint</a><br> -->
+                <table class="table table-sm table-dark w-100 m-0 p-0 table-hover">
+                    <tbody class="text-center">
+                        {% if user.role == "customer" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/customer/profile/" class="text-light">Profile</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/customer/reservations/" class="text-light">Reservations</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/customer/history/" class="text-light">User History</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/customer/services/" class="text-light">Services</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/customer/complaint/" class="text-light">Complaint</a></td>
+                        </tr>
+                    </tbody>
+                    {% else %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/profile/" class="text-light">Profile</a></td>
+                        </tr>
+                        {% if user.role == "staff" or user.role == "manager" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/resmanage/" class="text-light">Reservation Management</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if user.role == "staff" or user.role == "manager" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/servmanage/" class="text-light">Services Management</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if user.role == "manager" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/empreg/" class="text-light">Employee Registration</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if user.role == "manager" or user.role == "director" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/empmanage/" class="text-light">Managed Employees</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if user.role == "director" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/hoteloverview/" class="text-light">Hotel Overview</a></td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                    {% endif %}
+                </table>
+            </div>
+            <div class="modal-footer ">
+                <form class="form-inline mx-auto">
+                    <a class="btn btn-primary mx-auto" href="{{ HTTP_HOST }}/logout/" role="button">Log Out</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
