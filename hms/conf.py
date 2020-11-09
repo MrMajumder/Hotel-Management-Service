@@ -1,9 +1,15 @@
+def role_set(s):
+    global role
+    role = s
+
+
+
 login = False
 user_id = ''
 username = ''
 name = ''
 email = ''
-role = 'director'
+role = ''
 #roles can be customer, staff, manager, director, (admin?)
 
 def getuser():
