@@ -39,25 +39,39 @@
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/customer/services/" class="text-light">Services</a></td>
                         </tr>
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/customer/complaint/" class="text-light">Complaint</a></td>
-                        </tr>
+                        
                     </tbody>
                     {% else %}
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/profile/" class="text-light">Profile</a></td>
                         </tr>
-                        {% if user.role == "staff" or user.role == "manager" %}
+                        {% if user.role == "director" or user.role == "manager" %}
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/resmanage/" class="text-light">Reservation Management</a></td>
                         </tr>
                         {% endif %}
-                        {% if user.role == "staff" or user.role == "manager" %}
+                        {% if user.role == "manager" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/expense/" class="text-light">Hotel expenses entry</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/eattend/" class="text-light">Employee Attendence</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if user.role == "employee" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/servEx/" class="text-light">Service Executed</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/workh/" class="text-light">Work History</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if user.role == "employee" or user.role == "manager" %}
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/servmanage/" class="text-light">Services Management</a></td>
                         </tr>
                         {% endif %}
-                        {% if user.role == "manager" %}
+                        {% if user.role == "manager" or user.role == "director" %}
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/signup/" class="text-light">Employee Registration</a></td>
                         </tr>
@@ -68,6 +82,9 @@
                         </tr>
                         {% endif %}
                         {% if user.role == "director" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/fire/" class="text-light">Fire a Employee.</a></td>
+                        </tr>
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/hoteloverview/" class="text-light">Hotel Overview</a></td>
                         </tr>

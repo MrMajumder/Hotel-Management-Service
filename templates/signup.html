@@ -13,13 +13,13 @@
 
 {% block body %}
 {% load static %}
-{% if manager %}
-    {% include 'modal.html' with user=user %}
+{% if ementry %}
+{% include 'modal.html' with user=user %}
 {% endif %}
 
 {% if sign %}
 <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-    
+
     <strong>Please fill up the form.</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -37,9 +37,16 @@
 
 <div class="container text-center">
     <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
+
+    {% if ementry %}
+    <h3>
+        Employee Registration Form
+    </h3>
+    {% else %}
     <h3>
         Sign Up Form
     </h3>
+    {% endif %}
     <p>------------------------------</p>
 </div>
 
@@ -54,10 +61,10 @@
                 Looks good!
             </div>
         </div>
-        
+
         <div class="col-md-6 mb-3">
             <label for="validationCustom02">Last name</label>
-            <input type="text" class="form-control" name = 'lastn' id="validationCustom02" value="Otto" required>
+            <input type="text" class="form-control" name='lastn' id="validationCustom02" value="Otto" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -143,25 +150,25 @@
         </div>
     </div>
 
-    {% if manager %}
+    {% if ementry %}
     <div class="form-row">
         <div class="col-md-3 mb-3">
             <label for="exampleFormControlSelect1">Services Select</label>
-            <select class="form-control" name = "position" id="exampleFormControlSelect1">
-              <option>WAITER</option>
-              <option>ACCOUNTANT</option>
-              <option>LAUNDRY SERVICER</option>
-              <option>FOOD DELIVARY MAN</option>
-              <option>HE HE! BOLBO NA</option>
+            <select class="form-control" name="position" id="exampleFormControlSelect1">
+                <option>WAITER</option>
+                <option>ACCOUNTANT</option>
+                <option>LAUNDRY SERVICER</option>
+                <option>FOOD DELIVARY MAN</option>
+                <option>HE HE! BOLBO NA</option>
             </select>
-          </div>
+        </div>
         <div class="col-md-3 mb-3">
             <label for="exampleFormControlSelect1">Permission</label>
-            <select class="form-control" name = "permission" id="exampleFormControlSelect2">
-              <option>YES</option>
-              <option>NO</option>
+            <select class="form-control" name="permission" id="exampleFormControlSelect2">
+                <option>YES</option>
+                <option>NO</option>
             </select>
-          </div>
+        </div>
         <div class="col-md-3 mb-3">
             <label for="validationCustom02">Base Salary</label>
             <input type="number" name='salary' class="form-control" id="validationCustom116">

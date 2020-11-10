@@ -12,8 +12,8 @@ def contact(request):
     return render(request, 'contact.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def signup(request):
-    if(conf.login == True and conf.role == 'manager'):
-        return render(request, 'signup.html', {'login' : conf.login, 'sign' : True, 'user' : conf.getuser(), 'manager' : True})
+    if(conf.login == True and (conf.role == 'manager' or conf.role == 'director')):
+        return render(request, 'signup.html', {'login' : conf.login, 'sign' : True, 'user' : conf.getuser(), 'ementry' : True})
     if(conf.login == False):
         return render(request, 'signup.html', {'login' : conf.login, 'sign' : True, 'user' : conf.getuser()})
     else:
@@ -23,7 +23,7 @@ def about(request):
     return render(request, 'about.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def insert(request):
-    if(conf.login and conf.role != 'manager'):
+    if(conf.login and (conf.role != 'manager' and conf.role != 'director')):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     cursor = connection.cursor()
     sql = "SELECT count(*) FROM ACCOUNT_HOLDER"
@@ -45,10 +45,10 @@ def insert(request):
     country = request.POST.get('country', '')
     house = request.POST.get('house', '')
     road = request.POST.get('road', '')
-    if(conf.role != 'manager'):
+    if(conf.role != 'manager' and conf.role != 'director'):
         conf.role_set('customer')
     
-    if(conf.role == 'manager'):
+    if(conf.role == 'manager' or conf.role == 'director'):
         position = request.POST.get('position', '')
         permission = request.POST.get('permission', 'NO')
         salary = request.POST.get('salary', '')
@@ -63,7 +63,7 @@ def insert(request):
         password = hashing.hash_password(password)
         # print(password)
         role = 'customer'
-        if(conf.role == 'manager'):
+        if(conf.role == 'manager' or conf.role == 'director'):
             role = 'employee'
         cursor.execute(sql, [count + 100, name, password, role])
         sql1 = "INSERT INTO ACCOUNT_HOLDER VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -78,7 +78,7 @@ def insert(request):
         cursor.execute(sql3, [count + 1, email])
         sql4 = "INSERT INTO CUSTOMER VALUES(%s, %s, %s, %s)"
         cursor.execute(sql4, [count + 1, idcard, credit, passport])
-        if(conf.role == 'manager'):
+        if(conf.role == 'manager' or conf.role == 'director'):
             sql5 = "INSERT INTO EMPLOYEE VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(sql5, [count + 1, mid, position, workd, permission, salary, '', ''])
             print('hello2')
