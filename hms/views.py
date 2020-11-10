@@ -141,7 +141,9 @@ def enter_account(request):
                 mi = cursor.fetchall()
                 print(mi)
                 print(mi[0][0])
-                if(mi[0][0] == 'YES'):
+                if(mi[0][0] == '1'):
+                    conf.role = 'director'
+                if(mi[0][0] == '2'):
                     conf.role = 'manager'
                     print(conf.role)
             cursor.close()
