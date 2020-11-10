@@ -36,18 +36,17 @@
 
 
 <div class="container text-center">
-    <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
+    <img class="mt-2 mb-0" src="{% static 'img/logo.png' %}" alt="" width="200" height="200">
 
     {% if ementry %}
-    <h3>
+    <h3 class="display-4 mb-5">
         Employee Registration Form
     </h3>
     {% else %}
-    <h3>
+    <h3 class="display-4 mb-5">
         Sign Up Form
     </h3>
     {% endif %}
-    <p>------------------------------</p>
 </div>
 
 <!--form section-->
@@ -56,7 +55,7 @@
     <div class="form-row">
         <div class="col-md-6 mb-3">
             <label for="validationCustom01">First name</label>
-            <input type="text" class="form-control" name='user' id="validationCustom01" value="Mark" required>
+            <input type="text" class="form-control" name='user' id="validationCustom01" placeholder="First Name" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -64,7 +63,7 @@
 
         <div class="col-md-6 mb-3">
             <label for="validationCustom02">Last name</label>
-            <input type="text" class="form-control" name='lastn' id="validationCustom02" value="Otto" required>
+            <input type="text" class="form-control" name='lastn' id="validationCustom02" placeholder="Last Name" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -92,7 +91,7 @@
     <div class="form-row">
         <div class="col-md-6 mb-3">
             <label for="validationCustom03">Email</label>
-            <input type="email" name='email' class="form-control" id="validationCustom05" required>
+            <input type="email" name='email' class="form-control" id="validationCustom05" placeholder="example@example.com" required>
             <div class="invalid-feedback">
                 Please provide a valid email.
             </div>
@@ -113,7 +112,7 @@
     <div class="form-row">
         <div class="col-md-3 mb-3">
             <label for="validationCustom01">Phone number</label>
-            <input type="text" name='phnumber' class="form-control" id="validationCustom08" required>
+            <input type="text" name='phnumber' class="form-control" id="validationCustom08" placeholder="01xxxxxxxxx" required>
 
         </div>
         <div class="col-md-3 mb-3">

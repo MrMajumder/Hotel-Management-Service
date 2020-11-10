@@ -28,11 +28,11 @@
 {% endif %}
 
 <!--form section-->
-<div class="container text-center my-5">
+<div class="container text-center my-2">
     <form action='{{ HTTP_HOST }}/loginsuccess/' method='post' class="form-signin">
         {% csrf_token %}
-        <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <img class="mt-2 mb-0 pb-0" src="{% static 'img/logo.png' %}" alt="" width="200" height="200">
+        <h1 class="display-4 mb-4">Please sign in</h1>
 
         <label for="inputEmail" class="sr-only">LOGIN ID</label>
         <input type="number" name='id' id="inputid" class="form-control mx-auto" style="width: 500px;"

@@ -7,6 +7,8 @@ urlpatterns = [
     path('', views.index, name='home'),
     path('customer/', include('customer.urls')),
     path('employee/', include('employee.urls')),
+    path('reservation/', include('reservation.urls')),
+    path('service/', include('service.urls')),
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
     path('signup/',views.signup, name='signup'),
