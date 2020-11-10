@@ -4,18 +4,23 @@
 
 {% block style %} {% endblock %}
 
+{%block navshows %}
 {%block navshow %}
 {% with login=login %} {{block.super}} {% endwith %}
 {%endblock navshow %}
-
+{%endblock navshows %}
 
 
 {% block body %}
 {% load static %}
+{% if ementry %}
+{% include 'modal.html' with user=user %}
+{% endif %}
 
 {% if sign %}
 <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-    <strong>Please fill up the form.</strong> 
+
+    <strong>Please fill up the form.</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -29,11 +34,19 @@
 </div>
 {% endif %}
 
+
 <div class="container text-center">
     <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
+
+    {% if ementry %}
+    <h3>
+        Employee Registration Form
+    </h3>
+    {% else %}
     <h3>
         Sign Up Form
     </h3>
+    {% endif %}
     <p>------------------------------</p>
 </div>
 
@@ -48,6 +61,7 @@
                 Looks good!
             </div>
         </div>
+
         <div class="col-md-6 mb-3">
             <label for="validationCustom02">Last name</label>
             <input type="text" class="form-control" name='lastn' id="validationCustom02" value="Otto" required>
@@ -78,7 +92,7 @@
     <div class="form-row">
         <div class="col-md-6 mb-3">
             <label for="validationCustom03">Email</label>
-            <input type="email" name='email' class="form-control" id="validationCustom05" required >
+            <input type="email" name='email' class="form-control" id="validationCustom05" required>
             <div class="invalid-feedback">
                 Please provide a valid email.
             </div>
@@ -99,7 +113,7 @@
     <div class="form-row">
         <div class="col-md-3 mb-3">
             <label for="validationCustom01">Phone number</label>
-            <input type="text" name='phnumber' class="form-control" id="validationCustom08" required >
+            <input type="text" name='phnumber' class="form-control" id="validationCustom08" required>
 
         </div>
         <div class="col-md-3 mb-3">
@@ -135,6 +149,47 @@
             </div>
         </div>
     </div>
+
+    {% if ementry %}
+    <div class="form-row">
+        <div class="col-md-3 mb-3">
+            <label for="exampleFormControlSelect1">Services Select</label>
+            <select class="form-control" name="position" id="exampleFormControlSelect1">
+                <option>WAITER</option>
+                <option>ACCOUNTANT</option>
+                <option>LAUNDRY SERVICER</option>
+                <option>FOOD DELIVARY MAN</option>
+                <option>HE HE! BOLBO NA</option>
+            </select>
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="exampleFormControlSelect1">Permission</label>
+            <select class="form-control" name="permission" id="exampleFormControlSelect2">
+                <option>YES</option>
+                <option>NO</option>
+            </select>
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">Base Salary</label>
+            <input type="number" name='salary' class="form-control" id="validationCustom116">
+
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">Manager Id</label>
+            <input type="number" name='mid' class="form-control" id="validationCustom17">
+
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <label for="validationCustom01">Work Description</label>
+            <input type="text" name='workd' class="form-control" id="validationCustom18" required>
+        </div>
+
+        <button class="btn btn-primary mb-2" type="submit">Confirm Employee.</button>
+    </div>
+
+
+    {% else %}
     <div class="form-group">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
@@ -147,6 +202,7 @@
         </div>
     </div>
     <button class="btn btn-primary" type="submit">Sign Up</button>
+    {% endif %}
 </form>
 
 <script>

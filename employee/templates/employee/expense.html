@@ -1,0 +1,17 @@
+{% extends 'starter.html' %}
+
+{% block title %} Services Management {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+{% block body %}
+{% load static %}
+{% include 'modal.html' with user=user %}
+
+<h1>service management</h1>This is hotel expenses page...
+
+{% endblock %}
