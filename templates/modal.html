@@ -1,7 +1,7 @@
 {% load static %}
 <!-- Modal -->
 <style>
-    .modal-dialog {
+    .user-modal {
         position: absolute;
         top: 60px;
         right: 20px;
@@ -11,7 +11,7 @@
     }
 </style>
 <div class="modal fade" id="usermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog user-modal">
         <div class="modal-content bg-dark text-light">
             <div class="modal-header d-block text-center my-0 pt-3 pb-0">
                 <img src="{% static 'img/user.png' %}" height='60' width='60' alt=" user">

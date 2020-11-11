@@ -62,7 +62,7 @@ def index(request):
 def res(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'customer/reservation.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def his(request):
     if(conf.login == False):

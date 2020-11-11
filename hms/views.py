@@ -79,8 +79,9 @@ def insert(request):
         sql4 = "INSERT INTO CUSTOMER VALUES(%s, %s, %s, %s)"
         cursor.execute(sql4, [count + 1, idcard, credit, passport])
         if(conf.role == 'manager' or conf.role == 'director'):
+            print(count + 1, mid, position, workd, permission, salary)
             sql5 = "INSERT INTO EMPLOYEE VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql5, [count + 1, mid, position, workd, permission, salary, '', ''])
+            cursor.execute(sql5, [count + 1, conf.user_id, position, workd, permission, salary, '', ''])
             print('hello2')
 
         connection.commit()
@@ -117,6 +118,7 @@ def enter_account(request):
     # print(result)
     cursor.close()
 
+    # 
     for r in result:
         if(r[0] == id and hashing.verify_password(r[2], password) and r[3] == Atype):
             conf.role = 'customer'
