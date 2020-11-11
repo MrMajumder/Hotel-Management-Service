@@ -57,6 +57,9 @@
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/eattend/" class="text-light">Employee Attendence</a></td>
                         </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/empsalary/" class="text-light">Salary Payment of Employees</a></td>
+                        </tr>
                         {% endif %}
                         {% if user.role == "employee" %}
                         <tr>
@@ -87,6 +90,9 @@
                         </tr>
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/hoteloverview/" class="text-light">Hotel Overview</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/mansalary/" class="text-light">Salary Payment of Managers</a></td>
                         </tr>
                         {% endif %}
                     </tbody>

@@ -13,5 +13,7 @@ urlpatterns = [
     path('eattend/', views.eattend, name = 'employeeattendence'),
     path('fire/', views.fire, name = 'employeefire'),
     path('workh/', views.workh, name = 'workhistory'),
-    path('servEx/', views.serveEx, name = 'serviceExecuted')
+    path('servEx/', views.serveEx, name = 'serviceExecuted'),
+    path('empsalary/', views.empsalary, name = 'employeesalary'),
+    path('mansalary/', views.mansalary, name = 'managersalary')
 ]

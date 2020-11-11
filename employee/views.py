@@ -36,3 +36,9 @@ def workh(request):
 
 def serveEx(request):
     return render(request, 'employee/serveEx.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+def empsalary(request):
+    return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+def mansalary(request):
+    return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
