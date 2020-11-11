@@ -38,9 +38,6 @@ def insert(request):
     repassword = request.POST.get('repass', 'default')
     email = request.POST.get('email', 'default')
     phnumber = request.POST.get('phnumber', 'default')
-    idcard = request.POST.get('idcard', '')
-    credit = request.POST.get('creditcard', '')
-    passport = request.POST.get('passport', '')
     city = request.POST.get('city', '')
     country = request.POST.get('country', '')
     house = request.POST.get('house', '')
@@ -56,12 +53,16 @@ def insert(request):
         workd = request.POST.get('workd', '')
         print(position)
         print(permission)
+    else:
+        idcard = request.POST.get('idcard', '')
+        credit = request.POST.get('creditcard', '')
+        passport = request.POST.get('passport', '')
+
     
     if(password == repassword):
         cursor = connection.cursor()
         sql = "INSERT INTO LOG_IN VALUES(%s, %s, %s, %s)"
         password = hashing.hash_password(password)
-        # print(password)
         role = 'customer'
         if(conf.role == 'manager' or conf.role == 'director'):
             role = 'employee'
@@ -71,18 +72,21 @@ def insert(request):
         phnumber = funcs.split(phnumber)
         for i in phnumber:
             s = funcs.rspace(i)
-            # print(s)
             sql2="INSERT INTO ACCOUNT_HOLDER_PHNUMBER VALUES(%s, %s)"
             cursor.execute(sql2, [count + 1, int(s)])
         sql3 = "INSERT INTO ACCOUNT_HOLDER_EMAIL VALUES(%s, %s)"
         cursor.execute(sql3, [count + 1, email])
-        sql4 = "INSERT INTO CUSTOMER VALUES(%s, %s, %s, %s)"
-        cursor.execute(sql4, [count + 1, idcard, credit, passport])
         if(conf.role == 'manager' or conf.role == 'director'):
             print(count + 1, mid, position, workd, permission, salary)
             sql5 = "INSERT INTO EMPLOYEE VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql5, [count + 1, conf.user_id, position, workd, permission, salary, '', ''])
+            cursor.execute(sql5, [count + 1, "", position, workd, permission, salary, '', ''])
+            sql6 = "UPDATE EMPLOYEE SET MANAGER_ID = %s where USER_ID = %s"
+            cursor.execute(sql6, [mid, count + 1])
             print('hello2')
+        else:
+            sql4 = "INSERT INTO CUSTOMER VALUES(%s, %s, %s, %s)"
+            cursor.execute(sql4, [count + 1, idcard, credit, passport])
+
 
         connection.commit()
         cursor.close()
@@ -117,10 +121,9 @@ def enter_account(request):
     result = cursor.fetchall()
     # print(result)
     cursor.close()
-
-    # 
+#  hashing.verify_password(r[2], password)
     for r in result:
-        if(r[0] == id and hashing.verify_password(r[2], password) and r[3] == Atype):
+        if(r[0] == id and  hashing.verify_password(r[2], password) and r[3] == Atype):
             conf.role = 'customer'
             conf.login = True
             cursor = connection.cursor()

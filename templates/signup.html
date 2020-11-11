@@ -116,24 +116,6 @@
 
         </div>
         <div class="col-md-3 mb-3">
-            <label for="validationCustom02">Id card no</label>
-            <input type="number" name='idcard' class="form-control" id="validationCustom09">
-
-        </div>
-        <div class="col-md-3 mb-3">
-            <label for="validationCustom02">credit card no</label>
-            <input type="number" name='creditcard' class="form-control" id="validationCustom10">
-
-        </div>
-        <div class="col-md-3 mb-3">
-            <label for="validationCustom02">passport no</label>
-            <input type="number" name='passport' class="form-control" id="validationCustom11">
-
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="col-md-3 mb-3">
             <label for="validationCustom03">City</label>
             <input type="text" name='city' class="form-control" id="validationCustom12">
             <div class="invalid-feedback">
@@ -147,12 +129,15 @@
                 Please provide a valid Country.
             </div>
         </div>
+
     </div>
+
+    
 
     {% if ementry %}
     <div class="form-row">
         <div class="col-md-3 mb-3">
-            <label for="exampleFormControlSelect1">Services Select</label>
+            <label for="exampleFormControlSelect1">Employee Position</label>
             <select class="form-control" name="position" id="exampleFormControlSelect1">
                 <option>WAITER</option>
                 <option>ACCOUNTANT</option>
@@ -190,6 +175,25 @@
 
 
     {% else %}
+    <div class="form-row">
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">Id card no</label>
+            <input type="number" name='idcard' class="form-control" id="validationCustom09">
+
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">credit card no</label>
+            <input type="number" name='creditcard' class="form-control" id="validationCustom10">
+
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">passport no</label>
+            <input type="number" name='passport' class="form-control" id="validationCustom11">
+
+        </div>
+
+    </div>
+
     <div class="form-group">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
