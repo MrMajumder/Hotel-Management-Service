@@ -32,18 +32,20 @@
     {% csrf_token %}
 
 
-    
 
-    
+
+
     <!-- <button class="btn btn-primary" type="submit">Expense Entry</button> -->
-    <button type="button" class="btn btn-primary container justify-content-center col-0" data-toggle="modal" data-target="#exampleModal">
-        
+    <button type="button" class="btn btn-primary container justify-content-center col-0" data-toggle="modal"
+        data-target="#exampleModal">
+
         Confirm Deletion Of your Account
-      
+
     </button>
 
     <!-- Modal -->
-    <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-warning">
@@ -54,15 +56,15 @@
                 </div>
                 <div class="modal-body">
                     {% if employee %}
-                        Are you sure that you want to leave your Job? This action can't be reversed.
+                    Are you sure that you want to leave your Job? This action can't be reversed.
                     {% else %}
-                        Are you sure that you want to delete your account? This action can't be reversed.
+                    Are you sure that you want to delete your account? This action can't be reversed.
                     {% endif %}
                 </div>
                 <div class="modal-footer container justify-content-center col-5">
                     <button type="submit" class="btn btn-primary">YES</button>
                     <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
-                    
+
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 {% extends 'starter.html' %}
 
-{% block title %} Reservations Management {% endblock %}
+{% block title %} Services Management {% endblock %}
 
 {% block style %} {% endblock %}
 
@@ -12,45 +12,44 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
-
 <div class="container-fluid my-4">
 
     <div class="row">
         <div class="col-3">
-            <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto" width="100" height="100"
+            <img src="{% static 'img/serlogo.png' %}" class="d-block mx-auto" width="150" height="150"
                 alt="reservation logo"><br />
-            <h1 class="display-4 text-right mb-4">Reservation Menu</h1>
+            <h1 class="display-4 text-right mb-4">Services<br>Menu</h1>
             <div class="nav flex-column nav-pills text-right" id="v-pills-tab" role="tablist"
                 aria-orientation="vertical">
                 <a class="nav-link active" id="actrestab" data-toggle="pill" href="#actres" role="tab"
-                    aria-controls="actres" aria-selected="true">Active Reservations</a>
+                    aria-controls="actres" aria-selected="true">Active Services</a>
                 <a class="nav-link" id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
-                    aria-selected="false">Create Reservation</a>
+                    aria-selected="false">Create New Service</a>
             </div>
         </div>
 
         <div class="container col-8">
             <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="actres" role="tabpanel" aria-labelledby="actrestab">
-                    <h4>Active Reservations: <h5 class="display-4 text-left mb-4">5</h5>
+                    <h4>Active Services: <h5 class="display-4 text-left mb-4">5</h5>
                     </h4>
 
                     <div class="row">
-                        {% for resid in data %}
+                        {% for servid in data %}
                         <div class="col-4">
                             <div class="card border-secondary mb-3">
                                 <div class="card-header font-weight-bold">
-                                    Reservation : {{resid}}
+                                    Service : {{servid}}
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text text-justify">
-                                        Hi, this is some basic info about our reservation. Such as rooms, tables,
+                                        Hi, this is some basic info about our Service. Such as rooms, tables,
                                         services included, start date, etc. Clicking this will take you to another page,
-                                        where the date of this reservation will be shown.
+                                        where the date of this Service will be shown.
                                     </p>
                                     <form class="form-inline">
                                         <a class="btn btn-primary text-white mx-auto" role="button"
-                                            href="{{ HTTP_HOST }}/customer/reservations/{{resid}}/">
+                                            href="{{ HTTP_HOST }}/customer/services/{{servid}}/">
                                             View Details
                                         </a>
                                     </form>
@@ -68,7 +67,7 @@
 
 
                 <div class="tab-pane fade" id="creres" role="tabpanel" aria-labelledby="crerestab">
-                    <h2>অ দাদা, এখানে একটা ফর্ম বানিয়ে দাও না<br>এই ফর্ম দিয়ে যাতে আমরা রিজার্ভেশন বানাতে পারি!</h2>
+                    <h2>অ দাদা, এখানে একটা ফর্ম বানিয়ে দাও না<br>এই ফর্ম দিয়ে যাতে আমরা নতুন নতুন সার্ভিস বানাতে পারি!</h2>
                 </div>
 
 
@@ -77,6 +76,5 @@
 
     </div>
 </div>
-
 
 {% endblock %}
