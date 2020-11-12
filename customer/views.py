@@ -74,7 +74,5 @@ def ser(request):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'customer/service.html', {'login' : conf.login, 'user' : conf.getuser()})
 
-def com(request):
-    if(conf.login == False):
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'customer/complaint.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+

@@ -42,3 +42,6 @@ def empsalary(request):
 
 def mansalary(request):
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+def eproedit(request):
+    return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser()})

@@ -15,26 +15,39 @@
 {% load static %}
 
 {% include 'modal.html' with user=user %}
-{% if salary %}
-<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+{% if guest %}
 
-    <strong>Please fill up the form.</strong>
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Reservation Unsucessfull.</strong>No of choosen guests is more than the capacity. 
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-{% elif salary_pay %}
-<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
 
-    <strong>Salary is already paid.</strong>
+{% elif room %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Reservation Unsucessfull.</strong>Choosen Room is not available at this moment
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+{% elif date %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Reservation Unsucessfull.</strong>You have choosen invalid date
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
 
 {% else %}
-<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-    <strong>Salary Payment Unsuccessful!</strong> The employee is not present in the employee list.
+<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Please fill up the form.</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -48,7 +61,7 @@
 
 
     <h3>
-        Salary Payment
+        Room Reservation Form
     </h3>
 
     <p>------------------------------</p>
@@ -61,21 +74,46 @@
 
     <div class="form-row">
 
-        <div class="col-md-6 mb-5">
-            <label for="validationCustom01">User Id of the Employee</label>
-            <input type="number" name='id' class="form-control" id="validationCustom101" required>
-
+        <div class="col-md-6 mb-6">
+            <label for="exampleFormControlSelect1">Room Type</label>
+            <select class="form-control" name="room_t" id="exampleFormControlSelect10" required>
+                <option>Personal Suit</option>
+                <option>Family Suit</option>
+                <option>Executive Suit</option>
+            </select>
         </div>
         <div class="col-md-6 mb-6">
-            <label for="validationCustom101">Salary</label>
-            <input type="number" name='salary' class="form-control" id="validationCustom100" required>
+            <label for="validationCustom101">No of Guests</label>
+            <select class="form-control" name="no_of_g" id="exampleFormControlSelect11" required>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+            </select>
 
         </div>
     </div>
 
-    <!-- Button trigger modal -->
+    <div class="form-row">
+        <div class="col-md-6 mb-5">
+            <label for="validationCustom03">Arrival Date</label>
+            <input type="date" name='a_date' class="form-control" id="validationCustom000" required>
+            <div class="invalid-feedback">
+                Please provide a valid date.
+            </div>
+
+        </div>
+        <div class="col-md-6 mb-5">
+            <label for="validationCustom03">Departure Date</label>
+            <input type="date" name='d_date' class="form-control" id="validationCustom001" required>
+            <div class="invalid-feedback">
+                Please provide a valid date.
+            </div>
+        </div>
+    </div>
+    <!-- <button class="btn btn-primary" type="submit">Expense Entry</button> -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Confirm Payment
+        Confirm Reservation
     </button>
 
     <!-- Modal -->
@@ -99,7 +137,6 @@
             </div>
         </div>
     </div>
-
 </form>
 
 <script>
