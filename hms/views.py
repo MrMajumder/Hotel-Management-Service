@@ -49,7 +49,6 @@ def insert(request):
         position = request.POST.get('position', '')
         permission = request.POST.get('permission', 'NO')
         salary = request.POST.get('salary', '')
-        mid = request.POST.get('mid', '')
         workd = request.POST.get('workd', '')
         print(position)
         print(permission)
@@ -61,27 +60,23 @@ def insert(request):
     
     if(password == repassword):
         cursor = connection.cursor()
-        sql = "INSERT INTO LOG_IN VALUES(%s, %s, %s, %s)"
+        sql = "INSERT INTO LOG_IN VALUES(%s, %s, %s)"
         password = hashing.hash_password(password)
         role = 'customer'
         if(conf.role == 'manager' or conf.role == 'director'):
             role = 'employee'
-        cursor.execute(sql, [count + 100, name, password, role])
+        cursor.execute(sql, [email, password, role])
         sql1 = "INSERT INTO ACCOUNT_HOLDER VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql1, [count + 1, count + 100, name, lastname, house, road, city, country])
+        cursor.execute(sql1, [count + 1, email, name, lastname, house, road, city, country])
         phnumber = funcs.split(phnumber)
         for i in phnumber:
             s = funcs.rspace(i)
             sql2="INSERT INTO ACCOUNT_HOLDER_PHNUMBER VALUES(%s, %s)"
             cursor.execute(sql2, [count + 1, int(s)])
-        sql3 = "INSERT INTO ACCOUNT_HOLDER_EMAIL VALUES(%s, %s)"
-        cursor.execute(sql3, [count + 1, email])
         if(conf.role == 'manager' or conf.role == 'director'):
             sql5 = "INSERT INTO EMPLOYEE VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql5, [count + 1, "", position, workd, permission, salary, '', ''])
-            sql6 = "UPDATE EMPLOYEE SET MANAGER_ID = %s where USER_ID = %s"
-            cursor.execute(sql6, [mid, count + 1])
-            print('hello2')
+            cursor.execute(sql5, [count + 1, conf.user_id, position, workd, permission, salary, '', ''])
+            
         else:
             sql4 = "INSERT INTO CUSTOMER VALUES(%s, %s, %s, %s)"
             cursor.execute(sql4, [count + 1, idcard, credit, passport])
@@ -110,26 +105,31 @@ def enter_account(request):
     if(conf.login == True):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    id = request.POST.get('id', 'default')
+    email = request.POST.get('email', 'default')
     password = request.POST.get('password', 'default')
     Atype = request.POST.get('AcCheck', 'default')
-    id = int(id)
     cursor = connection.cursor()
     sql = "SELECT * FROM LOG_IN"
     cursor.execute(sql)
     result = cursor.fetchall()
-    # print(result)
     cursor.close()
 #  hashing.verify_password(r[2], password)
     for r in result:
-        if(r[0] == id and  hashing.verify_password(r[2], password) and r[3] == Atype):
+        if(r[0] == email and  hashing.verify_password(r[1], password) and r[2] == Atype):
+            
             conf.role = 'customer'
             conf.login = True
             cursor = connection.cursor()
-            sql = ("SELECT * FROM ACCOUNT_HOLDER WHERE LOGIN_ID=%s" %r[0])
-            cursor.execute(sql)
+            e = (str("\'"+(r[0])+"\'"))
+            sql = ("SELECT * FROM ACCOUNT_HOLDER WHERE LOGIN_EMAIL=%s" %e)
+           
+            try:
+                cursor.execute(sql)
+            except :
+                print("hello")
+                return render(request, 'login.html', {'login' : conf.login, 'user' : conf.getuser()})
             us = cursor.fetchall()
-            sql = ("SELECT EMAIL FROM ACCOUNT_HOLDER_EMAIL WHERE USER_ID=%s" %us[0][0])
+            sql = ("SELECT LOGIN_EMAIL FROM ACCOUNT_HOLDER WHERE USER_ID=%s" %us[0][0])
             cursor.execute(sql)
             em = cursor.fetchall()
             conf.user_id = us[0][0]
@@ -156,3 +156,14 @@ def enter_account(request):
             #print('this is name after doing log in ', conf.name)
             return render(request, 'index.html', {'login' : conf.login, 'logins' : True, 'user' : conf.getuser()})
     return render(request, 'login.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+
+def delete(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'delete.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+def edit(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'edit.html', {'login' : conf.login, 'user' : conf.getuser()})

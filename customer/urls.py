@@ -6,5 +6,6 @@ urlpatterns = [
     path('reservations/', views.res, name='cusRes'),
     path('history/', views.his, name='cusHis'),
     path('services/', views.ser, name='cusSer'),
-    path('complaint/', views.com, name='cusCom')
+
+
 ]

@@ -15,40 +15,13 @@
 {% load static %}
 
 {% include 'modal.html' with user=user %}
-{% if salary %}
-<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-
-    <strong>Please fill up the form.</strong>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-{% elif salary_pay %}
-<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-
-    <strong>Salary is already paid.</strong>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-
-{% else %}
-<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-    <strong>Salary Payment Unsuccessful!</strong> The employee is not present in the employee list.
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-{% endif %}
-
-
 
 <div class="container text-center">
     <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
 
 
     <h3>
-        Salary Payment
+        Account Deletion
     </h3>
 
     <p>------------------------------</p>
@@ -59,23 +32,14 @@
     {% csrf_token %}
 
 
-    <div class="form-row">
+    
 
-        <div class="col-md-6 mb-5">
-            <label for="validationCustom01">User Id of the Employee</label>
-            <input type="number" name='id' class="form-control" id="validationCustom101" required>
-
-        </div>
-        <div class="col-md-6 mb-6">
-            <label for="validationCustom101">Salary</label>
-            <input type="number" name='salary' class="form-control" id="validationCustom100" required>
-
-        </div>
-    </div>
-
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Confirm Payment
+    
+    <!-- <button class="btn btn-primary" type="submit">Expense Entry</button> -->
+    <button type="button" class="btn btn-primary container justify-content-center col-0" data-toggle="modal" data-target="#exampleModal">
+        
+        Confirm Deletion Of your Account
+      
     </button>
 
     <!-- Modal -->
@@ -89,7 +53,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    {% if employee %}
+                        Are you sure that you want to leave your Job? This action can't be reversed.
+                    {% else %}
+                        Are you sure that you want to delete your account? This action can't be reversed.
+                    {% endif %}
                 </div>
                 <div class="modal-footer container justify-content-center col-5">
                     <button type="submit" class="btn btn-primary">YES</button>
@@ -99,7 +67,6 @@
             </div>
         </div>
     </div>
-
 </form>
 
 <script>

@@ -15,5 +15,6 @@ urlpatterns = [
     path('workh/', views.workh, name = 'workhistory'),
     path('servEx/', views.serveEx, name = 'serviceExecuted'),
     path('empsalary/', views.empsalary, name = 'employeesalary'),
-    path('mansalary/', views.mansalary, name = 'managersalary')
+    path('mansalary/', views.mansalary, name = 'managersalary'),
+    path('empproedit/', views.eproedit, name = 'managersalary')
 ]
