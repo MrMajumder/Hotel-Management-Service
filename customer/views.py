@@ -84,7 +84,5 @@ def soloser(request, id):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'service/servview.html', {'login' : conf.login, 'servid' : id, 'user' : conf.getuser()})
 
-def com(request):
-    if(conf.login == False):
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'customer/complaint.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+

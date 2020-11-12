@@ -8,5 +8,4 @@ urlpatterns = [
     path('history/', views.his, name='cusHis'),
     path('services/', views.ser, name='cusSer'),
     path('services/<int:id>/', views.soloser, name='cusSoloSer'),
-    path('complaint/', views.com, name='cusCom')
 ]
