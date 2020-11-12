@@ -5,22 +5,27 @@ from hms import conf
 from hms import hashing
 from hms import funcs
 
+
 def index(request):
-    return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser()})
+
 
 def contact(request):
-    return render(request, 'contact.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'contact.html', {'login': conf.login, 'user': conf.getuser()})
+
 
 def signup(request):
     if(conf.login == True and (conf.role == 'manager' or conf.role == 'director')):
-        return render(request, 'signup.html', {'login' : conf.login, 'sign' : True, 'user' : conf.getuser(), 'ementry' : True})
+        return render(request, 'signup.html', {'login': conf.login, 'sign': True, 'user': conf.getuser(), 'ementry': True})
     if(conf.login == False):
-        return render(request, 'signup.html', {'login' : conf.login, 'sign' : True, 'user' : conf.getuser()})
+        return render(request, 'signup.html', {'login': conf.login, 'sign': True, 'user': conf.getuser()})
     else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 def about(request):
-    return render(request, 'about.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'about.html', {'login': conf.login, 'user': conf.getuser()})
+
 
 def insert(request):
     if(conf.login and (conf.role != 'manager' and conf.role != 'director')):
@@ -44,7 +49,7 @@ def insert(request):
     road = request.POST.get('road', '')
     if(conf.role != 'manager' and conf.role != 'director'):
         conf.role_set('customer')
-    
+
     if(conf.role == 'manager' or conf.role == 'director'):
         position = request.POST.get('position', '')
         permission = request.POST.get('permission', 'NO')
@@ -58,7 +63,6 @@ def insert(request):
         credit = request.POST.get('creditcard', '')
         passport = request.POST.get('passport', '')
 
-    
     if(password == repassword):
         cursor = connection.cursor()
         sql = "INSERT INTO LOG_IN VALUES(%s, %s, %s, %s)"
@@ -68,44 +72,45 @@ def insert(request):
             role = 'employee'
         cursor.execute(sql, [count + 100, name, password, role])
         sql1 = "INSERT INTO ACCOUNT_HOLDER VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql1, [count + 1, count + 100, name, lastname, house, road, city, country])
+        cursor.execute(sql1, [count + 1, count + 100, name,
+                              lastname, house, road, city, country])
         phnumber = funcs.split(phnumber)
         for i in phnumber:
             s = funcs.rspace(i)
-            sql2="INSERT INTO ACCOUNT_HOLDER_PHNUMBER VALUES(%s, %s)"
+            sql2 = "INSERT INTO ACCOUNT_HOLDER_PHNUMBER VALUES(%s, %s)"
             cursor.execute(sql2, [count + 1, int(s)])
         sql3 = "INSERT INTO ACCOUNT_HOLDER_EMAIL VALUES(%s, %s)"
         cursor.execute(sql3, [count + 1, email])
         if(conf.role == 'manager' or conf.role == 'director'):
             print(count + 1, mid, position, workd, permission, salary)
             sql5 = "INSERT INTO EMPLOYEE VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql5, [count + 1, "", position, workd, permission, salary, '', ''])
-            sql6 = "UPDATE EMPLOYEE SET MANAGER_ID = %s where USER_ID = %s"
-            cursor.execute(sql6, [mid, count + 1])
-            print('hello2')
+            cursor.execute(sql5, [count + 1, conf.user_id, position,
+                                  workd, permission, salary, '', ''])
         else:
             sql4 = "INSERT INTO CUSTOMER VALUES(%s, %s, %s, %s)"
             cursor.execute(sql4, [count + 1, idcard, credit, passport])
 
-
         connection.commit()
         cursor.close()
-        return render(request, 'index.html', {'loginid' :count + 100, 'login' : conf.login, 'sign' : True, 'user' : conf.getuser()})
+        return render(request, 'index.html', {'loginid': count + 100, 'login': conf.login, 'sign': True, 'user': conf.getuser()})
 
-    return render(request, 'signup.html', {'sign' : False})
-    
+    return render(request, 'signup.html', {'sign': False})
+
+
 def login(request):
     if(conf.login == False):
         #print('i am inside the right jayga')
-        return render(request, 'login.html', {'login' : conf.login, 'alerttoggle' : True, 'user' : conf.getuser()})
+        return render(request, 'login.html', {'login': conf.login, 'alerttoggle': True, 'user': conf.getuser()})
     else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 def logout(request):
     if(conf.login):
-        conf.login = False        
+        conf.login = False
         conf.user_id = conf.username = conf.name = conf.email = conf.role = ''
-    return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser()})
+
 
 def enter_account(request):
     if(conf.login == True):
@@ -123,14 +128,15 @@ def enter_account(request):
     cursor.close()
 #  hashing.verify_password(r[2], password)
     for r in result:
-        if(r[0] == id and  hashing.verify_password(r[2], password) and r[3] == Atype):
+        if(r[0] == id and hashing.verify_password(r[2], password) and r[3] == Atype):
             conf.role = 'customer'
             conf.login = True
             cursor = connection.cursor()
-            sql = ("SELECT * FROM ACCOUNT_HOLDER WHERE LOGIN_ID=%s" %r[0])
+            sql = ("SELECT * FROM ACCOUNT_HOLDER WHERE LOGIN_ID=%s" % r[0])
             cursor.execute(sql)
             us = cursor.fetchall()
-            sql = ("SELECT EMAIL FROM ACCOUNT_HOLDER_EMAIL WHERE USER_ID=%s" %us[0][0])
+            sql = (
+                "SELECT EMAIL FROM ACCOUNT_HOLDER_EMAIL WHERE USER_ID=%s" % us[0][0])
             cursor.execute(sql)
             em = cursor.fetchall()
             conf.user_id = us[0][0]
@@ -141,7 +147,8 @@ def enter_account(request):
             if(Atype == 'employee'):
                 conf.role = Atype
                 print(conf.role)
-                sql = ("SELECT PERMISSION FROM EMPLOYEE WHERE USER_ID=%s" %us[0][0])
+                sql = ("SELECT PERMISSION FROM EMPLOYEE WHERE USER_ID=%s" %
+                       us[0][0])
                 cursor.execute(sql)
                 mi = cursor.fetchall()
                 print(mi)
@@ -152,8 +159,8 @@ def enter_account(request):
                     conf.role = 'manager'
                     print(conf.role)
             cursor.close()
-            
+
             #conf.userenter(us[0][0], r[1], us[0][2], em[0])
             #print('this is name after doing log in ', conf.name)
-            return render(request, 'index.html', {'login' : conf.login, 'logins' : True, 'user' : conf.getuser()})
-    return render(request, 'login.html', {'login' : conf.login, 'user' : conf.getuser()})
+            return render(request, 'index.html', {'login': conf.login, 'logins': True, 'user': conf.getuser()})
+    return render(request, 'login.html', {'login': conf.login, 'user': conf.getuser()})

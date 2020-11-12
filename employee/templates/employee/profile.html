@@ -2,7 +2,12 @@
 
 {% block title %} Employee Profile {% endblock %}
 
-{% block style %} {% endblock %}
+{% block style %}
+td {
+    white-space: normal !important; 
+    word-wrap: break-word;  
+  }
+{% endblock %}
 
 {%block navshow %}
 {% with login=login %} {{block.super}} {% endwith %}
@@ -12,6 +17,79 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
-<h1>employee profile page</h1>
+<h1 class="display-2 text-center">Employee Profile</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4 d-flex flex-column justify-content-center">
+            <img src="{% static 'img/user.png' %}" class="d-block mx-auto" width="350" height="350" alt="username"><br/>
+            <p class="text text-center display-4 mb-0 pb-0">{{allval.name}}</p>
+            <p class="text text-center text-secondary">@{{allval.username}}</p>
+        </div>
+        <div class="col-8">
+            <p class="display-4">Employee Information</p>
+            <table class="table table-hover table-striped table-bordered w-20">
+                <tbody>
+                  <tr>
+                    <th scope="row" colspan="2">User ID</th>
+                    <td>{{allval.user_id}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" colspan="2">Name</th>
+                    <td>{{allval.name}}</td>
+                  </tr>
+                  {% for ph in allval.phone_nums %}
+                  <tr>
+                    <th scope="row" colspan="2">Phone Number</th>
+                    <td>{{ph.phone_no}}</td>
+                  </tr>
+                  {% endfor %}
+
+                  {% for em in allval.emails %}
+                  <tr>
+                    <th scope="row" colspan="2">Email</th>
+                    <td>{{em.email}}</td>
+                  </tr>
+                  {% endfor %}
+
+                  <tr>
+                    <th scope="row" rowspan="4">Address</th>
+                    <th scope="row" >House No.</th>
+                    <td>{{allval.house_no}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Road</th>
+                    <td>{{allval.road_no}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">City</th>
+                    <td>{{allval.city}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Country</th>
+                    <td>{{allval.country}}</td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row" colspan="2">Manager ID</th>
+                    <td>{{allval.manager_id}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" colspan="2">Position</th>
+                    <td>{{allval.position}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" colspan="2">Work Description</th>
+                    <td>{{allval.work_description}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" colspan="2">Salary</th>
+                    <td>{{allval.salary}}</td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

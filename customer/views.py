@@ -7,7 +7,6 @@ from hms import conf
 def index(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    print(conf.user_id)
     id = int(conf.user_id)
     cursor = connection.cursor()
     sql = ("SELECT * FROM ACCOUNT_HOLDER WHERE USER_ID=%s" % id)
@@ -35,14 +34,15 @@ def index(request):
     
     dict_result['user_id'] = acholder[0][0]
     dict_result['username'] = xx[0][1]
-    dict_result['name'] = acholder[0][2]
-    dict_result['house_no'] = acholder[0][3]
-    dict_result['road_no'] = acholder[0][4]
-    dict_result['city'] = acholder[0][5]
-    dict_result['country'] = acholder[0][6]
+    dict_result['name'] = acholder[0][2] + ' ' + acholder[0][3]
+    dict_result['house_no'] = acholder[0][4]
+    dict_result['road_no'] = acholder[0][5]
+    dict_result['city'] = acholder[0][6]
+    dict_result['country'] = acholder[0][7]
     dict_result['id_card_no'] = customer[0][1]
     dict_result['passport_no'] = customer[0][2]
     dict_result['credit_card_no'] = customer[0][3]
+    dict_result['role'] = conf.role
 
     ph_no = []
     for ph in acholderph:
@@ -57,12 +57,17 @@ def index(request):
         row = {'email' : em}
         emails.append(row)
     dict_result['emails'] = emails
-    return render(request, 'customer/index.html', {'login' : conf.login, 'user' : dict_result})
+    return render(request, 'customer/index.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result})
 
 def res(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'data' : [1, 3, 5], 'user' : conf.getuser()})
+
+def solores(request, id):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'reservation/resview.html', {'login' : conf.login, 'resid' : id, 'user' : conf.getuser()})
 
 def his(request):
     if(conf.login == False):
@@ -72,7 +77,12 @@ def his(request):
 def ser(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'customer/service.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'service/cusservhome.html', {'login' : conf.login, 'data' : [2, 4, 6, 8, 10], 'user' : conf.getuser()})
+
+def soloser(request, id):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'service/servview.html', {'login' : conf.login, 'servid' : id, 'user' : conf.getuser()})
 
 def com(request):
     if(conf.login == False):
