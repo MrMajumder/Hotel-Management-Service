@@ -120,7 +120,7 @@ def enter_account(request):
     cursor.execute(sql)
     result = cursor.fetchall()
     cursor.close()
-#  hashing.verify_password(r[2], password)
+#  hashing.verify_password(r[1], password)
     for r in result:
         if(r[0] == email and  hashing.verify_password(r[1], password) and r[2] == Atype):
             
@@ -133,16 +133,12 @@ def enter_account(request):
             try:
                 cursor.execute(sql)
             except :
-                print("hello")
                 return render(request, 'login.html', {'login' : conf.login, 'user' : conf.getuser()})
             us = cursor.fetchall()
-            sql = ("SELECT LOGIN_EMAIL FROM ACCOUNT_HOLDER WHERE USER_ID=%s" %us[0][0])
-            cursor.execute(sql)
-            em = cursor.fetchall()
             conf.user_id = us[0][0]
-            conf.username = r[1]
-            conf.name = us[0][2]
-            conf.email = em[0][0]
+            conf.username = us[0][2]
+            conf.name = us[0][2] + ' ' + us[0][3]
+            conf.email = us[0][1]
             print(Atype)
             if(Atype == 'employee'):
                 conf.role = Atype

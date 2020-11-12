@@ -17,23 +17,16 @@ def index(request):
     cursor.execute(sql)
     acholderph = cursor.fetchall()
 
-    sql = ("SELECT * FROM ACCOUNT_HOLDER_EMAIL WHERE USER_ID=%s" % id)
-    cursor.execute(sql)
-    acholderemail = cursor.fetchall()
-
     sql = ("SELECT * FROM CUSTOMER WHERE USER_ID=%s" % id)
     cursor.execute(sql)
     customer = cursor.fetchall()
-
-    sql = ("SELECT * FROM LOG_IN WHERE LOGIN_ID=%s" % acholder[0][1])
-    cursor.execute(sql)
-    xx = cursor.fetchall()
 
     cursor.close()
     dict_result = {} 
     
     dict_result['user_id'] = acholder[0][0]
-    dict_result['username'] = xx[0][1]
+    dict_result['email'] = acholder[0][1]
+    dict_result['username'] = acholder[0][2]
     dict_result['name'] = acholder[0][2] + ' ' + acholder[0][3]
     dict_result['house_no'] = acholder[0][4]
     dict_result['road_no'] = acholder[0][5]
@@ -42,7 +35,6 @@ def index(request):
     dict_result['id_card_no'] = customer[0][1]
     dict_result['passport_no'] = customer[0][2]
     dict_result['credit_card_no'] = customer[0][3]
-    dict_result['role'] = conf.role
 
     ph_no = []
     for ph in acholderph:
@@ -51,12 +43,6 @@ def index(request):
         ph_no.append(row)
     dict_result['phone_nums'] = ph_no
 
-    emails = []
-    for email in acholderemail:
-        em = email[1]
-        row = {'email' : em}
-        emails.append(row)
-    dict_result['emails'] = emails
     return render(request, 'customer/index.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result})
 
 def res(request):

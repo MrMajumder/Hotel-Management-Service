@@ -46,54 +46,6 @@
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/edition/" class="text-light">Edit Your Account</a></td>
                         </tr>
-<<<<<<< HEAD
-                        {% endif %}
-                        {% if user.role == "manager" %}
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/expense/" class="text-light">Hotel expenses entry</a></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/eattend/" class="text-light">Employee Attendence</a></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/empsalary/" class="text-light">Salary Payment of Employees</a></td>
-                        </tr>
-                        {% endif %}
-                        {% if user.role == "employee" %}
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/servEx/" class="text-light">Service Executed</a></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/workh/" class="text-light">Work History</a></td>
-                        </tr>
-                        {% endif %}
-                        {% if user.role == "employee" or user.role == "manager" %}
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/servmanage/" class="text-light">Services Management</a></td>
-                        </tr>
-                        {% endif %}
-                        {% if user.role == "manager" or user.role == "director" %}
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/signup/" class="text-light">Employee Registration</a></td>
-                        </tr>
-                        {% endif %}
-                        {% if user.role == "manager" or user.role == "director" %}
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/empmanage/" class="text-light">Managed Employees</a></td>
-                        </tr>
-                        {% endif %}
-                        {% if user.role == "director" %}
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/fire/" class="text-light">Fire a Employee</a></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/hoteloverview/" class="text-light">Hotel Overview</a></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/mansalary/" class="text-light">Salary Payment of Managers</a></td>
-                        </tr>
-                        {% endif %}
-=======
 
                     </tbody>
                     {% else %}
@@ -157,7 +109,6 @@
                                 Managers</a></td>
                     </tr>
                     {% endif %}
->>>>>>> 3fe53b63108326b1e5ffb153fef9739338fc2342
                     </tbody>
                     {% endif %}
                 </table>

@@ -6,79 +6,88 @@
 {% with login=login %} {{block.super}} {% endwith %}
 {%endblock navshow %}
 
-{% block body %} 
+{% block body %}
 {% load static %}
 {% include 'modal.html' with user=user %}
 
 <h1 class="display-2 text-center">Customer Profile</h1>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-4 d-flex flex-column justify-content-center">
-            <img src="{% static 'img/user.png' %}" class="d-block mx-auto" width="350" height="350" alt="username"><br/>
-            <p class="text text-center display-4 mb-0 pb-0">{{allval.name}}</p>
-            <p class="text text-center text-secondary">@{{allval.username}}</p>
-        </div>
-        <div class="col-8">
-            <p class="display-4">Customer Information</p>
-            <table class="table table-hover table-striped table-bordered w-20">
-                <tbody>
-                  <tr>
-                    <th scope="row" colspan="2">User ID</th>
-                    <td>{{allval.user_id}}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row" colspan="2">Name</th>
-                    <td>{{allval.name}}</td>
-                  </tr>
-                  {% for ph in allval.phone_nums %}
-                  <tr>
-                    <th scope="row" colspan="2">Phone Number</th>
-                    <td>{{ph.phone_no}}</td>
-                  </tr>
-                  {% endfor %}
-
-                  {% for em in allval.emails %}
-                  <tr>
-                    <th scope="row" colspan="2">Email</th>
-                    <td>{{em.email}}</td>
-                  </tr>
-                  {% endfor %}
-
-                  <tr>
-                    <th scope="row" rowspan="4">Address</th>
-                    <th scope="row" >House No.</th>
-                    <td>{{allval.house_no}}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Road</th>
-                    <td>{{allval.road_no}}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">City</th>
-                    <td>{{allval.city}}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Country</th>
-                    <td>{{allval.country}}</td>
-                  </tr>
-
-                  <tr>
-                    <th scope="row" colspan="2">ID Card No.</th>
-                    <td>{{allval.id_card_no}}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row" colspan="2">Passport No.</th>
-                    <td>{{allval.passport_no}}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row" colspan="2">Credit Card No.</th>
-                    <td>{{allval.credit_card_no}}</td>
-                  </tr>
-                  
-                </tbody>
-              </table>
-        </div>
+  <div class="row">
+    <div class="col-4 d-flex flex-column justify-content-center">
+      <img src="{% static 'img/user.png' %}" class="d-block mx-auto" width="350" height="350" alt="username"><br />
+      <p class="text text-center display-4 mb-0 pb-0">{{allval.name}}</p>
+      <p class="text text-center text-secondary">@{{allval.username}}</p>
     </div>
+    <div class="col-8">
+      <p class="display-4">Customer Information</p>
+      <table class="table table-hover table-striped table-bordered w-20">
+        <thead class="thead-dark text-center">
+          <tr>
+            <th scope="row" colspan="3">Basic Information</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" colspan="2">Name</th>
+            <td>{{allval.name}}</td>
+          </tr>
+          {% for ph in allval.phone_nums %}
+          <tr>
+            {% if ph == allval.phone_nums.0 %} <th scope="row" colspan="2"
+              rowspan="{{allval.phone_nums|length}}" style="vertical-align : middle;">Phone Number</th> {% endif %}
+            <td>{{ph.phone_no}}</td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <th scope="row" colspan="2">Email</th>
+            <td>{{em.email}}</td>
+          </tr>
+          <tr>
+            <th scope="row" rowspan="4" style="vertical-align : middle;">Address</th>
+            <th scope="row">House No.</th>
+            <td>{{allval.house_no}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Road</th>
+            <td>{{allval.road_no}}</td>
+          </tr>
+          <tr>
+            <th scope="row">City</th>
+            <td>{{allval.city}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Country</th>
+            <td>{{allval.country}}</td>
+          </tr>
+        </tbody>
+        <thead class="thead-dark text-center">
+          <tr>
+            <th scope="row" colspan="3">Credentials</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" colspan="2">User ID</th>
+            <td>{{allval.user_id}}</td>
+          </tr>
+
+          <tr>
+            <th scope="row" colspan="2">ID Card No.</th>
+            <td>{{allval.id_card_no}}</td>
+          </tr>
+          <tr>
+            <th scope="row" colspan="2">Passport No.</th>
+            <td>{{allval.passport_no}}</td>
+          </tr>
+          <tr>
+            <th scope="row" colspan="2">Credit Card No.</th>
+            <td>{{allval.credit_card_no}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
