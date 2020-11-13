@@ -1,0 +1,54 @@
+{% extends 'starter.html' %}
+
+{% block title %} Reservations Management {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+{% block body %}
+{% load static %}
+{% include 'modal.html' with user=user %}
+
+<div class="container-fluid my-4">
+
+    <div class="row">
+        <div class="col-3">
+            <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto" width="100" height="100"
+                alt="reservation logo"><br />
+            <h1 class="display-4 text-center mb-4">Reservation Management</h1>
+        </div>
+        <div class="col-8 container">
+            <p class="display-4">List of All Reservations</p>
+            <table class="table table-hover table-striped table-bordered w-20">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row">Reservation ID</th>
+                        <th scope="row">Active/Inactive</th>
+                        <th scope="row">View Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resid in data %}
+                    <tr>
+                        <td class="text-center">{{resid}}</td>
+                        <td class="text-center">Active</td>
+                        <td class="text-center">
+                            <form class="form-inline">
+                                <a class="btn btn-primary text-white mx-auto" role="button"
+                                    href="{{ HTTP_HOST }}/reservation/{{resid}}/">
+                                    ResID:{{resid}} Details
+                                </a>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

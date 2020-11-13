@@ -51,14 +51,16 @@ def profile(request):
 def resmanage(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/resmanage.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'reservation/allres.html', {'login' : conf.login, 'data': [1, 3, 5, 6, 7, 9, 10, 15, 26, 28, 35, 37], 'user' : conf.getuser()})
 
 def servmanage(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/servmanage.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'service/allserv.html', {'login' : conf.login, 'data': [1, 3, 5, 6, 7, 9, 10, 15, 26, 28, 35, 37], 'user' : conf.getuser()})
 
 def empreg(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/empreg.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def empmanage(request):

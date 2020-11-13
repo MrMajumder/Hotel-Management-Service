@@ -2,8 +2,7 @@ from django.shortcuts import render
 from hms import conf
 
 # Create your views here.
-def index(request):
-    return render(request, 'reservation/index.html', {'login' : conf.login, 'user' : conf.getuser()})
-
-def reserv(request):
-    return render(request, 'reservation/createReserv.html', {'login' : conf.login, 'user' : conf.getuser()})
+def solores(request, id):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'reservation/resview.html', {'login' : conf.login, 'resid' : id, 'user' : conf.getuser()})
