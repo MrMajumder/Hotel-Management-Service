@@ -54,7 +54,7 @@
         </div>
         <div class="col-md-6 mb-5">
             <label for="validationCustom03">Bill Date</label>
-            <input type="date" name='bdate' class="form-control" id="validationCustom102" required>
+            <input type="date" min="{{mindate}}" max ="{{mindate}}"  name='bdate' class="form-control" id="validationCustom102" required>
             <div class="invalid-feedback">
                 Please provide a valid date.
             </div>

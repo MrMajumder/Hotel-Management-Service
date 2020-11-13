@@ -52,11 +52,14 @@ def insert(request):
 
     if(conf.role == 'manager' or conf.role == 'director'):
         position = request.POST.get('position', '')
-        permission = request.POST.get('permission', 'NO')
+        if(position == "MANAGER"):
+            permission = 2
+        else:
+            permission = 3
         salary = request.POST.get('salary', '')
         workd = request.POST.get('workd', '')
         print(position)
-        print(permission)
+        
     else:
         idcard = request.POST.get('idcard', '')
         credit = request.POST.get('creditcard', '')
@@ -170,4 +173,7 @@ def delete(request):
 def edit(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'edit.html', {'login' : conf.login, 'user' : conf.getuser()})
+    if(conf.role == 'customer'):
+        return render(request, 'edit.html', {'login' : conf.login, 'customer' : True, 'user' : conf.getuser()})
+    return render(request, 'edit.html', {'login' : conf.login,  'user' : conf.getuser()})
+

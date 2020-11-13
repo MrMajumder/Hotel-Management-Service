@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db import connection
 from hms import conf
+from datetime import datetime
+import time 
 
 # Create your views here.
 def profile(request):
@@ -47,41 +49,88 @@ def profile(request):
     return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result})
 
 def resmanage(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/resmanage.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def servmanage(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/servmanage.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def empreg(request):
     return render(request, 'employee/empreg.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def empmanage(request):
-    return render(request, 'employee/empmanage.html', {'login' : conf.login, 'user' : conf.getuser()})
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    cursor = connection.cursor()
+    sql = "SELECT * FROM EMPLOYEE"
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    cursor.close()
+
+    dict_result = []
+
+    for r in result:
+        user_id = r[0]
+        first_name = r[3]
+        position = r[2]
+        
+        row = {'user_id': user_id, 'first_name': first_name, 'position': position}
+        dict_result.append(row)
+    return render(request, 'employee/empmanage.html', {'login' : conf.login, 'employees': dict_result, 'user' : conf.getuser()})
 
 def hoteloverview(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def expense(request):
-    return render(request, 'employee/expense.html', {'login' : conf.login, 'user' : conf.getuser()})
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    today = str(time.strftime("%Y-%m-%d"))
+    print(today)
+    return render(request, 'employee/expense.html', {'login' : conf.login, 'mindate':today, 'user' : conf.getuser()})
 
 def eattend(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/eattend.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def fire(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/fire.html', {'login' : conf.login, 'user' : conf.getuser()})
     
 
 def workh(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/workh.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def serveEx(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/serveEx.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def empsalary(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def mansalary(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def eproedit(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+def empdetails(request, id):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'employee/empdetails.html', {'login' : conf.login, 'empid' : id, 'user' : conf.getuser()})
+    

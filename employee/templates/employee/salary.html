@@ -16,13 +16,13 @@
 
 {% include 'modal.html' with user=user %}
 {% if salary %}
-<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-
-    <strong>Please fill up the form.</strong>
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+    <strong>Salary Payment Unsuccessful!</strong> The employee is not present in the employee list.
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
+
 {% elif salary_pay %}
 <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
 
@@ -33,12 +33,15 @@
 </div>
 
 {% else %}
-<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-    <strong>Salary Payment Unsuccessful!</strong> The employee is not present in the employee list.
+
+<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Please fill up the form.</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
+
 {% endif %}
 
 

@@ -55,7 +55,7 @@
     <div class="form-row">
         <div class="col-md-6 mb-3">
             <label for="validationCustom01">First name</label>
-            <input type="text" class="form-control" name='user' id="validationCustom01" placeholder="First Name" required>
+            <input type="text" class="form-control" name='user' id="validationCustom01" maxlength="100" placeholder="First Name" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -63,7 +63,7 @@
 
         <div class="col-md-6 mb-3">
             <label for="validationCustom02">Last name</label>
-            <input type="text" class="form-control" name='lastn' id="validationCustom02" placeholder="Last Name" required>
+            <input type="text" class="form-control" name='lastn' id="validationCustom02" maxlength="100" placeholder="Last Name" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -72,14 +72,14 @@
     <div class="form-row">
         <div class="col-md-6 mb-3">
             <label for="validationCustom04">Password</label>
-            <input type="password" name='pass' class="form-control" id="validationCustom03" required>
+            <input type="password" name='pass' class="form-control" maxlength="100" id="validationCustom03" required>
             <div class="invalid-feedback">
                 Please select a valid password.
             </div>
         </div>
         <div class="col-md-6 mb-3">
             <label for="validationCustom05">Rewrite Password</label>
-            <input type="password" name='repass' class="form-control" id="validationCustom04" required>
+            <input type="password" name='repass' class="form-control" maxlength="100" id="validationCustom04" required>
             <div class="invalid-feedback">
                 Please confirm your password.
             </div>
@@ -91,7 +91,7 @@
     <div class="form-row">
         <div class="col-md-6 mb-3">
             <label for="validationCustom03">Email</label>
-            <input type="email" name='email' class="form-control" id="validationCustom05" placeholder="example@example.com" required>
+            <input type="email" name='email' class="form-control" id="validationCustom05" maxlength="100" placeholder="example@example.com" required>
             <div class="invalid-feedback">
                 Please provide a valid email.
             </div>
@@ -99,12 +99,12 @@
 
         <div class="col-md-3 mb-3">
             <label for="validationCustom02">House No</label>
-            <input type="text" name='house' class="form-control" id="validationCustom06">
+            <input type="text" name='house' class="form-control" maxlength="10" id="validationCustom06">
 
         </div>
         <div class="col-md-3 mb-3">
             <label for="validationCustom02">Road No</label>
-            <input type="text" name='road' class="form-control" id="validationCustom07">
+            <input type="text" name='road' class="form-control"  maxlength="10" id="validationCustom07">
 
         </div>
     </div>
@@ -117,14 +117,14 @@
         </div>
         <div class="col-md-3 mb-3">
             <label for="validationCustom03">City</label>
-            <input type="text" name='city' class="form-control" id="validationCustom12">
+            <input type="text" name='city' class="form-control"  maxlength="20" id="validationCustom12">
             <div class="invalid-feedback">
                 Please provide a valid city.
             </div>
         </div>
         <div class="col-md-3 mb-3">
             <label for="validationCustom04">Country</label>
-            <input type="text" name='country' class="form-control" id="validationCustom13">
+            <input type="text" name='country' class="form-control"  maxlength="20" id="validationCustom13">
             <div class="invalid-feedback">
                 Please provide a valid Country.
             </div>
@@ -143,17 +143,11 @@
                 <option>ACCOUNTANT</option>
                 <option>LAUNDRY SERVICER</option>
                 <option>FOOD DELIVARY MAN</option>
+                <option>MANAGER</option>
                 <option>HE HE! BOLBO NA</option>
             </select>
         </div>
-        <div class="col-md-3 mb-3">
-            <label for="exampleFormControlSelect1">Permission</label>
-            <select class="form-control" name="permission" id="exampleFormControlSelect2">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-            </select>
-        </div>
+        
         <div class="col-md-3 mb-3">
             <label for="validationCustom02">Base Salary</label>
             <input type="number" name='salary' class="form-control" id="validationCustom116" required>

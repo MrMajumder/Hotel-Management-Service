@@ -17,16 +17,17 @@
 {% include 'modal.html' with user=user %}
 
 {% if fire %}
-<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-
-    <strong>Fill the necessary Infomation</strong>
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+    <strong>Employee Firing Unsuccessful!</strong> The staff is not present in the employee list.
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
+    
 </div>
 {% else %}
-<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-    <strong>Employee Firing Unsuccessful!</strong> The staff is not present in the employee list.
+<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+    
+    <strong>Fill the necessary Infomation</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>

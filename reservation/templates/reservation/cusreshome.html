@@ -22,9 +22,9 @@
             <h1 class="display-4 text-right mb-4">Reservation Menu</h1>
             <div class="nav flex-column nav-pills text-right" id="v-pills-tab" role="tablist"
                 aria-orientation="vertical">
-                <a class="nav-link " id="actrestab" data-toggle="pill" href="#actres" role="tab"
+                <a class="nav-link active" id="actrestab" data-toggle="pill" href="#actres" role="tab"
                     aria-controls="actres" aria-selected="true">Active Reservations</a>
-                <a class="nav-link active" id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
+                <a class="nav-link " id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
                     aria-selected="true">Create Reservation</a>
             </div>
         </div>
@@ -87,15 +87,6 @@
                     </div>
                     
                     
-                    {% elif date %}
-                    <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                    
-                        <strong>Reservation Unsucessfull.</strong>You have choosen invalid date
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    
                     {% else %}
                     <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
                     
@@ -149,7 +140,7 @@
                         <div class="form-row">
                             <div class="col-md-6 mb-5">
                                 <label for="validationCustom03">Arrival Date</label>
-                                <input type="date" name='a_date' class="form-control" id="validationCustom000" required>
+                                <input type="date" name='a_date'  min="{{mindate}}" class="form-control" id="validationCustom000" required>
                                 <div class="invalid-feedback">
                                     Please provide a valid date.
                                 </div>
