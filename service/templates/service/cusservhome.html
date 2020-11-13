@@ -67,7 +67,114 @@
 
 
                 <div class="tab-pane fade" id="creres" role="tabpanel" aria-labelledby="crerestab">
-                    <h2>অ দাদা, এখানে একটা ফর্ম বানিয়ে দাও না<br>এই ফর্ম দিয়ে যাতে আমরা নতুন নতুন সার্ভিস বানাতে পারি!</h2>
+                    {% if service %}
+
+                    <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+                        <strong>This Service can't be provided Now.</strong>No of choosen guests is more than the
+                        capacity.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    {% else %}
+                    <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+
+                        <strong>Please fill up the form.</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+
+
+
+                    <div class="container text-center">
+                        <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
+
+
+                        <h3>
+                            Room Reservation Form
+                        </h3>
+
+                        <p>------------------------------</p>
+                    </div>
+
+                    <!--form section-->
+                    <form action='{{ HTTP_HOST }}/signsuccess/' method='post' class="needs-validation my-4 container"
+                        novalidate>
+                        {% csrf_token %}
+
+
+                        <div class="form-row">
+
+                            <div class="col-md-6 mb-6">
+                                <label for="exampleFormControlSelect1">Service Type</label>
+                                <select class="form-control" name="room_t" id="exampleFormControlSelect1000000"
+                                    required>
+                                    <option>Food Service</option>
+                                    <option>Laundry Service</option>
+                                    <option>Cleainging Service</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="validationCustom01">Service Description</label>
+                                <input type="text" name='workd' class="form-control" id="validationCustom0000001"
+                                    maxlength="256" required>
+                            </div>
+                        </div>
+
+                        <!-- <button class="btn btn-primary" type="submit">Expense Entry</button> -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            Confirm Service
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-warning">
+                                        <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer container justify-content-center col-5">
+                                        <button type="submit" class="btn btn-primary">YES</button>
+                                        <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <script>
+                        // Example starter JavaScript for disabling form submissions if there are invalid fields
+                        (function () {
+                            'use strict';
+                            window.addEventListener('load', function () {
+                                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                                var forms = document.getElementsByClassName('needs-validation');
+                                // Loop over them and prevent submission
+                                var validation = Array.prototype.filter.call(forms, function (form) {
+                                    form.addEventListener('submit', function (event) {
+                                        if (form.checkValidity() === false) {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+                                        }
+                                        form.classList.add('was-validated');
+                                    }, false);
+                                });
+                            }, false);
+                        })();
+                    </script>
+                    {% endblock %}
                 </div>
 
 
