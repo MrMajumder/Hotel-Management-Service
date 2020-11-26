@@ -38,51 +38,69 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-4 d-flex flex-column justify-content-center">
+        <div class="col-3 d-flex flex-column justify-content-center">
             <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto my-2" width="150" height="150"
                 alt="username"><br />
-            <p class="text text-right display-4">Service {{servid}}:<br>Details</p>
-            <button type="button" class="btn btn-success my-2">
-                Completed &#10004;
-            </button>
+            <p class="text text-center display-4">Service {{service.servid}} : Details</p>
+            
+            
+            {% if service.isactive %}
             <button type="button" class="btn btn-info  my-2">
                 Pending &#9711;
             </button>
-            <button type="button" class="btn btn-secondary  my-2">
-                Inactive &#10060;
+            {% else %}
+            <button type="button" class="btn btn-success my-2">
+                Completed &#10004;
             </button>
+            {% endif %}
             <button type="button" class="btn btn-primary  my-2" data-toggle="modal" data-target="#cancelmodal">
                 Cancel This Service
             </button>
         </div>
-        <div class="col-8">
+        <div class="container col-8">
             <p class="display-4">Service Information</p>
             <table class="table table-hover table-striped table-bordered w-20">
                 <thead class="thead-dark text-center">
                     <tr>
-                        <th scope="row" colspan="3">Detailed Information</th>
+                        <th scope="row" colspan="3">Service Details</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">Service ID</th>
-                        <td colspan="2">{{servid}}</td>
+                        <td colspan="2">{{service.servid}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Name</th>
-                        <td colspan="2">Laundry</td>
+                        <td colspan="2">{{service.name}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Cost</th>
-                        <td colspan="2">BDT 5000</td>
+                        <td colspan="2">BDT {{service.cost}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Description</th>
-                        <td colspan="2">Cleans 30 of your clothing items, irons them, and sends them back to your room. Please mark clothes of which color is not fixed, and may cause other clothes to be ruined. If you do this lathi diya pitamu hala</td>
+                        <td colspan="2">{{service.description}}</td>
+                    </tr>
+                    
+                </tbody>
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="3">Service Execution Information</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Assigned to Room</th>
+                        <td colspan="2">{{service.roomid}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Employee Assigned</th>
-                        <td colspan="2">Rokhsana (Emp. ID: 5005)</td>
+                        <td colspan="2">{{service.empname}} (Employee ID: {{service.empid}})</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Billed to Bill ID</th>
+                        <td colspan="2">{{service.empid}}</td>
                     </tr>
                 </tbody>
             </table>

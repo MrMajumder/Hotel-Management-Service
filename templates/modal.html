@@ -50,7 +50,7 @@
                     </tbody>
                     {% else %}
                     <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/profile/" class="text-light">Profile</a></td>
+                        <td><a href="{{ HTTP_HOST }}/employee/profile/{{user.user_id}}/" class="text-light">Profile</a></td>
                     </tr>
                     {% if user.role == "director" or user.role == "manager" %}
                     <tr>

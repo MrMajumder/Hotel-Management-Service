@@ -36,27 +36,28 @@
                     </h4>
 
                     <div class="row">
-                        {% for resid in data %}
+                        {% for res in data %}
                         <div class="col-4">
                             <div class="card border-secondary mb-3">
                                 <div class="card-header font-weight-bold">
-                                    Reservation : {{resid}}
+                                    Reservation : {{res.resid}}
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text text-justify">
-                                        Hi, this is some basic info about our reservation. Such as rooms, tables,
-                                        services included, start date, etc. Clicking this will take you to another page,
-                                        where the date of this reservation will be shown.
+                                        Reservation ID: {{res.resid}} <br>
+                                        Number of Guests: {{res.guest_no}} <br>
+                                        Arrival Date: {{res.arrivaldate}} <br>
+                                        Depart Date: {{res.departuredate}} <br>
                                     </p>
                                     <form class="form-inline">
                                         <a class="btn btn-primary text-white mx-auto" role="button"
-                                            href="{{ HTTP_HOST }}/reservation/{{resid}}/">
+                                            href="{{ HTTP_HOST }}/reservation/{{res.resid}}/">
                                             View Details
                                         </a>
                                     </form>
                                 </div>
                                 <div class="card-footer font-weight-light">
-                                    Date Created: 11 Jan, 2020
+                                    Date Created: {{res.arrivaldate}}
                                 </div>
                             </div>
                         </div>

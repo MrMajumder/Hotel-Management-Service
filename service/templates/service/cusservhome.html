@@ -35,21 +35,21 @@
                     </h4>
 
                     <div class="row">
-                        {% for servid in data %}
+                        {% for ser in data %}
                         <div class="col-4">
                             <div class="card border-secondary mb-3">
                                 <div class="card-header font-weight-bold">
-                                    Service : {{servid}}
+                                    Service : {{ser.servid}}
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text text-justify">
-                                        Hi, this is some basic info about our Service. Such as rooms, tables,
-                                        services included, start date, etc. Clicking this will take you to another page,
-                                        where the date of this Service will be shown.
+                                        <b>Service Name:</b>{{ser.name}}<br>
+                                        <b>Delivered To Room:</b>{{ser.roomid}}<br>
+                                        <b>Under Reservation ID:</b>{{ser.resid}}<br>
                                     </p>
                                     <form class="form-inline">
                                         <a class="btn btn-primary text-white mx-auto" role="button"
-                                            href="{{ HTTP_HOST }}/service/{{servid}}/">
+                                            href="{{ HTTP_HOST }}/service/{{ser.actionid}}/">
                                             View Details
                                         </a>
                                     </form>

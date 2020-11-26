@@ -23,7 +23,7 @@ word-wrap: break-word;
     <div class="col-4 d-flex flex-column justify-content-center">
       <img src="{% static 'img/user.png' %}" class="d-block mx-auto" width="350" height="350" alt="username"><br />
       <p class="text text-center display-4 mb-0 pb-0">{{allval.name}}</p>
-      <p class="text text-center text-secondary">@{{allval.username}}</p>
+      <p class="text text-center text-secondary">{{allval.email}}</p>
     </div>
     <div class="col-8">
       <p class="display-4">Employee Information</p>
@@ -42,7 +42,7 @@ word-wrap: break-word;
           <tr>
             {% if ph == allval.phone_nums.0 %} <th scope="row" colspan="2" rowspan="{{allval.phone_nums|length}}"
               style="vertical-align : middle;">Phone Number</th> {% endif %}
-            <td>{{ph.phone_no}}</td>
+            <td>+880{{ph.phone_no}}</td>
           </tr>
           {% endfor %}
           <tr>

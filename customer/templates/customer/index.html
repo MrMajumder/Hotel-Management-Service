@@ -13,14 +13,14 @@
 <h1 class="display-2 text-center">Customer Profile</h1>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-4 d-flex flex-column justify-content-center">
+    <div class="col-3 d-flex flex-column justify-content-center">
       <img src="{% static 'img/user.png' %}" class="d-block mx-auto" width="350" height="350" alt="username"><br />
       <p class="text text-center display-4 mb-0 pb-0">{{allval.name}}</p>
-      <p class="text text-center text-secondary">@{{allval.username}}</p>
+      <p class="text text-center text-secondary">{{allval.email}}</p>
     </div>
-    <div class="col-8">
+    <div class="container col-8">
       <p class="display-4">Customer Information</p>
-      <table class="table table-hover table-striped table-bordered w-20">
+      <table class="table table-hover table-striped table-bordered">
         <thead class="thead-dark text-center">
           <tr>
             <th scope="row" colspan="3">Basic Information</th>
@@ -35,12 +35,12 @@
           <tr>
             {% if ph == allval.phone_nums.0 %} <th scope="row" colspan="2"
               rowspan="{{allval.phone_nums|length}}" style="vertical-align : middle;">Phone Number</th> {% endif %}
-            <td>{{ph.phone_no}}</td>
+            <td>+880{{ph.phone_no}}</td>
           </tr>
           {% endfor %}
           <tr>
             <th scope="row" colspan="2">Email</th>
-            <td>{{em.email}}</td>
+            <td>{{allval.email}}</td>
           </tr>
           <tr>
             <th scope="row" rowspan="4" style="vertical-align : middle;">Address</th>

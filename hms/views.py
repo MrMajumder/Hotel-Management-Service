@@ -103,6 +103,26 @@ def login(request):
     else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+def roomdetails(request, id):
+    if(conf.login == False):
+        return render(request, 'login.html', {'login': conf.login, 'alerttoggle': True, 'user': conf.getuser()})
+
+    cursor = connection.cursor()
+    sql = ("SELECT * FROM ROOM WHERE ROOM_ID = %s" % (id))
+    cursor.execute(sql)
+    row = cursor.fetchall()
+
+    room = {}
+    room['roomid'] = row[0][0]
+    room['building'] = row[0][1]
+    room['floor'] = row[0][2]
+    room['capacity'] = row[0][3]
+    room['ac'] = row[0][4]
+    room['bed_no'] = row[0][5]
+    room['rent'] = row[0][6]
+    room['reservation_id'] = row[0][7]
+
+    return render(request, 'roomview.html', {'login': conf.login, 'alerttoggle': True, 'room' : room, 'user': conf.getuser()})
 
 def logout(request):
     if(conf.login):

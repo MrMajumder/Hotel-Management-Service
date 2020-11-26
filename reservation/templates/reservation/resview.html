@@ -1,6 +1,6 @@
 {% extends 'starter.html' %}
 
-{% block title %} Reservation: {{resid}} {% endblock %}
+{% block title %} Reservation: {{res.resid}} {% endblock %}
 
 {% block style %} {% endblock %}
 
@@ -22,8 +22,8 @@
             <div class="modal-body">
                 Are you sure you want to cancel this reservation?<br>
                 <p class="font-weight-light">
-                    Reservation ID: {{resid}} <br>
-                    Date Created: x
+                    Reservation ID: {{res.resid}} <br>
+                    Date Created: {{res.arrivaldate}}
                 </p>
                 <p class=>*Beware that this action cannot be reversed*</p>
             </div>
@@ -38,22 +38,25 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-4 d-flex flex-column justify-content-center">
-            <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto" width="100" height="100"
+        <div class="col-3 d-flex flex-column">
+            <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto my-4" width="100" height="100"
                 alt="username"><br />
-            <p class="text text-right display-4">Resrvation {{resid}}:<br>Details</p>
-            <button type="button" class="btn btn-success">
+            <p class="text text-right display-4">Resrvation {{res.resid}}:<br>Details</p>
+            {% if res.resactive == 1 %}
+            <button type="button" class="btn btn-success mb-3">
                 Active &#10004;
             </button>
-            <button type="button" class="btn btn-danger">
+            {% else %}
+            <button type="button" class="btn btn-danger mb-3">
                 Inactive &#10060;
             </button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelmodal">
+            {% endif %}
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#cancelmodal">
                 Cancel This Reservation
             </button>
         </div>
-        <div class="col-8">
-            <p class="display-4">Reservation Information</p>
+        <div class=" container col-8">
+            <p class="display-4 my-2">Reservation Information</p>
             <table class="table table-hover table-striped table-bordered w-20">
                 <thead class="thead-dark text-center">
                     <tr>
@@ -63,20 +66,20 @@
                 <tbody>
                     <tr>
                         <th scope="row" colspan="2">Reservation ID</th>
-                        <td>{{resid}}</td>
+                        <td>{{res.resid}}</td>
                     </tr>
                     <tr>
                         <th scope="row" colspan="2">Number of Guests</th>
-                        <td>6 people</td>
+                        <td>{{res.guest_no}} people</td>
                     </tr>
                     <tr>
                         <th scope="row" rowspan="2" style="vertical-align : middle;">Date</th>
                         <th scope="row">Arrival Date</th>
-                        <td>1 january, 2020</td>
+                        <td>{{res.arrivaldate}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Departure Date</th>
-                        <td>3 january, 2020</td>
+                        <td>{{res.departuredate}}</td>
                     </tr>
                 </tbody>
                 <thead class="thead-dark text-center">
@@ -91,18 +94,25 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if res.roomcnt == '0' %}
                     <tr>
-                        <td>101</th>
-                        <td colspan="2">floor: 3, building: 5, Capacity : 4</td>
+                        <td colspan="3" class="text-center"><i class="text-secondary">No Rooms Currently Associated</i></td>
                     </tr>
+                    {% else %}
+                    {% for roomid in res.rooms %}
                     <tr>
-                        <td>101</th>
-                        <td colspan="2">floor: 3, building: 5, Capacity : 4</td>
+                        <td class="text-center">{{roomid}}</th>
+                        <td colspan="2" class="text-center">
+                            <form class="form-inline">
+                                <a class="btn btn-primary text-white mx-auto" role="button"
+                                    href="{{ HTTP_HOST }}/room/{{roomid}}/">
+                                    Room:{{roomid}} Details
+                                </a>
+                            </form>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>101</th>
-                        <td colspan="2">floor: 3, building: 5, Capacity : 4</td>
-                    </tr>
+                    {% endfor %}
+                    {% endif %}
                 </tbody>
                 <thead class="thead-dark text-center">
                     <tr>
@@ -112,22 +122,31 @@
                 <thead class="thead-secondary text-center">
                     <tr>
                         <th scope="row">Service No.</th>
-                        <th scope="row" colspan="2">Details</th>
+                        <th scope="row">To Room</th>
+                        <th scope="row">Details</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% if res.servcnt == '0' %}
                     <tr>
-                        <td>5</th>
-                        <td colspan="2">Laundry</td>
+                        <td colspan="3" class="text-center"><i class="text-secondary">No Services Currently Associated</i></td>
                     </tr>
+                    {% else %}
+                    {% for serv in res.services %}
                     <tr>
-                        <td>3</th>
-                        <td colspan="2">Food</td>
+                        <td class="text-center">{{serv.serviceid}}</th>
+                        <td class="text-center">{{serv.roomid}}</th>
+                        <td class="text-center">
+                            <form class="form-inline">
+                                <a class="btn btn-primary text-white mx-auto" role="button"
+                                    href="{{ HTTP_HOST }}/service/{{serv.actionid}}/">
+                                    Service:{{serv.serviceid}} Details
+                                </a>
+                            </form>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>8</th>
-                        <td colspan="2">Cleaning</td>
-                    </tr>
+                    {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>

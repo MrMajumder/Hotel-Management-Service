@@ -26,20 +26,24 @@
                 <thead class="thead-dark text-center">
                     <tr>
                         <th scope="row">Service ID</th>
+                        <th scope="row">To Room</th>
+                        <th scope="row">Bill ID</th>
                         <th scope="row">Active/Inactive</th>
                         <th scope="row">View Details</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for servid in data %}
+                    {% for ser in data %}
                     <tr>
-                        <td class="text-center">{{servid}}</td>
-                        <td class="text-center">Active</td>
+                        <td class="text-center">{{ser.servid}}</td>
+                        <td class="text-center">{{ser.roomid}}</td>
+                        <td class="text-center">{{ser.billid}}</td>
+                        <td class="text-center table-{% if ser.isactive == 1 %}success{% else %}danger{% endif %}">{% if ser.isactive == 1 %}Active{% else %}Inactive{% endif %}</td>
                         <td class="text-center">
                             <form class="form-inline">
                                 <a class="btn btn-primary text-white mx-auto" role="button"
-                                    href="{{ HTTP_HOST }}/service/{{servid}}/">
-                                    ServID:{{servid}} Details
+                                    href="{{ HTTP_HOST }}/service/{{ser.actionid}}/">
+                                    ServID:{{ser.servid}} Details
                                 </a>
                             </form>
                         </td>
