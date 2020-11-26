@@ -100,8 +100,6 @@ def empmanage(request):
     sql = "SELECT X.USER_ID, (X.FIRST_NAME || ' ' || X.LAST_NAME), Y.POSITION FROM ACCOUNT_HOLDER X, EMPLOYEE Y WHERE X.USER_ID = Y.USER_ID AND X.USER_ID <>" + str(id)
     if(conf.role == 'manager'):
         sql = sql + " AND Y.MANAGER_ID = " + str(id)
-    print('sql command here******')
-    print(sql)
     cursor.execute(sql)
     result = cursor.fetchall()
     cursor.close()

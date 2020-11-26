@@ -10,7 +10,7 @@ def solores(request, id):
         return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser()})
 
     cursor = connection.cursor()
-    sql = ("SELECT RESERVATION.*, GETROOMCNT(%s), GETROOMS(%s), GETSERVCNT(%s), GETSERV(%s), GETSERVROOMS(%s), GETSERVACTIONID(%s) FROM RESERVATION WHERE RESERVATION_ID = %s" % (id, id, id, id, id, id, id))
+    sql = ("SELECT RESERVATION.*, GETROOMS(%s), GETSERV(%s), GETSERVROOMS(%s), GETSERVACTIONID(%s) FROM RESERVATION WHERE RESERVATION_ID = %s" % (id, id, id, id, id))
     cursor.execute(sql)
     row = cursor.fetchall()
 
@@ -20,16 +20,13 @@ def solores(request, id):
     res['arrivaldate'] = row[0][2]
     res['departuredate'] = row[0][3]
     res['resactive'] = row[0][4]
-    res['roomcnt'] = row[0][6]
-    res['servcnt'] = row[0][8]
 
-    if not res['roomcnt']:
+    if not row[0][6]:
         res['roomcnt'] = '0'
-    if not res['servcnt']:
+    if not row[0][7]:
         res['servcnt'] = '0'
 
-    rooms = row[0][7]
-    print(row[0][7])
+    rooms = row[0][6]
     if not rooms:
         res['rooms'] = []
     else:
@@ -38,12 +35,11 @@ def solores(request, id):
     res['rooms'] = sorted(res['rooms'])
     service = []
     res['services'] = []
-    if  row[0][9]:
+    if  row[0][7]:
+        service.append([int(x) for x in (row[0][7].split(','))])
+        service.append([int(x) for x in (row[0][8].split(','))])
         service.append([int(x) for x in (row[0][9].split(','))])
-        service.append([int(x) for x in (row[0][10].split(','))])
-        service.append([int(x) for x in (row[0][11].split(','))])
        
-        print('till here')
         for i in range(len(service[0])):
             s = {}
             s['actionid'] = service[2][i]
