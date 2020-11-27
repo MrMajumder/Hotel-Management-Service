@@ -12,7 +12,7 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
-<form action='{{ HTTP_HOST }}/reservation/creserv{{resid}}/' method='post' class="needs-validation my-4 container" novalidate>
+<form action='{{ HTTP_HOST }}/reservation/creserv{{res.resid}}/' method='post' class="needs-validation my-4 container" novalidate>
     {% csrf_token %}
     <div class="modal fade" id="cancelmodal" data-backdrop="static" tabindex="-1" role="dialog"
         aria-labelledby="cancelmodalTitle" aria-hidden="true">
@@ -24,7 +24,7 @@
                 <div class="modal-body">
                     Are you sure you want to cancel this reservation?<br>
                     <p class="font-weight-light">
-                        Reservation ID: {{resid}} <br>
+                        Reservation ID: {{res.resid}} <br>
                         Date Created: {{res.arrivaldate}}
                     </p>
                     <p class=>*Beware that this action cannot be reversed*</p>
@@ -49,14 +49,15 @@
             <button type="button" class="btn btn-success mb-3">
                 Active &#10004;
             </button>
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#cancelmodal">
+                Cancel This Reservation
+            </button>
             {% else %}
             <button type="button" class="btn btn-danger mb-3">
                 Inactive &#10060;
             </button>
             {% endif %}
-            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#cancelmodal">
-                Cancel This Reservation
-            </button>
+            
         </div>
         <div class=" container col-8">
             <p class="display-4 my-2">Reservation Information</p>
