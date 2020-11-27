@@ -35,17 +35,34 @@ def cr_service(request):
     servicet = request.POST.get('service_t', 'default')
     serviced = request.POST.get('serd', 'default')
     roomid = request.POST.get('roomid', 'default')
-    print(servicet)
-    print(serviced)
+
+    id = int(conf.user_id)
     cursor = connection.cursor()
-    returnval = cursor.callfunc('SERVICE_ENTRY', int, [servicet, serviced, conf.user_id, roomid])
+    returnval = cursor.callfunc('SERVICE_ENTRY', int, [servicet, serviced, int(conf.user_id), int(roomid)])
+    sql = ("SELECT X.ACTION_ID, X.SERVICE_ID, Z.NAME, X.ROOM_ID, Y.RESERVATION_ID FROM ROOM_HB_SERV_RECEIVES X, HOTEL_BILL Y, SERVICES Z WHERE X.BILL_ID = ANY(SELECT BILL_ID FROM HOTEL_BILL WHERE RESERVATION_ID = ANY(SELECT RESERVATION_ID FROM RESERVATION WHERE USER_ID = %s)) AND X.BILL_ID = Y.BILL_ID AND X.SERVICE_ACTIVE = 1 AND Z.SERVICE_ID = X.SERVICE_ID" % id)
+    cursor.execute(sql)
+    table = cursor.fetchall()
+    print(table)
+    data = []
+    for row in table:
+        ser = {}
+        ser['actionid'] = row[0]
+        ser['servid'] = row[1]
+        ser['name'] = row[2]
+        ser['roomid'] = row[3]
+        ser['resid'] = row[4]
+        data.append(ser)
+    
+    data = sorted(data, key=lambda item: int(item['servid']))
+    print('please find the returnvalue')
     print(returnval)
-    cursor.close()
+    
+
     if returnval == 1:
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'srsuccess': True})
     elif returnval == 2:
-        return render(request, 'service/cusservhome.html', {'login' : conf.login, 'data' : [2, 4, 6, 8, 10],  'rprob': True, 'user' : conf.getuser()})
-    return render(request, 'service/cusservhome.html', {'login' : conf.login, 'data' : [2, 4, 6, 8, 10],  'sprob': True, 'user' : conf.getuser()})
+        return render(request, 'service/cusservhome.html', {'login' : conf.login, 'data' : data, 'user' : conf.getuser()})
+    return render(request, 'service/cusservhome.html', {'login' : conf.login, 'data' : data,  'sprob': True, 'user' : conf.getuser()})
 
 
 

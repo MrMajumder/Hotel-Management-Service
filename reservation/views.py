@@ -66,15 +66,29 @@ def cr_reserve(request):
     dict_result['room'] = False
     dict_result['date'] = False
     dict_result['guest'] = False
+
+    id = int(conf.user_id)
+    cursor = connection.cursor()
+    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 1" % id)
+    cursor.execute(sql)
+    table = cursor.fetchall()
+
+    data = []
+    for row in table:
+        res = {}
+        res['resid'] = row[0]
+        res['guest_no'] = row[1]
+        res['arrivaldate'] = row[2]
+        res['departuredate'] = row[3]
+        res['resactive'] = row[4]
+        data.append(res)
+    
+    data = sorted(data, key=lambda item: int(item['resid']))
+
     if adate > ddate:
         dict_result['date'] = True
-        return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'data' : [1, 3, 5], 'mindate' : conf.today, 'prob': dict_result, 'user' : conf.getuser()})
+        return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'data' : data, 'mindate' : conf.today, 'prob': dict_result, 'user' : conf.getuser()})
 
-
-    print(roomt)
-    print(guests)
-    print(adate)
-    print(ddate)
     cursor = connection.cursor()
     order_count = cursor.var(int).var
     cursor.callproc("RESERV_ENTRY", [guests, conf.user_id, adate, ddate, roomt, order_count])
@@ -91,7 +105,7 @@ def cr_reserve(request):
     print("Printing laptop details")
     
     print('hello1')
-    return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'data' : [1, 3, 5], 'mindate' : conf.today, 'prob': dict_result, 'user' : conf.getuser()})
+    return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'data' : data, 'mindate' : conf.today, 'prob': dict_result, 'user' : conf.getuser()})
 
 
 

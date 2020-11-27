@@ -11,7 +11,7 @@
 {% block body %}
 {% load static %}
 {% include 'modal.html' with user=user %}
-<form action='{{ HTTP_HOST }}/service/ca_serve{{servid}}/' method='post' class="needs-validation my-4 container"
+<form action='{{ HTTP_HOST }}/service/ca_serve{{service.servid}}/' method='post' class="needs-validation my-4 container"
     novalidate>
     {% csrf_token %}
     <div class="modal fade" id="cancelmodal" data-backdrop="static" tabindex="-1" role="dialog"
@@ -24,8 +24,8 @@
                 <div class="modal-body">
                     Are you sure you want to cancel this service?<br>
                     <p class="font-weight-light">
-                        Service ID: x <br>
-                        Date Created: x
+                        Service ID: {{service.serviceid}} <br>
+                        Assigned to: {{service.empname}}
                     </p>
                     <p class=>*Beware that this action cannot be reversed*</p>
                 </div>
@@ -51,14 +51,15 @@
             <button type="button" class="btn btn-info  my-2">
                 Pending &#9711;
             </button>
+            <button type="button" class="btn btn-primary  my-2" data-toggle="modal" data-target="#cancelmodal">
+                Cancel This Service
+            </button>
             {% else %}
             <button type="button" class="btn btn-success my-2">
                 Completed &#10004;
             </button>
             {% endif %}
-            <button type="button" class="btn btn-primary  my-2" data-toggle="modal" data-target="#cancelmodal">
-                Cancel This Service
-            </button>
+            
         </div>
         <div class="container col-8">
             <p class="display-4">Service Information</p>
