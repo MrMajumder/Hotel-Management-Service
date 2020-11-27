@@ -2,8 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import connection
 from hms import conf
-from datetime import datetime
-import time 
 
 # Create your views here.
 def index(request):
@@ -50,9 +48,7 @@ def index(request):
 def res(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    today = str(time.strftime("%Y-%m-%d"))
-    print(today)
-    return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'data' : [1, 3, 5], 'mindate' : today, 'user' : conf.getuser()})
+    return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'data' : [1, 3, 5], 'mindate' : conf.today, 'user' : conf.getuser()})
 
 def solores(request, id):
     if(conf.login == False):
@@ -73,6 +69,20 @@ def soloser(request, id):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'service/servview.html', {'login' : conf.login, 'servid' : id, 'user' : conf.getuser()})
+
+def com(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'customer/complaint.html', {'login' : conf.login, 'data' : [2, 4, 6, 8, 10], 'user' : conf.getuser()})
+
+def fcom(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    complain = request.POST.get('comp', 'default')
+    cursor = connection.cursor()
+    cursor.callproc("NEW_COMPLAIN", [conf.user_id, complain])
+    cursor.close()
+    return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'comp' : True})
 
 
 

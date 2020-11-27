@@ -11,29 +11,32 @@
 {% block body %}
 {% load static %}
 {% include 'modal.html' with user=user %}
-
-<div class="modal fade" id="cancelmodal" data-backdrop="static" tabindex="-1" role="dialog"
-    aria-labelledby="cancelmodalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Are You Sure?</h5>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to cancel this service?<br>
-                <p class="font-weight-light">
-                    Service ID: x <br>
-                    Date Created: x
-                </p>
-                <p class=>*Beware that this action cannot be reversed*</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
-                <button type="button" class="btn btn-primary">Cancel This Service</button>
+<form action='{{ HTTP_HOST }}/service/ca_serve{{servid}}/' method='post' class="needs-validation my-4 container"
+    novalidate>
+    {% csrf_token %}
+    <div class="modal fade" id="cancelmodal" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="cancelmodalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Are You Sure?</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to cancel this service?<br>
+                    <p class="font-weight-light">
+                        Service ID: x <br>
+                        Date Created: x
+                    </p>
+                    <p class=>*Beware that this action cannot be reversed*</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                    <button type="submit class=" btn btn-primary">Cancel This Service</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 
 
 <div class="container-fluid">
@@ -78,7 +81,9 @@
                     </tr>
                     <tr>
                         <th scope="row">Description</th>
-                        <td colspan="2">Cleans 30 of your clothing items, irons them, and sends them back to your room. Please mark clothes of which color is not fixed, and may cause other clothes to be ruined. If you do this lathi diya pitamu hala</td>
+                        <td colspan="2">Cleans 30 of your clothing items, irons them, and sends them back to your room.
+                            Please mark clothes of which color is not fixed, and may cause other clothes to be ruined.
+                            If you do this lathi diya pitamu hala</td>
                     </tr>
                     <tr>
                         <th scope="row">Employee Assigned</th>

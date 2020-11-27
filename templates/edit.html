@@ -18,14 +18,23 @@
 
 {% endif %}
 
-{% if sign %}
+{% if unsuccess %}
 <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-    <strong>Signup Unsuccessful!</strong> Please recheck your password.
+    <strong>Profile Edit Unsuccessful!</strong> Please recheck your password.
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 
 </div>
+{% elif success %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Profile Edit Successful!</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+</div>
+
 {% else %}
 <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
 
@@ -49,7 +58,7 @@
 </div>
 
 <!--form section-->
-<form action='{{ HTTP_HOST }}/signsuccess/' method='post' class="needs-validation my-4 container" novalidate>
+<form action='{{ HTTP_HOST }}/editform/' method='post' class="needs-validation my-4 container" novalidate>
     {% csrf_token %}
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
@@ -61,7 +70,7 @@
                 <div class="form-row ">
                     <div class="col-md-6 mb-3">
                         <label for="validationCustom01">First name</label>
-                        <input type="text" class="form-control" name='user' id="validationCustom01" value="Mark">
+                        <input type="text" class="form-control" name='fname' id="nfname" value="Mark">
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -69,7 +78,7 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="validationCustom02">Last name</label>
-                        <input type="text" class="form-control" name='lastn' id="validationCustom02" value="Otto">
+                        <input type="text" class="form-control" name='lname' id="nlname" value="Otto">
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -92,14 +101,14 @@
                 <div class="form-row">
                     <div class="col-md-6 mb-3">
                         <label for="validationCustom04">New Password</label>
-                        <input type="password" name='pass' class="form-control" id="validationCustom03">
+                        <input type="password" name='pass' class="form-control" id="npass">
                         <div class="invalid-feedback">
                             Please select a valid password.
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="validationCustom05">Rewrite Password</label>
-                        <input type="password" name='repass' class="form-control" id="validationCustom04">
+                        <input type="password" name='repass' class="form-control" id="rnpass">
                         <div class="invalid-feedback">
                             Please confirm your password.
                         </div>
@@ -123,24 +132,24 @@
 
                     <div class="col-md-3 mb-3">
                         <label for="validationCustom02">House No</label>
-                        <input type="text" name='house' class="form-control" id="validationCustom06">
+                        <input type="text" name='house' class="form-control" id="nhouse">
 
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="validationCustom02">Road No</label>
-                        <input type="text" name='road' class="form-control" id="validationCustom07">
+                        <input type="text" name='road' class="form-control" id="nroad">
 
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="validationCustom03">City</label>
-                        <input type="text" name='city' class="form-control" id="validationCustom12">
+                        <input type="text" name='city' class="form-control" id="ncity">
                         <div class="invalid-feedback">
                             Please provide a valid city.
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="validationCustom04">Country</label>
-                        <input type="text" name='country' class="form-control" id="validationCustom13">
+                        <input type="text" name='country' class="form-control" id="ncountry">
                         <div class="invalid-feedback">
                             Please provide a valid Country.
                         </div>
@@ -160,7 +169,7 @@
                 <div class="form-row">
                     <div class="col-md-12 mb-6">
                         <label for="validationCustom01"> New Phone number</label>
-                        <input type="text" name='phnumber' class="form-control" id="validationCustom08">
+                        <input type="text" name='phnumber1' class="form-control" id="nphone">
                     </div>
                 </div>
             </div>
@@ -180,17 +189,17 @@
                 <div class="form-row">
                     <div class="col-md-3 mb-3">
                         <label for="validationCustom02">Id card no</label>
-                        <input type="number" name='idcard' class="form-control" id="validationCustom09">
+                        <input type="number" name='idcard' class="form-control" id="nicard">
 
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="validationCustom02">credit card no</label>
-                        <input type="number" name='creditcard' class="form-control" id="validationCustom10">
+                        <input type="number" name='creditcard' class="form-control" id="ncredit">
 
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="validationCustom02">passport no</label>
-                        <input type="number" name='passport' class="form-control" id="validationCustom11">
+                        <input type="number" name='passport' class="form-control" id="npassport">
 
                     </div>
 
@@ -202,7 +211,38 @@
 
     {% endif %}
     
-    <button class="btn btn-primary" type="submit">Confirm Change</button>
+    
+    <button type="button" class="btn btn-primary container justify-content-center col-2 my-3" data-toggle="modal"
+        data-target="#exampleModal">
+
+        Confirm Change
+
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                    Are you sure that you want to change this information?
+                   
+                </div>
+                <div class="modal-footer container justify-content-center col-5">
+                    <button type="submit" class="btn btn-primary">YES</button>
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
     
 </form>
 

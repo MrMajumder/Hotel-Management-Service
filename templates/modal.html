@@ -41,6 +41,9 @@
                             <td><a href="{{ HTTP_HOST }}/customer/services/" class="text-light">Services</a></td>
                         </tr>
                         <tr>
+                            <td><a href="{{ HTTP_HOST }}/customer/complain/" class="text-light">Complain</a></td>
+                        </tr>
+                        <tr>
                             <td><a href="{{ HTTP_HOST }}/deletion/" class="text-light">Delete Your Account</a></td>
                         </tr>
                         <tr>
@@ -82,6 +85,9 @@
                     <tr>
                         <td><a href="{{ HTTP_HOST }}/employee/servmanage/" class="text-light">Services Management</a>
                         </td>
+                    </tr>
+                    <tr>
+                        <td><a href="{{ HTTP_HOST }}/edition/" class="text-light">Edit Your Account</a></td>
                     </tr>
                     {% endif %}
                     {% if user.role == "manager" or user.role == "director" %}

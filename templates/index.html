@@ -20,11 +20,68 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-{% endif %}
 
-{% if logins %}
+{% elif esign %}
+
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Employee Registration Successful!</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% elif logins %}
 <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
     <strong>Congratulations!</strong> Login Successful.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+{% elif rsuccess %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Congratulations!</strong> Reservation Successful.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% elif srsuccess %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Congratulations!</strong> Service Ordered Successfully.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% elif comp %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Your Complain has been taken.</strong> We will try to solve this issue as soon as possible.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% elif rcancel %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Reservation cancellation succussfull!</strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% elif delete %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Account Deletion Succussfull!</strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% elif scancel %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Service cancellation succussfull!</strong> 
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>

@@ -10,6 +10,72 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
-<h1 class="display-1">Hey This is customer complaint page</h1>
+<div class="container text-center">
+    <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="100" height="100">
+    <h1 class="display-4 text-center">This is a complaint form</h1>
+</div>
+
+<!--form section-->
+<form action='{{ HTTP_HOST }}/customer/filecomp/' method='post' class="needs-validation my-4 container" novalidate>
+    {% csrf_token %}
+
+
+    <div class="form-row">
+
+        <div class="col-md-6 mb-6">
+            <label for="validationCustom101">Your Complaint</label>
+            <input type="text" name='comp' class="form-control" id="complain" maxlength="1000" required>
+
+        </div>
+    </div>
+
+    <!-- <button class="btn btn-primary" type="submit">Expense Entry</button> -->
+    <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#exampleModal">
+        Fill a complaint
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer container justify-content-center col-5">
+                    <button type="submit" class="btn btn-primary">YES</button>
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
 
 {% endblock %}

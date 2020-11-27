@@ -1,0 +1,42 @@
+
+<!-- this page is junk for now -->
+
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Reservation Unsucessfull.</strong>No of choosen guests is more than the capacity. 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% elif room %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Reservation Unsucessfull.</strong>Choosen Room is not available at this moment
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+{% elif date %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Reservation Unsucessfull.</strong>You have choosen invalid date
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% else %}
+<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Please fill up the form.</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+
+
+

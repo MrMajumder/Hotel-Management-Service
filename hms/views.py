@@ -74,23 +74,25 @@ def insert(request):
             role = 'employee'
         cursor.execute(sql, [email, password, role])
         sql1 = "INSERT INTO ACCOUNT_HOLDER VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql1, [count + 1, email, name, lastname, house, road, city, country])
+        cursor.execute(sql1, [count + 1000, email, name, lastname, house, road, city, country])
         phnumber = funcs.split(phnumber)
         for i in phnumber:
             s = funcs.rspace(i)
             sql2 = "INSERT INTO ACCOUNT_HOLDER_PHNUMBER VALUES(%s, %s)"
-            cursor.execute(sql2, [count + 1, int(s)])
+            cursor.execute(sql2, [count + 1000, int(s)])
         if(conf.role == 'manager' or conf.role == 'director'):
             print(count + 1, conf.user_id, position, workd, permission, salary)
             sql5 = "INSERT INTO EMPLOYEE VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql5, [count + 1, conf.user_id, position, workd, permission, salary, '', ''])
+            cursor.execute(sql5, [count + 1000, conf.user_id, position, workd, permission, salary, '', 0])
             
         else:
             sql4 = "INSERT INTO CUSTOMER VALUES(%s, %s, %s, %s)"
-            cursor.execute(sql4, [count + 1, idcard, credit, passport])
+            cursor.execute(sql4, [count + 1000, idcard, credit, passport])
 
         connection.commit()
         cursor.close()
+        if(conf.role == 'manager' or conf.role == 'director'):
+            return render(request, 'index.html', {'loginid': count + 100, 'login': conf.login, 'esign': True, 'user': conf.getuser()})
         return render(request, 'index.html', {'loginid': count + 100, 'login': conf.login, 'sign': True, 'user': conf.getuser()})
 
     return render(request, 'signup.html', {'sign': False})
@@ -168,7 +170,20 @@ def enter_account(request):
 def delete(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'delete.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'delete.html', {'login' : conf.login, 'user' : conf.getuser(), 'employee' : False})
+    
+
+def cdelete(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    cursor = connection.cursor()
+    cursor.callproc("DELETE_ACCOUNT", [conf.user_id])
+    cursor.close()
+    print('account deleted successfully')
+    if(conf.login):
+        conf.login = False
+        conf.user_id = conf.username = conf.name = conf.email = conf.role = ''
+    return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser(), 'delete' : True})
 
 def edit(request):
     if(conf.login == False):
@@ -177,3 +192,108 @@ def edit(request):
         return render(request, 'edit.html', {'login' : conf.login, 'customer' : True, 'user' : conf.getuser()})
     return render(request, 'edit.html', {'login' : conf.login,  'user' : conf.getuser()})
 
+
+def cedit(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+   
+    cus = False
+    name = request.POST.get('fname', 'default')
+    lastname = request.POST.get('lname', 'default')
+    password = request.POST.get('pass', 'default')
+    repassword = request.POST.get('repass', 'default')
+    phnumber = request.POST.get('phnumber1', 'default')
+    city = request.POST.get('city', '')
+    country = request.POST.get('country', '')
+    house = request.POST.get('house', '')
+    road = request.POST.get('road', '')
+
+    if conf.role == 'customer':
+        idcard = request.POST.get('idcard', '')
+        credit = request.POST.get('creditcard', '')
+        passport = request.POST.get('passport', '')
+        cus = True
+    
+    if(password == repassword):
+        if(password != ""):
+            password = hashing.hash_password(password)
+        cursor = connection.cursor()
+        cursor.callproc("EDIT_ACCOUNT", [conf.user_id, name, lastname, password, house, road, city, country, idcard, credit, passport, conf.role])
+        if phnumber != "":
+            cursor.callproc("PH_NUMBER_DELETE", [conf.user_id])
+            phnumber = funcs.split(phnumber)
+            for i in phnumber:
+                s = funcs.rspace(i)
+                cursor.callproc("PH_NUMBER_INSERT", [conf.user_id, int(s)])
+            
+        cursor.close()
+        return render(request, 'edit.html', {'login' : conf.login, 'customer' : cus, 'user' : conf.getuser(), 'success' : True})
+        
+    else:
+        return render(request, 'edit.html', {'login' : conf.login,  'customer' : cus, 'user' : conf.getuser(), 'unsuccess' : True})
+    
+
+    
+
+
+
+
+def newinsert(request):
+    if(conf.login and (conf.role != 'manager' and conf.role != 'director')):
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    name = request.POST.get('user', 'default')
+    lastname = request.POST.get('lastn', 'default')
+    password = request.POST.get('pass', 'default')
+    repassword = request.POST.get('repass', 'default')
+    email = request.POST.get('email', 'default')
+    phnumber = request.POST.get('phnumber', 'default')
+    city = request.POST.get('city', '')
+    country = request.POST.get('country', '')
+    house = request.POST.get('house', '')
+    road = request.POST.get('road', '')
+    if(conf.role != 'manager' and conf.role != 'director'):
+        conf.role_set('customer')
+
+    if(conf.role == 'manager' or conf.role == 'director'):
+        position = request.POST.get('position', '')
+        if(position == "MANAGER"):
+            permission = 2
+        else:
+            permission = 3
+        salary = request.POST.get('salary', '')
+        workd = request.POST.get('workd', '')
+        print(position)
+        
+    else:
+        idcard = request.POST.get('idcard', '')
+        credit = request.POST.get('creditcard', '')
+        passport = request.POST.get('passport', '')
+
+    if(password == repassword):
+        cursor = connection.cursor()
+        password = hashing.hash_password(password)
+        role = 'customer'
+        if(conf.role == 'manager' or conf.role == 'director'):
+            role = 'employee'
+        
+        order_count = cursor.var(int).var
+        cursor.callproc("INSERT_ACCOUNTHOLDER", [email, name, lastname, password, house, road, city, country, role, order_count])
+        suc = order_count.getvalue()
+        if suc == 0:
+            return render(request, 'signup.html', {'exist': True})
+        phnumber = funcs.split(phnumber)
+        for i in phnumber:
+            s = funcs.rspace(i)
+            cursor.callproc("NEW_PH_NUMBER_INSERT", [int(s)])
+
+        if(conf.role == 'manager' or conf.role == 'director'):
+            cursor.callproc("INSERT_EMPLOYEE", [conf.user_id,  position, workd, permission, salary])
+            
+        else:
+            cursor.callproc("INSERT_CUSTOMER", [idcard, credit, passport])
+        cursor.close()
+        if(conf.role == 'manager' or conf.role == 'director'):
+            return render(request, 'index.html', {'login': conf.login, 'esign': True, 'user': conf.getuser()})
+        return render(request, 'index.html', {'login': conf.login, 'sign': True, 'user': conf.getuser()})
+
+    return render(request, 'signup.html', {'sign': False})

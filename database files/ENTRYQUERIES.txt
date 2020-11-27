@@ -1,0 +1,24 @@
+---WHY ROOM AC IS INTEGER DATA TYPE
+
+INSERT INTO ROOM VALUES(3, 1, 1, 2, 1, 2, 5000, NULL, 'Personal Suit');
+INSERT INTO ROOM VALUES(1, 1, 1, 4, 1, 2, 5000, NULL, 'Family Suit');
+INSERT INTO ROOM VALUES(2, 1, 1, 4, 1, 2, 5000, NULL, 'Family Suit');
+
+
+
+INSERT INTO SERVICES VALUES(1, 'Food Service', 100, 'bla bla', NULL, 'Food Service');
+INSERT INTO SERVICES VALUES(2, 'Food Service', 100, 'bla bla', NULL, 'Food Service');
+INSERT INTO SERVICES VALUES(3, 'Food Service', 100, 'bla bla', NULL, 'Food Service');
+
+
+
+INSERT INTO LOG_IN
+VALUES('abal@gmail.com', '1234', 'employee');
+
+
+INSERT INTO ACCOUNT_HOLDER VALUES(0, 'abal@gmail.com', 'SAFA AND JAJO', 'PROJECT', '1','1','NAI', 'NAIDES');
+
+
+INSERT INTO ACCOUNT_HOLDER_PHNUMBER VALUES(0, 0000000000);
+
+INSERT INTO EMPLOYEE VALUES(0, NULL, 'director', 'director', '1', 1000000000, NULL,NULL);

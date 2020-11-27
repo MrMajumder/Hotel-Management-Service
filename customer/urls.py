@@ -6,4 +6,6 @@ urlpatterns = [
     path('reservations/', views.res, name='cusRes'),
     path('history/', views.his, name='cusHis'),
     path('services/', views.ser, name='cusSer'),
+    path('complain/', views.com, name='cusCom'),
+    path('filecomp/', views.fcom, name='cusFileCom'),
 ]

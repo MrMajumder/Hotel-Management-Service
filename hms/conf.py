@@ -1,3 +1,7 @@
+from datetime import datetime
+import time 
+
+
 def role_set(s):
     global role
     role = s
@@ -10,6 +14,7 @@ username = ''
 name = ''
 email = ''
 role = ''
+today = str(time.strftime("%Y-%m-%d"))
 #roles can be customer, staff, manager, director, (admin?)
 
 def getuser():

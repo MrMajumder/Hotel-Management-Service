@@ -28,12 +28,8 @@
 </div>
 
 <!--form section-->
-<form action='{{ HTTP_HOST }}/signsuccess/' method='post' class="needs-validation my-4 container" novalidate>
+<form action='{{ HTTP_HOST }}/delete/'  class="needs-validation my-4 container" novalidate>
     {% csrf_token %}
-
-
-
-
 
     <!-- <button class="btn btn-primary" type="submit">Expense Entry</button> -->
     <button type="button" class="btn btn-primary container justify-content-center col-0" data-toggle="modal"
