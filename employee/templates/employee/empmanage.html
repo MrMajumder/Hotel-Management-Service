@@ -16,8 +16,55 @@
 {% include 'modal.html' with user=user %}
 
 
+<div class="container-fluid my-4">
 
-<div class="container text-center">
+    <div class="row">
+        <div class="col-3">
+            <img src="{% static 'img/emp.png' %}" class="d-block mx-auto" width="150" height="150"
+                alt="reservation logo"><br />
+            <h1 class="display-4 text-center mb-4">Employee Management List</h1>
+        </div>
+        <div class="col-8 container">
+            <p class="display-4">List of All Employees Managed</p>
+            <table class="table table-hover table-striped table-bordered w-20">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row">User ID</th>
+                        <th scope="row">First Name</th>
+                        <th scope="row">Position</th>
+                        <th scope="row">View Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if employees|length > 0 %}
+                    {% for employee in employees %}
+                    <tr>
+                        <td>{{employee.user_id}}</td>
+                        <td>{{employee.name}}</td>
+                        <td>{{employee.position}}</td>
+                        <td class="text-center">
+                            <form class="form-inline">
+                                <a class="btn btn-primary text-white mx-auto" role="button"
+                                href="{{ HTTP_HOST }}/employee/profile/{{employee.user_id}}/">
+                                    View Details
+                                </a>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr class="text-center">
+                        <td colspan="4"> <i class="text-secondary">No employees managed by you</i></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="container text-center">
     <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
 
 
@@ -29,32 +76,33 @@
 
     <table class="table table-striped">
         <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">User Id</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Position</th>
-          </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">User Id</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Position</th>
+            </tr>
         </thead>
         <tbody>
-          {% for employee in employees %}
-                <tr>
-                    <th scope="row">#</th>
-                    <td>{{employee.user_id}}</td>
-                    <td>{{employee.first_name}}</td>
-                    <td>{{employee.position}}</td>
-                    <td>
-                        <a class="btn btn-primary" href="{{ HTTP_HOST }}/employee/empdetails/{{employee.user_id}}/" role="button">View Details</a>
-                    </td>
-                </tr>
+            {% for employee in employees %}
+            <tr>
+                <th scope="row">#</th>
+                <td>{{employee.user_id}}</td>
+                <td>{{employee.first_name}}</td>
+                <td>{{employee.position}}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ HTTP_HOST }}/employee/empdetails/{{employee.user_id}}/"
+                        role="button">View Details</a>
+                </td>
+            </tr>
             {% endfor %}
         </tbody>
-      </table>
+    </table>
 
 
 
 
-</div>
+</div> -->
 
 
 <script>
