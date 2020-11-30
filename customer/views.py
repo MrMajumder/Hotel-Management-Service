@@ -45,7 +45,7 @@ def res(request):
 
     id = int(conf.user_id)
     cursor = connection.cursor()
-    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 0" % id)
+    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 1" % id)
     cursor.execute(sql)
     table = cursor.fetchall()
     cursor.close()

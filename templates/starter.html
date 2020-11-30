@@ -39,6 +39,15 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
+                    {% if user.role == "director" %}
+                    <li class="nav-item active">
+                        <form action='{{ HTTP_HOST }}/updateserver/' class="form-inline">
+                            <button class="btn btn-outline-success" type="submit">Update Server Utilites</button>
+                            
+                        </form>
+                        <!-- <a class="nav-link" href="/">Update Server Utilites<span class="sr-only">(current)</span></a> -->
+                    </li>
+                    {% endif %}
                     <li class="nav-item active">
                         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                     </li>
