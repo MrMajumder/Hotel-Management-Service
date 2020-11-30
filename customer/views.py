@@ -45,7 +45,7 @@ def res(request):
 
     id = int(conf.user_id)
     cursor = connection.cursor()
-    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 0" % id)
+    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE IN (0, 1, 2, 3   )" % id)
     cursor.execute(sql)
     table = cursor.fetchall()
     cursor.close()
@@ -54,10 +54,9 @@ def res(request):
     for row in table:
         res = {}
         res['resid'] = row[0]
-        res['guest_no'] = row[1]
         res['arrivaldate'] = row[2].date()
         res['departuredate'] = row[3].date()
-        res['resactive'] = row[4]
+        res['isactive'] = row[4]
         data.append(res)
     
     data = sorted(data, key=lambda item: int(item['resid']))

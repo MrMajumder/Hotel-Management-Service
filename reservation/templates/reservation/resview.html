@@ -45,16 +45,21 @@
             <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto my-4" width="100" height="100"
                 alt="username"><br />
             <p class="text text-right display-4">Resrvation {{res.resid}}:<br>Details</p>
-            {% if res.resactive == 1 %}
-            <button type="button" class="btn btn-success mb-3">
-                Active &#10004;
+            {% if res.resactive == 0 or res.resactive == 1 %}
+            <button type="button" class="btn btn-{% if res.resactive == 0 %}secondary{% else %}success{% endif %} mb-3">
+                {% if res.resactive == 0 %}Pending
+                {% else %}Active &#10004;
+                {% endif %}
             </button>
             <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#cancelmodal">
                 Cancel This Reservation
             </button>
             {% else %}
-            <button type="button" class="btn btn-danger mb-3">
-                Inactive &#10060;
+            <button type="button" class="btn btn-{% if res.resactive == 2 %}danger{% else %}info{% endif %} mb-3">
+                {% if res.resactive == 0 %}Cancelled &#10060;
+                {% else %}Completed
+                {% endif %}
+                
             </button>
             {% endif %}
             <form class="form d-flex flex-column">
@@ -70,53 +75,53 @@
             <table class="table table-hover table-striped table-bordered w-20">
                 <thead class="thead-dark text-center">
                     <tr>
-                        <th scope="row" colspan="3">Basic Information</th>
+                        <th scope="row" colspan="4">Basic Information</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row" colspan="2">Reservation ID</th>
-                        <td>{{res.resid}}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" colspan="2">Number of Guests</th>
-                        <td>{{res.guest_no}} people</td>
+                        <td colspan="2">{{res.resid}}</td>
                     </tr>
                     <tr>
                         <th scope="row" rowspan="2" style="vertical-align : middle;">Date</th>
                         <th scope="row">Arrival Date</th>
-                        <td>{{res.arrivaldate}}</td>
+                        <td colspan="2">{{res.arrivaldate}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Departure Date</th>
-                        <td>{{res.departuredate}}</td>
+                        <td colspan="2">{{res.departuredate}}</td>
                     </tr>
                 </tbody>
                 <thead class="thead-dark text-center">
                     <tr>
-                        <th scope="row" colspan="3">Rooms Included</th>
+                        <th scope="row" colspan="4">Rooms Included</th>
                     </tr>
                 </thead>
                 <thead class="thead-secondary text-center">
                     <tr>
                         <th scope="row">Room No.</th>
-                        <th scope="row" colspan="2">Details</th>
+                        <th scope="row">Room Type</th>
+                        <th scope="row">Capacity</th>
+                        <th scope="row">Details</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% if res.roomcnt == '0' %}
+                    {% if res.rooms|length == 0 %}
                     <tr>
-                        <td colspan="3" class="text-center"><i class="text-secondary">No Rooms Currently Associated</i></td>
+                        <td colspan="4" class="text-center"><i class="text-secondary">No Rooms Currently Associated</i></td>
                     </tr>
                     {% else %}
-                    {% for roomid in res.rooms %}
+                    {% for room in res.rooms %}
                     <tr>
-                        <td class="text-center">{{roomid}}</th>
+                        <td class="text-center">{{room.roomid}}</th>
+                        <td class="text-center">{{room.type}}</th>
+                        <td class="text-center">{{room.capacity}}</th>
                         <td colspan="2" class="text-center">
                             <form class="form-inline">
                                 <a class="btn btn-primary text-white mx-auto" role="button"
-                                    href="{{ HTTP_HOST }}/room/{{roomid}}/">
-                                    Room:{{roomid}} Details
+                                    href="{{ HTTP_HOST }}/room/{{room.roomid}}/">
+                                    Room:{{room.roomid}} Details
                                 </a>
                             </form>
                         </td>
@@ -126,26 +131,34 @@
                 </tbody>
                 <thead class="thead-dark text-center">
                     <tr>
-                        <th scope="row" colspan="3">Services Taken</th>
+                        <th scope="row" colspan="4">Services Taken</th>
                     </tr>
                 </thead>
                 <thead class="thead-secondary text-center">
                     <tr>
-                        <th scope="row">Service No.</th>
+                        <th scope="row">Service Name</th>
                         <th scope="row">To Room</th>
+                        <th scope="row">Status</th>
                         <th scope="row">Details</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% if res.servcnt == '0' %}
+                    {% if res.services|length == 0 %}
                     <tr>
-                        <td colspan="3" class="text-center"><i class="text-secondary">No Services Currently Associated</i></td>
+                        <td colspan="4" class="text-center"><i class="text-secondary">No Services Currently Associated</i></td>
                     </tr>
                     {% else %}
                     {% for serv in res.services %}
                     <tr>
-                        <td class="text-center">{{serv.serviceid}}</th>
+                        <td class="text-center">{{serv.name}}</th>
                         <td class="text-center">{{serv.roomid}}</th>
+                            <td class="text-center table-{% if serv.isactive == 1 %}success{% elif serv.isactive == 2 %}danger{% else %}info{% endif %}">
+                                {% if serv.isactive == 1 %}Active
+                                {% elif serv.isactive == 2 %}Canceled
+                                {% else %}Completed
+                                {% endif %}
+    
+                            </td>
                         <td class="text-center">
                             <form class="form-inline">
                                 <a class="btn btn-primary text-white mx-auto" role="button"

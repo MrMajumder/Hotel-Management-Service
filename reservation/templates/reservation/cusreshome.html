@@ -45,14 +45,13 @@
                     <div class="row">
                         {% for res in data %}
                         <div class="col-4">
-                            <div class="card border-secondary mb-3">
+                            <div class="card border-{% if res.isactive == 0 %}secondary{% elif res.isactive == 1 %}success{% elif res.isactive == 2 %}danger{% else %}info{% endif %} mb-3">
                                 <div class="card-header font-weight-bold">
                                     Reservation : {{res.resid}}
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text text-justify">
                                         <b>Reservation ID:</b> {{res.resid}} <br>
-                                        <b>Number of Guests:</b> {{res.guest_no}} <br>
                                         <b>Arrival Date:</b> {{res.arrivaldate}} <br>
                                         <b>Depart Date:</b> {{res.departuredate}} <br>
                                     </p>

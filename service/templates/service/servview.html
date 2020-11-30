@@ -47,16 +47,18 @@
             <p class="text text-center display-4">Service {{service.servid}} : Details</p>
             
             
-            {% if service.isactive %}
-            <button type="button" class="btn btn-info  my-2">
-                Pending &#9711;
+            {% if service.isactive == 1 %}
+            <button type="button" class="btn btn-success my-2">
+                Active &#10004;
             </button>
-            <button type="button" class="btn btn-primary  my-2" data-toggle="modal" data-target="#cancelmodal">
+            <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#cancelmodal">
                 Cancel This Service
             </button>
             {% else %}
-            <button type="button" class="btn btn-success my-2">
-                Completed &#10004;
+            <button type="button" class="btn btn-{% if service.isactive == 3%}success{% else %}danger{% endif%} my-2">
+                {% if service.isactive == 3%}Completed
+                {% else %}Canceled
+                {% endif%}
             </button>
             {% endif %}
             

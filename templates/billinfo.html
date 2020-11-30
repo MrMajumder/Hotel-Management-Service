@@ -82,32 +82,32 @@
             <table class="table table-hover table-striped table-bordered w-20">
                 <thead class="thead-dark text-center">
                     <tr>
-                        <th scope="row" colspan="3">Basic Information</th>
+                        <th scope="row" colspan="4">Basic Information</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="2">Reservation ID</td>
+                        <td colspan="3">Reservation ID</td>
                         <td>{{data.resid}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Arrival Date</td>
+                        <td colspan="3">Arrival Date</td>
                         <td>{{data.arrdate}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Departure Date</td>
+                        <td colspan="3">Departure Date</td>
                         <td>{{data.depdate}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Customer Name</td>
+                        <td colspan="3">Customer Name</td>
                         <td>{{data.cusname}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Customer ID Card</td>
+                        <td colspan="3">Customer ID Card</td>
                         <td>{{data.cusidcard}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Customer Phone Number</td>
+                        <td colspan="3">Customer Phone Number</td>
                         <td>+880{{data.cusphno}}</td>
                     </tr>
                     
@@ -117,24 +117,28 @@
 
                 <thead class="thead-dark text-center">
                     <tr>
-                        <th scope="row" colspan="3">Rooms Reserved : {{data.rooms|length}}</th>
+                        <th scope="row" colspan="4">Rooms Reserved : {{data.rooms|length}}</th>
                     </tr>
                 </thead>
                 <thead class="thead-secondary text-center">
                     <tr>
-                        <th scope="row" colspan="2">Room Number</th>
+                        <th scope="row">Room Number</th>
+                        <th scope="row">Type</th>
+                        <th scope="row">Capacity</th>
                         <th scope="row">Rent</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if data.rooms|length == 0 %}
                     <tr>
-                        <td colspan="3" class="text-center"><i class="text-secondary">No Rooms Associated</i></td>
+                        <td colspan="4" class="text-center"><i class="text-secondary">No Rooms Associated</i></td>
                     </tr>
                     {% else %}
                     {% for room in data.rooms %}
                     <tr>
-                        <td class="text-center" colspan="2">{{room.roomid}}</th>
+                        <td class="text-center">{{room.roomid}}</td>
+                        <td class="text-center">{{room.type}}</td>
+                        <td class="text-center">{{room.capacity}}</td>
                         <!-- <td colspan="2" class="text-center">
                             <form class="form-inline">
                                 <a class="btn btn-primary text-white mx-auto" role="button"
@@ -143,7 +147,7 @@
                                 </a>
                             </form>
                         </td> -->
-                        <td class="text-center">BDT. {{room.rent}}</th>
+                        <td class="text-center">BDT. {{room.rent}}</td>
                     </tr>
                     {% endfor %}
                     {% endif %}
@@ -153,12 +157,13 @@
 
                 <thead class="thead-dark text-center">
                     <tr>
-                        <th scope="row" colspan="3">Services Taken: {{data.services|length}}</th>
+                        <th scope="row" colspan="4">Services Taken: {{data.services|length}}</th>
                     </tr>
                 </thead>
                 <thead class="thead-secondary text-center">
                     <tr>
                         <th scope="row">Service ID</th>
+                        <th scope="row">Name</th>
                         <th scope="row">To Room</th>
                         <th scope="row">Cost</th>
                     </tr>
@@ -166,12 +171,13 @@
                 <tbody>
                     {% if data.services|length == 0 %}
                     <tr>
-                        <td colspan="3" class="text-center"><i class="text-secondary">No Services Associated</i></td>
+                        <td colspan="4" class="text-center"><i class="text-secondary">No Services Associated</i></td>
                     </tr>
                     {% else %}
                     {% for service in data.services %}
                     <tr>
-                        <td class="text-center">{{service.servid}}</th>
+                        <td class="text-center">{{service.servid}}</td>
+                        <td class="text-center">{{service.name}}</td>
                         <!-- <td colspan="2" class="text-center">
                             <form class="form-inline">
                                 <a class="btn btn-primary text-white mx-auto" role="button"
@@ -180,42 +186,42 @@
                                 </a>
                             </form>
                         </td> -->
-                        <td class="text-center">{{service.toroom}}</th>
-                        <td class="text-center">BDT. {{service.cost}}</th>
+                        <td class="text-center">{{service.toroom}}</td>
+                        <td class="text-center">BDT. {{service.cost}}</td>
                     </tr>
                     {% endfor %}
                     {% endif %}
                 </tbody>
                 <thead class="thead-dark text-center">
                     <tr>
-                        <th scope="row" colspan="3">Bill Information</th>
+                        <th scope="row" colspan="4">Bill Information</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="2">Bill ID</td>
+                        <td colspan="3">Bill ID</td>
                         <td>{{data.billid}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Date Created</td>
+                        <td colspan="3">Date Created</td>
                         <td>{{data.billdate}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Vat Percentage</td>
+                        <td colspan="3">Vat Percentage</td>
                         <td>{{data.vat}} %</td>
                     </tr>
                     
                     <tr>
                         <td><strong>Sub Total</strong></td>
-                        <td class="text-right" colspan="2"><strong>{{data.totalcost}}</strong></td>
+                        <td class="text-right" colspan="3"><strong>{{data.totalcost}}</strong></td>
                     </tr>
                     <tr class="text-bold">
                         <td><strong>Paid</strong></td>
-                        <td class="text-right" colspan="2"><strong>{{data.paid}}</strong></td>
+                        <td class="text-right" colspan="3"><strong>{{data.paid}}</strong></td>
                     </tr>
                     <tr class="text-bold {% if data.due == 0 %}table-success{% else %}table-danger{% endif %}">
                         <td><strong>Due</strong></td>
-                        <td class="text-right" colspan="2"><strong>{{data.due}}</strong></td>
+                        <td class="text-right" colspan="3"><strong>{{data.due}}</strong></td>
                     </tr>
                 </tbody>
             </table>

@@ -103,7 +103,7 @@
                         <td class="text-center">{{res.arrdate}}</td>
                         <td class="text-center">{{res.depdate}}</td>
 
-                        <td class="text-center table-{% if res.isactive == 0 %}primary{% elif res.isactive == 1 %}success{% elif res.isactive == 2 %}danger{% else %}info{% endif %}">
+                        <td class="text-center table-{% if res.isactive == 0 %}secondary{% elif res.isactive == 1 %}success{% elif res.isactive == 2 %}danger{% else %}info{% endif %}">
                             {% if res.isactive == 0 %}Pending
                             {% elif res.isactive == 1 %}Active
                             {% elif res.isactive == 2 %}Cancelled

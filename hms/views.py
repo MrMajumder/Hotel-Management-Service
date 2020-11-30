@@ -354,51 +354,47 @@ def billpay(request, resid):
 
 def getbilltable(resid):
     cursor = connection.cursor()
-    sql = ("SELECT X.ARRIVAL_DATE, X.DEPARTURE_DATE, Y.*, GETROOMS(%s), GETSERV(%s), GETSERVROOMS(%s), GETROOMRENT(%s), GETSERVCOST(%s), M.BILL_ID, N.COST, N.BILL_DATE, N.VAT_PERCENTAGE, M.DUE FROM RESERVATION X, (SELECT C.USER_ID USID, (A.FIRST_NAME || ' ' || A.LAST_NAME) FNAME, C.ID_CARD_NO CNO, P.PH_NUMBER PNO FROM CUSTOMER C, ACCOUNT_HOLDER A, ACCOUNT_HOLDER_PHNUMBER P WHERE C.USER_ID = A.USER_ID AND A.USER_ID = P.USER_ID) Y, HOTEL_BILL M, BILL N WHERE Y.USID = X.USER_ID AND X.RESERVATION_ID = %s AND M.RESERVATION_ID = X.RESERVATION_ID AND M.BILL_ID = N.BILL_ID AND ROWNUM <= 1;" % (resid, resid, resid, resid, resid, resid))
+    sql = ("SELECT C.RESERVATION_ID, C.ARRIVAL_DATE, C.DEPARTURE_DATE, D.FNAME, D.CNO, D.PNO, B.BILL_ID, B.COST, B.BILL_DATE, B.VAT_PERCENTAGE, A.DUE, E.ROOM_ID, E.ROOM_TYPE, E.CAPACITY, E.RENT FROM HOTEL_BILL A, BILL B, RESERVATION C, (SELECT C.USER_ID USID, (A.FIRST_NAME || ' ' || A.LAST_NAME) FNAME, C.ID_CARD_NO CNO, P.PH_NUMBER PNO FROM CUSTOMER C, ACCOUNT_HOLDER A, ACCOUNT_HOLDER_PHNUMBER P WHERE C.USER_ID = A.USER_ID AND A.USER_ID = P.USER_ID AND ROWNUM <= 1) D, ROOM E, BOOKED_ROOMS F WHERE A.BILL_ID = B.BILL_ID AND A.RESERVATION_ID = C.RESERVATION_ID AND D.USID = C.USER_ID AND C.RESERVATION_ID = F.RESERVATION_ID AND F.ROOM_ID = E.ROOM_ID AND A.RESERVATION_ID = %s" % (resid))
     cursor.execute(sql)
     row = cursor.fetchall()
+    sql = ("SELECT M.SERVICE_ID, N.NAME, M.ROOM_ID, N.COST FROM ROOM_HB_SERV_RECEIVES M, SERVICES N, HOTEL_BILL O WHERE M.SERVICE_ID = N.SERVICE_ID AND O.BILL_ID = M.BILL_ID AND O.RESERVATION_ID = %s" % (resid))
+    cursor.execute(sql)
+    servicetable = cursor.fetchall()
     cursor.close()
     data = {}
-    data['resid'] = resid
-    data['arrdate'] = row[0][0].date()
-    data['depdate'] = row[0][1].date()
+    data['resid'] = row[0][0]
+    data['arrdate'] = row[0][1].date()
+    data['depdate'] = row[0][2].date()
     data['cusname'] = row[0][3]
     data['cusidcard'] = row[0][4]
     data['cusphno'] = row[0][5]
-    data['billid'] = row[0][11]
-    data['totalcost'] = row[0][12]
-    data['billdate'] = row[0][13].date()
-    data['vat'] = row[0][14]
-    data['due'] = row[0][15]
+    data['billid'] = row[0][6]
+    data['totalcost'] = row[0][7]
+    data['billdate'] = row[0][8].date()
+    data['vat'] = row[0][9]
+    data['due'] = row[0][10]
     data['paid'] = int(data['totalcost']) - int(data['due'])
 
 
-    rooms = []
     data['rooms'] = []
-    if row[0][6]:
-        rooms.append([int(x) for x in (str(row[0][6]).split(','))])
-        rooms.append([int(x) for x in (str(row[0][9]).split(','))])
-        for i in range(len(rooms[0])):
-            r = {}
-            r['roomid'] = rooms[0][i]
-            r['rent'] = rooms[1][i]
-            data['rooms'].append(r)
+    for ro in row:
+        r = {}
+        r['roomid'] = ro[11]
+        r['type'] = ro[12]
+        r['capacity'] = ro[13]
+        r['rent'] = ro[14]
+        data['rooms'].append(r)
     
     data['rooms'] = sorted(data['rooms'], key=lambda item: int(item['roomid']))
     
-    service = []
     data['services'] = []
-    if  row[0][7]:
-        service.append([int(x) for x in (str(row[0][7]).split(','))])
-        service.append([int(x) for x in (str(row[0][8]).split(','))])
-        service.append([int(x) for x in (str(row[0][10]).split(','))])
-       
-        for i in range(len(service[0])):
-            s = {}
-            s['servid'] = service[0][i]
-            s['toroom'] = service[1][i]
-            s['cost'] = service[2][i]
-            data['services'].append(s)
+    for ro in servicetable:
+        s = {}
+        s['servid'] = ro[0]
+        s['name'] = ro[1]
+        s['roomid'] = ro[2]
+        s['cost'] = ro[3]
+        data['services'].append(s)
 
     data['services'] = sorted(data['services'], key=lambda item: int(item['servid']))
     return data

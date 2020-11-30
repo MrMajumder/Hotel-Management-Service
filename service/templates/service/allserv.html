@@ -100,7 +100,7 @@
                         <td class="text-center">{{ser.servdate}}</td>
                         <td class="text-center table-{% if ser.isactive == 1 %}success{% elif ser.isactive == 2 %}danger{% else %}info{% endif %}">
                             {% if ser.isactive == 1 %}Active
-                            {% elif ser.isactive == 2 %}Cancelled
+                            {% elif ser.isactive == 2 %}Canceled
                             {% else %}Completed
                             {% endif %}
 

@@ -13,28 +13,29 @@
 {% include 'modal.html' with user=user %}
 
 <form action='{{ HTTP_HOST }}/reservation/roomentry{{rooms|length}}{{adate}}{{ddate}}' method='post'
-    class="needs-validation my-4 container" novalidate>
+    class="needs-validation" novalidate>
     {% csrf_token %}
     <div class="container-fluid my-4">
 
         <div class="row">
             <div class="col-3">
-                <img src="{% static 'img/emp.png' %}" class="d-block mx-auto" width="150" height="150"
+                <img src="{% static 'img/room.png' %}" class="d-block mx-auto" width="150" height="150"
                     alt="reservation logo"><br />
                 <h1 class="display-4 text-center mb-4">Room List</h1>
             </div>
             <div class="col-8 container">
                 <p class="display-4">List of All Available Rooms</p>
-                <table class="table table-hover table-striped table-bordered w-20">
+                <table class="table table-hover table-striped table-bordered">
                     <thead class="thead-dark text-center">
-                        <tr>
+                        <tr> 
                             <th scope="row">Room No</th>
                             <th scope="row">Room Type</th>
                             <th scope="row">Room Rent</th>
                             <th scope="row">Room Capacity</th>
+                            <th scope="row">Select</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
 
                         {% for room in rooms %}
                         <tr>

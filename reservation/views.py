@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db import connection
 from hms import conf
+from datetime import datetime
 
 # Create your views here.
 
@@ -10,44 +11,42 @@ def solores(request, id):
        return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser()})
 
     cursor = connection.cursor()
-    sql = ("SELECT RESERVATION.*, GETROOMS(%s), GETSERV(%s), GETSERVROOMS(%s), GETSERVACTIONID(%s) FROM RESERVATION WHERE RESERVATION_ID = %s" % (id, id, id, id, id))
+    sql = ("SELECT A.ARRIVAL_DATE, A.DEPARTURE_DATE, A.RESERVATION_ACTIVE, A.USER_ID, B.* FROM RESERVATION A, (SELECT N.ROOM_ID, N.RESERVATION_ID, M.ROOM_TYPE, M.CAPACITY FROM ROOM M, BOOKED_ROOMS N WHERE M.ROOM_ID = N.ROOM_ID) B WHERE A.RESERVATION_ID = B.RESERVATION_ID AND A.RESERVATION_ID = %s" % (id))
     cursor.execute(sql)
-    row = cursor.fetchall()
+    roomtable = cursor.fetchall()
+    sql = ("SELECT M.ACTION_ID, M.SERVICE_ID, O.RESERVATION_ID, N.NAME, M.ROOM_ID, M.SERVICE_ACTIVE FROM ROOM_HB_SERV_RECEIVES M, SERVICES N, HOTEL_BILL O WHERE M.SERVICE_ID = N.SERVICE_ID AND O.BILL_ID = M.BILL_ID AND O.RESERVATION_ID = %s" %(id))
+    cursor.execute(sql)
+    servicetable = cursor.fetchall()
+    cursor.close()
 
     res = {}
-    res['resid'] = row[0][0]
-    res['guest_no'] = row[0][1]
-    res['arrivaldate'] = row[0][2]
-    res['departuredate'] = row[0][3]
-    res['resactive'] = row[0][4]
+    res['resid'] = roomtable[0][5]
+    res['arrivaldate'] = roomtable[0][0].date()
+    res['departuredate'] = roomtable[0][1].date()
+    res['resactive'] = roomtable[0][2]
 
-    if not row[0][6]:
-        res['roomcnt'] = '0'
-    if not row[0][7]:
-        res['servcnt'] = '0'
+    room = []
+    for row in roomtable:
+        r = {}
+        r['roomid'] = row[4]
+        r['type'] = row[6]
+        r['capacity'] = row[7]
+        room.append(r)
 
-    rooms = row[0][6]
-    if not rooms:
-        res['rooms'] = []
-    else:
-        rooms = rooms.split(',')
-        res['rooms'] = [int(room) for room in rooms]
-    res['rooms'] = sorted(res['rooms'])
+    res['rooms'] = sorted(room, key=lambda item: int(item['roomid']))
+    
     service = []
-    res['services'] = []
-    if  row[0][7]:
-        service.append([int(x) for x in (row[0][7].split(','))])
-        service.append([int(x) for x in (row[0][8].split(','))])
-        service.append([int(x) for x in (row[0][9].split(','))])
        
-        for i in range(len(service[0])):
-            s = {}
-            s['actionid'] = service[2][i]
-            s['serviceid'] = service[0][i]
-            s['roomid'] = service[1][i]
-            res['services'].append(s)
+    for row in servicetable:
+        s = {}
+        s['actionid'] = row[0]
+        s['serviceid'] = row[1]
+        s['roomid'] = row[3]
+        s['name'] = row[2]
+        s['isactive'] = row[4]
+        service.append(s)
 
-    res['services'] = sorted(res['services'], key=lambda item: int(item['serviceid']))
+    res['services'] = sorted(service, key=lambda item: int(item['serviceid']))
 
     return render(request, 'reservation/resview.html', {'login' : conf.login, 'res' : res, 'user' : conf.getuser()})
 
