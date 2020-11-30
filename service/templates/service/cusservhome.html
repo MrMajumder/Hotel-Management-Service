@@ -53,7 +53,7 @@
                     <div class="row">
                         {% for ser in data %}
                         <div class="col-4">
-                            <div class="card border-secondary mb-3">
+                            <div class="card border-{% if ser.isactive == 1 %}primary{% elif ser.isactive == 2 %}danger{% else %}success{% endif %} mb-3">
                                 <div class="card-header font-weight-bold">
                                     Service : {{ser.servid}}
                                 </div>
@@ -71,7 +71,7 @@
                                     </form>
                                 </div>
                                 <div class="card-footer font-weight-light">
-                                    Date Created: 11 Jan, 2020
+                                    Date Created: {{ser.servdate}}
                                 </div>
                             </div>
                         </div>

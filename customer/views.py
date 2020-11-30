@@ -176,7 +176,7 @@ def ser(request):
     
     id = int(conf.user_id)
     cursor = connection.cursor()
-    sql = ("SELECT X.ACTION_ID, X.SERVICE_ID, Z.NAME, X.ROOM_ID, Y.RESERVATION_ID FROM ROOM_HB_SERV_RECEIVES X, HOTEL_BILL Y, SERVICES Z WHERE X.BILL_ID = ANY(SELECT BILL_ID FROM HOTEL_BILL WHERE RESERVATION_ID = ANY(SELECT RESERVATION_ID FROM RESERVATION WHERE USER_ID = %s)) AND X.BILL_ID = Y.BILL_ID AND X.SERVICE_ACTIVE = 1 AND Z.SERVICE_ID = X.SERVICE_ID" % id)
+    sql = ("SELECT X.ACTION_ID, X.SERVICE_ID, Z.NAME, X.ROOM_ID, Y.RESERVATION_ID, X.SERVICE_DATE, X.SERVICE_ACTIVE FROM ROOM_HB_SERV_RECEIVES X, HOTEL_BILL Y, SERVICES Z WHERE X.BILL_ID = ANY(SELECT BILL_ID FROM HOTEL_BILL WHERE RESERVATION_ID = ANY(SELECT RESERVATION_ID FROM RESERVATION WHERE USER_ID = %s)) AND X.BILL_ID = Y.BILL_ID AND X.SERVICE_ACTIVE IN (1, 2, 3) AND Z.SERVICE_ID = X.SERVICE_ID" % id)
     cursor.execute(sql)
     table = cursor.fetchall()
     cursor.close()
@@ -188,6 +188,8 @@ def ser(request):
         ser['name'] = row[2]
         ser['roomid'] = row[3]
         ser['resid'] = row[4]
+        ser['servdate'] = row[5].date()
+        ser['isactive'] = row[6]
         data.append(ser)
     
     data = sorted(data, key=lambda item: int(item['servid']))

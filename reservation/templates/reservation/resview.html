@@ -56,7 +56,7 @@
             </button>
             {% else %}
             <button type="button" class="btn btn-{% if res.resactive == 2 %}danger{% else %}info{% endif %} mb-3">
-                {% if res.resactive == 0 %}Cancelled &#10060;
+                {% if res.resactive == 2 %}Cancelled &#10060;
                 {% else %}Completed
                 {% endif %}
                 

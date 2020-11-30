@@ -7,6 +7,10 @@ INSERT INTO ROOM VALUES(3, 1, 1, 4, 1, 2, 5000, NULL, 'Family Suit');
 INSERT INTO ROOM VALUES(4, 1, 1, 2, 1, 2, 2000, NULL, 'Personal Suit');
 INSERT INTO ROOM VALUES(5, 1, 1, 2, 1, 2, 2000, NULL, 'Personal Suit');
 INSERT INTO ROOM VALUES(6, 1, 1, 2, 1, 2, 2000, NULL, 'Personal Suit');
+INSERT INTO ROOM VALUES(7, 1, 1, 2, 1, 2, 5500, NULL, 'Executive Suit');
+INSERT INTO ROOM VALUES(8, 1, 1, 2, 1, 2, 5500, NULL, 'Executive Suit');
+INSERT INTO ROOM VALUES(9, 1, 1, 2, 1, 2, 5500, NULL, 'Executive Suit');
+INSERT INTO ROOM VALUES(10, 1, 1, 2, 1, 2, 5500, NULL, 'Executive Suit');
 
 
 INSERT INTO SERVICES VALUES(1, 'Food Service', 100, 'bla bla', NULL, 'Food Service');

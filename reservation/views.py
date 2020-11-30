@@ -41,9 +41,9 @@ def solores(request, id):
         s = {}
         s['actionid'] = row[0]
         s['serviceid'] = row[1]
-        s['roomid'] = row[3]
-        s['name'] = row[2]
-        s['isactive'] = row[4]
+        s['roomid'] = row[4]
+        s['name'] = row[3]
+        s['isactive'] = row[5]
         service.append(s)
 
     res['services'] = sorted(service, key=lambda item: int(item['serviceid']))
@@ -64,7 +64,7 @@ def cr_reserve(request):
     print(ddate)
     id = int(conf.user_id)
     cursor = connection.cursor()
-    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 1" % id)
+    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE IN (0, 1, 2, 3)" % id)
     cursor.execute(sql)
     table = cursor.fetchall()
 
@@ -75,7 +75,7 @@ def cr_reserve(request):
         res['guest_no'] = row[1]
         res['arrivaldate'] = row[2]
         res['departuredate'] = row[3]
-        res['resactive'] = row[4]
+        res['isactive'] = row[4]
         data.append(res)
     
     data = sorted(data, key=lambda item: int(item['resid']))
@@ -142,7 +142,7 @@ def roomentry(request, id, adate, ddate):
     cursor.close()
     id = int(conf.user_id)
     cursor = connection.cursor()
-    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 1" % id)
+    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE IN (0, 1, 2, 3)" % id)
     cursor.execute(sql)
     table = cursor.fetchall()
 
@@ -153,7 +153,7 @@ def roomentry(request, id, adate, ddate):
         res['guest_no'] = row[1]
         res['arrivaldate'] = row[2]
         res['departuredate'] = row[3]
-        res['resactive'] = row[4]
+        res['isactive'] = row[4]
         data.append(res)
     
     data = sorted(data, key=lambda item: int(item['resid']))
