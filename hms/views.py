@@ -218,6 +218,7 @@ def cedit(request):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
    
     cus = False
+    opass = request.POST.get('oldpass', '')
     name = request.POST.get('fname', 'default')
     lastname = request.POST.get('lname', 'default')
     password = request.POST.get('pass', 'default')
@@ -227,6 +228,13 @@ def cedit(request):
     country = request.POST.get('country', '')
     house = request.POST.get('house', '')
     road = request.POST.get('road', '')
+    cursor = connection.cursor()
+    sql = "SELECT L.LOGIN_PASSWORD FROM LOG_IN L, ACCOUNT_HOLDER A WHERE L.LOGIN_EMAIL = A.LOGIN_EMAIL AND A.USER_ID = %s" % int(conf.user_id)
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    print(result)
+    print(result[0][0])
+    cursor.close()
 
     if conf.role == 'customer':
         idcard = request.POST.get('idcard', '')
@@ -234,7 +242,7 @@ def cedit(request):
         passport = request.POST.get('passport', '')
         cus = True
     
-    if(password == repassword):
+    if(password == repassword and  hashing.verify_password(result[0][0], opass)):
         if(password != ""):
             password = hashing.hash_password(password)
         cursor = connection.cursor()
