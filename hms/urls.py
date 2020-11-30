@@ -21,4 +21,6 @@ urlpatterns = [
     path('edition/', views.edit, name='edit'),
     path('editform/', views.cedit, name='confirmedit'),
     path('room/<int:id>/', views.roomdetails, name='roomdetails'),
+    path('bill/<int:resid>/', views.billshow, name='billshow'),
+    path('billpay/<int:resid>', views.billpay, name='billpay'),
 ]

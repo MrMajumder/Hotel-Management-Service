@@ -1,0 +1,226 @@
+{% extends 'starter.html' %}
+
+{% block title %} Services Management {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+{% block body %}
+{% load static %}
+{% include 'modal.html' with user=user %}
+
+{% if success == 0 %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+    <strong>Bill Pay Unsuccessful!</strong> Over Payment/Not Fully Paid if Checking Out. Please Try Again.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% elif success == 1 %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Bill Pay Success!</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+
+<form action='{{ HTTP_HOST }}/billpay/{{data.resid}}' method='post' class="needs-validation my-4 container"
+    novalidate>
+    {% csrf_token %}
+    <div class="modal fade" id="paymodal" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="paymodaltitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Hotel Payment Gateway</h5>
+                </div>
+                <div class="modal-body">
+                    <strong>Payment for Bill ID: </strong>{{data.billid}}<br>
+                    <strong>Total Bill: </strong>{{data.totalcost}}<br>
+                    <strong>Due: </strong>{{data.due}}<br>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3 my-1">
+                            <label for="paymentinput">Make Payment of </label>
+                            <input type="number" name='payment' class="form-control" id="payment" placeholder="{{data.due}}"
+                                maxlength="30" required>
+                        </div>
+                    </div>
+                    <p><i class="text-secondary">*Beware that this action cannot be reversed*</i></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class=" btn btn-primary">Pay Bill</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="container-fluid my-4">
+
+    <div class="row">
+        <div class="col-3 d-flex flex-column">
+            <img src="{% static 'img/bill.png' %}" class="d-block mx-auto" width="150" height="150"
+                alt="reservation logo"><br />
+            <h1 class="display-4 text-right mb-4">Bill Information:<br>Reservation {{data.resid}}</h1>
+            {%if user.role == 'customer' %}
+            <button type="button" class="btn btn-info my-2">
+                Download Transcript
+            </button>
+            <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#paymodal">
+                Payment of Dues
+            </button>
+            {% endif %}
+        </div>
+        <div class="col-8 container">
+            <p class="display-4 text-center">Detailed Bill Information</p>
+            <table class="table table-hover table-striped table-bordered w-20">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="3">Basic Information</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="2">Reservation ID</td>
+                        <td>{{data.resid}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Arrival Date</td>
+                        <td>{{data.arrdate}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Departure Date</td>
+                        <td>{{data.depdate}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Customer Name</td>
+                        <td>{{data.cusname}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Customer ID Card</td>
+                        <td>{{data.cusidcard}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Customer Phone Number</td>
+                        <td>+880{{data.cusphno}}</td>
+                    </tr>
+                    
+                </tbody>
+                
+                <!-- rooms part -->
+
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="3">Rooms Reserved : {{data.rooms|length}}</th>
+                    </tr>
+                </thead>
+                <thead class="thead-secondary text-center">
+                    <tr>
+                        <th scope="row" colspan="2">Room Number</th>
+                        <th scope="row">Rent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if data.rooms|length == 0 %}
+                    <tr>
+                        <td colspan="3" class="text-center"><i class="text-secondary">No Rooms Associated</i></td>
+                    </tr>
+                    {% else %}
+                    {% for room in data.rooms %}
+                    <tr>
+                        <td class="text-center" colspan="2">{{room.roomid}}</th>
+                        <!-- <td colspan="2" class="text-center">
+                            <form class="form-inline">
+                                <a class="btn btn-primary text-white mx-auto" role="button"
+                                    href="{{ HTTP_HOST }}/room/{{roomid}}/">
+                                    Room:{{roomid}} Details
+                                </a>
+                            </form>
+                        </td> -->
+                        <td class="text-center">BDT. {{room.rent}}</th>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+
+                <!-- services part -->
+
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="3">Services Taken: {{data.services|length}}</th>
+                    </tr>
+                </thead>
+                <thead class="thead-secondary text-center">
+                    <tr>
+                        <th scope="row">Service ID</th>
+                        <th scope="row">To Room</th>
+                        <th scope="row">Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if data.services|length == 0 %}
+                    <tr>
+                        <td colspan="3" class="text-center"><i class="text-secondary">No Services Associated</i></td>
+                    </tr>
+                    {% else %}
+                    {% for service in data.services %}
+                    <tr>
+                        <td class="text-center">{{service.servid}}</th>
+                        <!-- <td colspan="2" class="text-center">
+                            <form class="form-inline">
+                                <a class="btn btn-primary text-white mx-auto" role="button"
+                                    href="{{ HTTP_HOST }}/room/{{roomid}}/">
+                                    Room:{{roomid}} Details
+                                </a>
+                            </form>
+                        </td> -->
+                        <td class="text-center">{{service.toroom}}</th>
+                        <td class="text-center">BDT. {{service.cost}}</th>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="3">Bill Information</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="2">Bill ID</td>
+                        <td>{{data.billid}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Date Created</td>
+                        <td>{{data.billdate}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Vat Percentage</td>
+                        <td>{{data.vat}} %</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>Sub Total</strong></td>
+                        <td class="text-right" colspan="2"><strong>{{data.totalcost}}</strong></td>
+                    </tr>
+                    <tr class="text-bold">
+                        <td><strong>Paid</strong></td>
+                        <td class="text-right" colspan="2"><strong>{{data.paid}}</strong></td>
+                    </tr>
+                    <tr class="text-bold {% if data.due == 0 %}table-success{% else %}table-danger{% endif %}">
+                        <td><strong>Due</strong></td>
+                        <td class="text-right" colspan="2"><strong>{{data.due}}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

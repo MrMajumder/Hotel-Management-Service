@@ -22,17 +22,16 @@
             <h1 class="display-4 text-right mb-4">Reservation Menu</h1>
             <div class="nav flex-column nav-pills text-right" id="v-pills-tab" role="tablist"
                 aria-orientation="vertical">
-                <a class="nav-link active" id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
-                    aria-selected="true">Create Reservation</a>
-                <a class="nav-link " id="actrestab" data-toggle="pill" href="#actres" role="tab"
+                <a class="nav-link {%if prob.guest or prob.room or prob.date %}{% else %} active{% endif %}" id="actrestab" data-toggle="pill" href="#actres" role="tab"
                     aria-controls="actres" aria-selected="true">Active Reservations</a>
-                
+                <a class="nav-link {%if prob.guest or prob.room or prob.date %}active{% else %}{% endif %}" id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
+                    aria-selected="false">Create Reservation</a>
             </div>
         </div>
 
         <div class="container col-8">
             <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade " id="actres" role="tabpanel" aria-labelledby="actrestab">
+                <div class="tab-pane fade {%if prob.guest or prob.room or prob.date %}{% else %}show active{% endif %}" id="actres" role="tabpanel" aria-labelledby="actrestab">
                     <h4>Active Reservations: <h5 class="display-4 text-left mb-4">{{data|length}}</h5>
                     </h4>
 
@@ -45,10 +44,10 @@
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text text-justify">
-                                        Reservation ID: {{res.resid}} <br>
-                                        Number of Guests: {{res.guest_no}} <br>
-                                        Arrival Date: {{res.arrivaldate}} <br>
-                                        Depart Date: {{res.departuredate}} <br>
+                                        <b>Reservation ID:</b> {{res.resid}} <br>
+                                        <b>Number of Guests:</b> {{res.guest_no}} <br>
+                                        <b>Arrival Date:</b> {{res.arrivaldate}} <br>
+                                        <b>Depart Date:</b> {{res.departuredate}} <br>
                                     </p>
                                     <form class="form-inline">
                                         <a class="btn btn-primary text-white mx-auto" role="button"
@@ -69,20 +68,20 @@
                 </div>
 
 
-                <div class="tab-pane fade show active" id="creres" role="tabpanel" aria-labelledby="crerestab">
+                <div class="tab-pane fade {%if prob.guest or prob.room or prob.date %}show active{% else %}{% endif %}" id="creres" role="tabpanel" aria-labelledby="crerestab">
                     {% if prob.guest %}
                     <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
 
-                        <strong>Reservation Unsucessfull.</strong>No of choosen guests is more than the capacity. 
+                        <strong>Reservation Unsuccessful.</strong> No of chosen guests is more than the capacity.
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    
+
                     {% elif prob.room %}
                     <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                    
-                        <strong>Reservation Unsucessfull.</strong>Choosen Room is not available at this moment
+
+                        <strong>Reservation Unsuccessful.</strong> Chosen Room is not available at this moment
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -90,44 +89,38 @@
 
                     {% elif prob.date %}
                     <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                    
-                        <strong>Reservation Unuccessfull.</strong>You have choosen a invalid date.
+
+                        <strong>Reservation Unsuccessful.</strong> You have chosen a invalid date.
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    
-                    
+
+
                     {% else %}
                     <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-                    
+
                         <strong>Please fill up the form.</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     {% endif %}
-                    
-                    
-                    
+
+
+
                     <div class="container text-center">
-                        <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
-                    
-                    
-                        <h3>
-                            Room Reservation Form
-                        </h3>
-                    
-                        <p>------------------------------</p>
+                        <h5 class="display-4 text-center mb-4">Create Room Reservation</h5>
                     </div>
-                    
+
                     <!--form section-->
-                    <form action='{{ HTTP_HOST }}/reservation/cr_reserve/' method='post' class="needs-validation my-4 container" novalidate>
+                    <form action='{{ HTTP_HOST }}/reservation/cr_reserve/' method='post'
+                        class="needs-validation my-4 container" novalidate>
                         {% csrf_token %}
-                    
-                    
+
+
                         <div class="form-row">
-                    
+
                             <div class="col-md-2 mb-6">
                                 <label for="exampleFormControlSelect1">Room Type</label>
                                 <select class="form-control" name="room_t" id="exampleFormControlSelect10" required>
@@ -144,37 +137,39 @@
                                     <option>3</option>
                                     <option>4</option>
                                 </select>
-                    
+
                             </div>
                             <div class="col-md mb-6 mx-3">
                                 <table class="table  table-striped table-bordered w-20">
                                     <tbody>
-                                      <tr>
-                                        <td>Personal Suit (Capacity - 1 person) Per Day Rent - 1500 taka</td>
-                                      </tr>
-                                      <tr>
-                                        <td>Executive Suit (Capacity - 2 persons) Per Day Rent - 3000 taka</td>
-                                      </tr>
-                                      <tr>
-                                        <td>Family Suit (Capacity - 4 persons) Per Day Rent - 5500 taka</td>
-                                      </tr>
+                                        <tr>
+                                            <td>Personal Suit (Capacity - 1 person) Per Day Rent - 1500 taka</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Executive Suit (Capacity - 2 persons) Per Day Rent - 3000 taka</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Family Suit (Capacity - 4 persons) Per Day Rent - 5500 taka</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    
+
                         <div class="form-row">
                             <div class="col-md-6 mb-5">
                                 <label for="validationCustom03">Arrival Date</label>
-                                <input type="date" name='a_date'  min="{{mindate}}" class="form-control" id="validationCustom000" required>
+                                <input type="date" name='a_date' min="{{mindate}}" class="form-control"
+                                    id="validationCustom000" required>
                                 <div class="invalid-feedback">
                                     Please provide a valid date.
                                 </div>
-                    
+
                             </div>
                             <div class="col-md-6 mb-5">
                                 <label for="validationCustom03">Departure Date</label>
-                                <input type="date" name='d_date' min="{{mindate}}" class="form-control" id="validationCustom001" required>
+                                <input type="date" name='d_date' min="{{mindate}}" class="form-control"
+                                    id="validationCustom001" required>
                                 <div class="invalid-feedback">
                                     Please provide a valid date.
                                 </div>
@@ -184,9 +179,10 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                             Confirm Reservation
                         </button>
-                    
+
                         <!-- Modal -->
-                        <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header bg-warning">
@@ -201,13 +197,13 @@
                                     <div class="modal-footer container justify-content-center col-5">
                                         <button type="submit" class="btn btn-primary">YES</button>
                                         <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
-                                        
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
-                    
+
                     <script>
                         // Example starter JavaScript for disabling form submissions if there are invalid fields
                         (function () {
@@ -228,7 +224,7 @@
                             }, false);
                         })();
                     </script>
-                    
+
                 </div>
 
 

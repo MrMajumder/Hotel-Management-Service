@@ -35,20 +35,20 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><a href="{{ HTTP_HOST }}/customer/history/" class="text-light">User History</a></td>
+                            <td><a href="{{ HTTP_HOST }}/customer/services/" class="text-light">Services</a></td>
                         </tr>
                         <tr>
-                            <td><a href="{{ HTTP_HOST }}/customer/services/" class="text-light">Services</a></td>
+                            <td><a href="{{ HTTP_HOST }}/customer/history/0/" class="text-light">User History</a></td>
                         </tr>
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/customer/complain/" class="text-light">Complain</a></td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td><a href="{{ HTTP_HOST }}/deletion/" class="text-light">Delete Your Account</a></td>
                         </tr>
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/edition/" class="text-light">Edit Your Account</a></td>
-                        </tr>
+                        </tr> -->
 
                     </tbody>
                     {% else %}
@@ -57,7 +57,7 @@
                     </tr>
                     {% if user.role == "director" or user.role == "manager" %}
                     <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/resmanage/" class="text-light">Reservation Management</a>
+                        <td><a href="{{ HTTP_HOST }}/employee/resmanage/0/" class="text-light">Reservation Management</a>
                         </td>
                     </tr>
                     {% endif %}
@@ -83,7 +83,7 @@
                     {% endif %}
                     {% if user.role == "employee"%}
                     <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/servmanage/" class="text-light">Services Management</a>
+                        <td><a href="{{ HTTP_HOST }}/employee/servmanage/0/" class="text-light">Services Management</a>
                         </td>
                     </tr>
                     <tr>

@@ -1,6 +1,6 @@
 {% extends 'starter.html' %}
 
-{% block title %} Service: {{servid}} {% endblock %}
+{% block title %} Service: {{service.servid}} {% endblock %}
 
 {% block style %} {% endblock %}
 
@@ -24,14 +24,14 @@
                 <div class="modal-body">
                     Are you sure you want to cancel this service?<br>
                     <p class="font-weight-light">
-                        Service ID: {{service.serviceid}} <br>
+                        Service ID: {{service.servid}} <br>
                         Assigned to: {{service.empname}}
                     </p>
                     <p class=>*Beware that this action cannot be reversed*</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
-                    <button type="submit class=" btn btn-primary">Cancel This Service</button>
+                    <button type="submit" class=" btn btn-primary">Cancel This Service</button>
                 </div>
             </div>
         </div>

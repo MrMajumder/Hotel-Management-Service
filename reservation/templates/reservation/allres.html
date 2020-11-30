@@ -15,30 +15,102 @@
 <div class="container-fluid my-4">
 
     <div class="row">
-        <div class="col-3">
-            <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto" width="100" height="100"
-                alt="reservation logo"><br />
+        <div class="col-3 d-flex flex-column">
+            <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto" width="150" height="150"
+                alt="reservation logo">
+            {% if user.role == 'customer' %}
+            <h1 class="display-4 text-center mb-4">User History Page</h1>
+            {% else %}
             <h1 class="display-4 text-center mb-4">Reservation Management</h1>
+            {% endif %}
+
+            {% if user.role == 'customer' or user.role == 'manager' or user.role == 'director' %}
+            <button type="button" class="btn btn-success active my-2">
+                <i>Currently viewing:</i> Reservations History
+            </button>
+            <form class="form d-flex flex-column">
+                <a class="btn btn-primary text-white my-2" role="button" href="{% if user.role == 'customer' %}{{ HTTP_HOST }}/customer/history/2/{% else %}{{ HTTP_HOST }}/employee/servmanage/0/{% endif %}">
+                    <i>Switch mode:</i> Services History
+                </a>
+            </form>
+            {% endif %}
+            <p class="mt-5 text-center"><b><u><i>Filters:</i></u></b></p>
+            <form action="{% if user.role == 'customer' %}{{ HTTP_HOST }}/customer/history/1/{% else %}{{ HTTP_HOST }}/employee/resmanage/1/{% endif %}" method='post' class="needs-validation my-4 container" novalidate>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="datearr">Arrival Date</label>
+                        <input type="date" name="arrdate" class="form-control" id="datearr" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid date.
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="datedep">Departure Date</label>
+                        <input type="date" name='depdate' class="form-control" id="datedep" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid date.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <label for="restype">Reservation Type</label>
+                        <select class="form-control" name="restype" id="restype">
+                          <option>All</option>
+                          <option>Active</option>
+                          <option>Pending</option>
+                          <option>Cancelled</option>
+                          <option>Completed</option>
+                        </select>
+                      </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary mx-auto my-2 " type="submit">Search</button>
+                </div>
+                
+            </form>
+
         </div>
         <div class="col-8 container">
             <p class="display-4">List of All Reservations</p>
+            <p><i class="text-secondary">{{msg}}</i></p>
             <table class="table table-hover table-striped table-bordered w-20">
                 <thead class="thead-dark text-center">
                     <tr>
+                        <th scope="row" colspan="5">Reservations found: {{data|length}}</th>
+                    </tr>
+                </thead>
+                <thead class="thead-dark text-center">
+                    <tr>
                         <th scope="row">Reservation ID</th>
-                        <th scope="row">Customer ID</th>
-                        <th scope="row">Active/Inactive</th>
+                        <th scope="row">Arrival Date</th>
+                        <th scope="row">Departure Date</th>
+                        <th scope="row">Status</th>
                         <th scope="row">View Details</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% if data|length == 0 %}
+                    <tr class=" text-center">
+                        <td colspan="5"><i class="text-secondary">No Reservations To Show</i></td>
+                    </tr>
+                    {% else %}
                     {% for res in data %}
                     <tr>
                         <td class="text-center">{{res.resid}}</td>
-                        <td class="text-center">{{res.cusid}}</td>
-                        
-                        <td class="text-center table-{% if res.isactive == 1 %}success{% else %}danger{% endif %}">{% if res.isactive == 1 %}Active{% else %}Inactive{% endif %}</td>
-                                                
+                        <td class="text-center">{{res.arrdate}}</td>
+                        <td class="text-center">{{res.depdate}}</td>
+
+                        <td class="text-center table-{% if res.isactive == 0 %}primary{% elif res.isactive == 1 %}success{% elif res.isactive == 2 %}danger{% else %}info{% endif %}">
+                            {% if res.isactive == 0 %}Pending
+                            {% elif res.isactive == 1 %}Active
+                            {% elif res.isactive == 2 %}Cancelled
+                            {% else %}Completed
+                            {% endif %}
+                        </td>
+
                         <td class="text-center">
                             <form class="form-inline">
                                 <a class="btn btn-primary text-white mx-auto" role="button"
@@ -49,6 +121,7 @@
                         </td>
                     </tr>
                     {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>

@@ -39,53 +39,119 @@ def profile(request, id):
     dict_result['phone_nums'] = ph_no
     return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result})
 
-def resmanage(request):
-    if(conf.login == False):
+def resmanage(request, id):
+    if(conf.login == False or id > 1 or id < 0):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    
+
+    sql = ("SELECT RESERVATION_ID, RESERVATION_ACTIVE, ARRIVAL_DATE, DEPARTURE_DATE, USER_ID FROM RESERVATION ")
+    msg = "Showing results for : all reservations "
+    if(id == 1):
+        arrdate = request.POST.get('arrdate', '')
+        depdate = request.POST.get('depdate', '')
+        restype = request.POST.get('restype', '')
+
+        if(arrdate or depdate or restype):
+            msg = msg + " with"
+            sql = sql + " WHERE "
+            if(arrdate):
+                sql = sql + " ARRIVAL_DATE >= TO_DATE(" + str("\'" + arrdate + "\', 'YYYY-MM-DD') ")
+                msg = msg + " arrival date >= " + str("\"" + arrdate + "\", ")
+            if(arrdate and depdate):
+                sql = sql + " AND "
+            if(depdate):
+                sql = sql + " DEPARTURE_DATE <= TO_DATE(" + str("\'" + depdate + "\', 'YYYY-MM-DD') ")
+                msg = msg + " departure date <= " + str("\"" + depdate + "\", ")
+            if(restype and depdate):
+                sql = sql + " AND "
+            if(restype == 'Active'):
+                sql = sql + "  RESERVATION_ACTIVE = 1 "
+                msg = msg + " type = Active "
+            elif(restype == 'Pending'):
+                sql = sql + " RESERVATION_ACTIVE = 0 "
+                msg = msg + " type = Inactive "
+            elif(restype == 'Cancelled'):
+                sql = sql + " RESERVATION_ACTIVE = 2 "
+                msg = msg + " type = Cancelled "
+            elif(restype == 'Completed'):
+                sql = sql + " RESERVATION_ACTIVE = 3 "
+                msg = msg + " type = Completed "
+            else:
+                msg = msg + " type = All "
     cursor = connection.cursor()
-    sql = ("SELECT RESERVATION_ID, USER_ID, RESERVATION_ACTIVE FROM RESERVATION")
     cursor.execute(sql)
     table = cursor.fetchall()
-
     cursor.close()
 
     data = []
     for row in table:
-        res = {}
-        res['resid'] = row[0]
-        res['cusid'] = row[1]
-        res['isactive'] = row[2]
-        data.append(res)
+        r = {}
+        r['resid'] = row[0]
+        r['isactive'] = row[1]
+        r['arrdate'] = row[2].date()
+        r['depdate'] = row[3].date()
+        data.append(r)
 
     data = sorted(data, key=lambda item: int(item['resid']))
 
-    return render(request, 'reservation/allres.html', {'login' : conf.login, 'data': data, 'user' : conf.getuser()})
+    return render(request, 'reservation/allres.html', {'login' : conf.login,'data' : data, 'msg' : msg, 'user' : conf.getuser()})
 
-def servmanage(request):
-    if(conf.login == False):
+def servmanage(request, id):
+    if(conf.login == False or id > 1 or id < 0):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
 
+    sql = "SELECT * FROM ROOM_HB_SERV_RECEIVES "
+    msg = "Showing results for : all reservations "
+    if(id == 1):
+        serdate = request.POST.get('servdate', '')
+        sertype = request.POST.get('sertype', '')
+
+        if(serdate or (sertype and sertype != 'All')):
+            msg = msg + " with"
+            sql = sql + " WHERE "
+            if(serdate):
+                sql = sql + " TRUNC(SERVICE_DATE) = TO_DATE(" + str("\'" + serdate + "\', 'YYYY-MM-DD') ")
+                msg = msg + " service execution date = " + str("\"" + serdate + "\", ")
+            if(serdate and sertype and sertype != 'All'):
+                sql = sql + " AND "
+            if(sertype == 'Active'):
+                sql = sql + " SERVICE_ACTIVE = 1 "
+                msg = msg + " type = Active "
+            elif(sertype == 'Cancelled'):
+                sql = sql + " SERVICE_ACTIVE = 2 "
+                msg = msg + " type = Cancelled "
+            elif(sertype == 'Completed'):
+                sql = sql + " SERVICE_ACTIVE = 3 "
+                msg = msg + " type = Completed "
+            else:
+                msg = msg + " type = All "
+            if(conf.role != 'manager' and conf.role != 'director'):
+                sql = sql + " AND EMP_ID = " + str(conf.user_id)
+        else:
+            if(conf.role != 'manager' and conf.role != 'director'):
+                sql = sql + " WHERE EMP_ID = " + str(conf.user_id)
+    else:
+        if(conf.role != 'manager' and conf.role != 'director'):
+            sql = sql + " WHERE EMP_ID = " + str(conf.user_id)
+    print(sql)
     cursor = connection.cursor()
-    sql = ("SELECT * FROM ROOM_HB_SERV_RECEIVES")
     cursor.execute(sql)
     table = cursor.fetchall()
-
     cursor.close()
 
     data = []
     for row in table:
-        res = {}
-        res['servid'] = row[0]
-        res['roomid'] = row[1]
-        res['billid'] = row[2]
-        res['isactive'] = row[3]
-        res['actionid'] = row[4]
-        data.append(res)
-    
+        ser = {}
+        ser['servid'] = row[0]
+        ser['roomid'] = row[1]
+        ser['billid'] = row[2]
+        ser['isactive'] = row[3]
+        ser['actionid'] = row[4]
+        ser['servdate'] = row[5]
+        data.append(ser)
+
     data = sorted(data, key=lambda item: int(item['servid']))
 
-    return render(request, 'service/allserv.html', {'login' : conf.login, 'data': data, 'user' : conf.getuser()})
+    return render(request, 'service/allserv.html', {'login' : conf.login,'data' : data, 'msg' : msg, 'user' : conf.getuser()})
 
 def empreg(request):
     if(conf.login == False):

@@ -1,0 +1,19 @@
+{% extends 'starter.html' %}
+
+{% block title %} Contact {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+
+
+{% block body %} 
+{% load static %}
+{% include 'modal.html' with user=user %}
+
+<!-- welcome section -->
+this is a dummy page. Values sent are {{data}}
+{% endblock %}

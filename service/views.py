@@ -9,10 +9,9 @@ def soloser(request, id):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     cursor = connection.cursor()
-    sql = ("SELECT X.SERVICE_ID, X.ROOM_ID, X.BILL_ID, Y.NAME, Y.DESCRIPTION, Y.COST, X.SERVICE_ACTIVE, Y.USER_ID, (Z.FIRST_NAME || ' ' || Z.LAST_NAME) FULLNAME FROM ROOM_HB_SERV_RECEIVES X, SERVICES Y, ACCOUNT_HOLDER Z WHERE X.SERVICE_ID = Y.SERVICE_ID AND X.ACTION_ID = %s AND Z.USER_ID = Y.USER_ID" % (id))
+    sql = ("SELECT X.SERVICE_ID, X.ROOM_ID, X.BILL_ID, Y.NAME, Y.DESCRIPTION, Y.COST, X.SERVICE_ACTIVE, X.EMP_ID, (Z.FIRST_NAME || ' ' || Z.LAST_NAME) FULLNAME FROM ROOM_HB_SERV_RECEIVES X, SERVICES Y, ACCOUNT_HOLDER Z WHERE X.SERVICE_ID = Y.SERVICE_ID AND X.ACTION_ID = %s AND Z.USER_ID = X.EMP_ID" % (id))
     cursor.execute(sql)
     row = cursor.fetchall()
-
     service = {}
     service['servid'] = row[0][0]
     service['roomid'] = row[0][1]
@@ -44,6 +43,7 @@ def cr_service(request):
     table = cursor.fetchall()
     print(table)
     data = []
+    
     for row in table:
         ser = {}
         ser['actionid'] = row[0]
@@ -54,9 +54,6 @@ def cr_service(request):
         data.append(ser)
     
     data = sorted(data, key=lambda item: int(item['servid']))
-    print('please find the returnvalue')
-    print(returnval)
-    
 
     if returnval == 1:
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'srsuccess': True})
@@ -74,6 +71,6 @@ def ca_serve(request, id):
     cursor.close()
     if suc == 1:
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'scancel': True})
-    return render(request, 'service/servview.html', {'login' : conf.login, 'resid' : id, 'user' : conf.getuser()}) 
+    return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
 
     

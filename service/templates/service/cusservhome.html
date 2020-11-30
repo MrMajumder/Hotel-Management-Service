@@ -21,18 +21,17 @@
             <h1 class="display-4 text-right mb-4">Services<br>Menu</h1>
             <div class="nav flex-column nav-pills text-right" id="v-pills-tab" role="tablist"
                 aria-orientation="vertical">
-                <a class="nav-link active" id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
-                    aria-selected="false">Create New Service</a>
-                <a class="nav-link " id="actrestab" data-toggle="pill" href="#actres" role="tab"
-                    aria-controls="actres" aria-selected="true">Active Services</a>
-                
+                <a class="nav-link {%if sprob or rprob %}{% else %}active{% endif %}" id="actrestab" data-toggle="pill" href="#actres" role="tab"
+                    aria-controls="actres" aria-selected="true">Pending Services</a>
+                <a class="nav-link {%if sprob or rprob %} active{% else %}{% endif %}" id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
+                aria-selected="false">Create New Service</a>
             </div>
         </div>
 
         <div class="container col-8">
             <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade " id="actres" role="tabpanel" aria-labelledby="actrestab">
-                    <h4>Active Services: <h5 class="display-4 text-left mb-4">{{data|length}}</h5>
+                <div class="tab-pane fade {%if sprob or rprob %}{% else %}show active{% endif %}" id="actres" role="tabpanel" aria-labelledby="actrestab">
+                    <h4>Pending Services: <h5 class="display-4 text-left mb-4">{{data|length}}</h5>
                     </h4>
 
                     <div class="row">
@@ -44,9 +43,9 @@
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text text-justify">
-                                        <b>Service Name:</b>{{ser.name}}<br>
-                                        <b>Delivered To Room:</b>{{ser.roomid}}<br>
-                                        <b>Under Reservation ID:</b>{{ser.resid}}<br>
+                                        <b>Service Name:</b> {{ser.name}}<br>
+                                        <b>Delivered To Room:</b> {{ser.roomid}}<br>
+                                        <b>Under Reservation ID:</b> {{ser.resid}}<br>
                                     </p>
                                     <form class="form-inline">
                                         <a class="btn btn-primary text-white mx-auto" role="button"
@@ -67,7 +66,7 @@
                 </div>
 
 
-                <div class="tab-pane fade show active" id="creres" role="tabpanel" aria-labelledby="crerestab">
+                <div class="tab-pane fade {%if sprob or rprob %}show active{% else %}{% endif %}" id="creres" role="tabpanel" aria-labelledby="crerestab">
                     {% if sprob %}
 
                     <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
@@ -99,14 +98,7 @@
 
 
                     <div class="container text-center">
-                        <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="72" height="72">
-
-
-                        <h3>
-                            Room Reservation Form
-                        </h3>
-
-                        <p>------------------------------</p>
+                        <h5 class="display-4 text-center mb-4">New Service Order</h5>
                     </div>
 
                     <!--form section-->
@@ -173,7 +165,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        ...
+                                        This Action Cannot Be Undone
                                     </div>
                                     <div class="modal-footer container justify-content-center col-5">
                                         <button type="submit" class="btn btn-primary">YES</button>

@@ -10,13 +10,50 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
+<div class="modal fade container justify-content-center col-3" id="delmodal" tabindex="-1"
+        aria-labelledby="delmodallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="delmodallabel">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if employee %}
+                    Are you sure that you want to leave your Job? This action can't be reversed.
+                    {% else %}
+                    Are you sure that you want to delete your account? This action can't be reversed.
+                    {% endif %}
+                </div>
+                <div class="modal-footer container justify-content-center col-5">
+                    <button type="submit" class="btn btn-primary">Yes</button>
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">No</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 <h1 class="display-2 text-center">Customer Profile</h1>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-3 d-flex flex-column justify-content-center">
+    <div class="col-3 d-flex flex-column">
       <img src="{% static 'img/user.png' %}" class="d-block mx-auto" width="350" height="350" alt="username"><br />
       <p class="text text-center display-4 mb-0 pb-0">{{allval.name}}</p>
       <p class="text text-center text-secondary">{{allval.email}}</p>
+      {% if user.user_id == allval.user_id %}
+      <form class="form d-flex flex-column">
+        <a class="btn btn-primary text-white my-2" role="button" href="{{ HTTP_HOST }}/edition/">
+          Edit Account Info
+        </a>
+        <button type="button" class="btn btn-danger my-2" data-toggle="modal"
+          data-target="#delmodal">
+          Delete Account
+        </button>
+        {% endif %}
+      </form>
     </div>
     <div class="container col-8">
       <p class="display-4">Customer Information</p>
@@ -33,8 +70,8 @@
           </tr>
           {% for ph in allval.phone_nums %}
           <tr>
-            {% if ph == allval.phone_nums.0 %} <th scope="row" colspan="2"
-              rowspan="{{allval.phone_nums|length}}" style="vertical-align : middle;">Phone Number</th> {% endif %}
+            {% if ph == allval.phone_nums.0 %} <th scope="row" colspan="2" rowspan="{{allval.phone_nums|length}}"
+              style="vertical-align : middle;">Phone Number</th> {% endif %}
             <td>+880{{ph.phone_no}}</td>
           </tr>
           {% endfor %}

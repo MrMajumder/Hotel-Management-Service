@@ -4,6 +4,7 @@ from django.db import connection
 from hms import conf
 from hms import hashing
 from hms import funcs
+from datetime import datetime
 
 
 def index(request):
@@ -123,6 +124,7 @@ def roomdetails(request, id):
     room['bed_no'] = row[0][5]
     room['rent'] = row[0][6]
     room['reservation_id'] = row[0][7]
+    room['type'] = row[0][8]
 
     return render(request, 'roomview.html', {'login': conf.login, 'alerttoggle': True, 'room' : room, 'user': conf.getuser()})
 
@@ -300,6 +302,8 @@ def newinsert(request):
         cursor.callproc("INSERT_ACCOUNTHOLDER", [email, name, lastname, password, house, road, city, country, role, order_count])
         suc = order_count.getvalue()
         if suc == 0:
+            if(conf.login == True and (conf.role == 'manager' or conf.role == 'director')):
+                return render(request, 'signup.html', {'login': conf.login, 'user': conf.getuser(), 'ementry': True, 'exist': True})
             return render(request, 'signup.html', {'exist': True})
         phnumber = funcs.split(phnumber)
         for i in phnumber:
@@ -316,4 +320,77 @@ def newinsert(request):
             return render(request, 'index.html', {'login': conf.login, 'esign': True, 'user': conf.getuser()})
         return render(request, 'index.html', {'login': conf.login, 'sign': True, 'user': conf.getuser()})
 
-    return render(request, 'signup.html', {'sign': False})
+    return render(request, 'signup.html', {'login': conf.login, 'sign': False, 'user': conf.getuser()})
+
+def billshow(request, resid):
+    if(conf.login == False):
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    #do stuff here to show the bill
+    data = getbilltable(resid)
+    
+    return render(request, 'billinfo.html', {'login' : conf.login, 'data' : data, 'user' : conf.getuser()})
+    
+
+def billpay(request, resid):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser()})
+    pay = request.POST.get('payment', 0)
+    
+    cursor = connection.cursor()
+    success = cursor.callfunc("UPDATEDUE", int, [pay, resid])
+    cursor.close()
+    data = getbilltable(resid)
+
+    return render(request, 'billinfo.html', {'login' : conf.login, 'success' : success, 'data' : data, 'user' : conf.getuser()})
+
+def getbilltable(resid):
+    cursor = connection.cursor()
+    sql = ("SELECT X.ARRIVAL_DATE, X.DEPARTURE_DATE, Y.*, GETROOMS(%s), GETSERV(%s), GETSERVROOMS(%s), GETROOMRENT(%s), GETSERVCOST(%s), M.BILL_ID, N.COST, N.BILL_DATE, N.VAT_PERCENTAGE, M.DUE FROM RESERVATION X, (SELECT C.USER_ID USID, (A.FIRST_NAME || ' ' || A.LAST_NAME) FNAME, C.ID_CARD_NO CNO, P.PH_NUMBER PNO FROM CUSTOMER C, ACCOUNT_HOLDER A, ACCOUNT_HOLDER_PHNUMBER P WHERE C.USER_ID = A.USER_ID AND A.USER_ID = P.USER_ID) Y, HOTEL_BILL M, BILL N WHERE Y.USID = X.USER_ID AND X.RESERVATION_ID = %s AND M.RESERVATION_ID = X.RESERVATION_ID AND M.BILL_ID = N.BILL_ID AND ROWNUM <= 1;" % (resid, resid, resid, resid, resid, resid))
+    cursor.execute(sql)
+    row = cursor.fetchall()
+    cursor.close()
+    data = {}
+    data['resid'] = resid
+    data['arrdate'] = row[0][0].date()
+    data['depdate'] = row[0][1].date()
+    data['cusname'] = row[0][3]
+    data['cusidcard'] = row[0][4]
+    data['cusphno'] = row[0][5]
+    data['billid'] = row[0][11]
+    data['totalcost'] = row[0][12]
+    data['billdate'] = row[0][13].date()
+    data['vat'] = row[0][14]
+    data['due'] = row[0][15]
+    data['paid'] = int(data['totalcost']) - int(data['due'])
+
+
+    rooms = []
+    data['rooms'] = []
+    if row[0][6]:
+        rooms.append([int(x) for x in (str(row[0][6]).split(','))])
+        rooms.append([int(x) for x in (str(row[0][9]).split(','))])
+        for i in range(len(rooms[0])):
+            r = {}
+            r['roomid'] = rooms[0][i]
+            r['rent'] = rooms[1][i]
+            data['rooms'].append(r)
+    
+    data['rooms'] = sorted(data['rooms'], key=lambda item: int(item['roomid']))
+    
+    service = []
+    data['services'] = []
+    if  row[0][7]:
+        service.append([int(x) for x in (str(row[0][7]).split(','))])
+        service.append([int(x) for x in (str(row[0][8]).split(','))])
+        service.append([int(x) for x in (str(row[0][10]).split(','))])
+       
+        for i in range(len(service[0])):
+            s = {}
+            s['servid'] = service[0][i]
+            s['toroom'] = service[1][i]
+            s['cost'] = service[2][i]
+            data['services'].append(s)
+
+    data['services'] = sorted(data['services'], key=lambda item: int(item['servid']))
+    return data
