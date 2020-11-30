@@ -1,0 +1,92 @@
+{% extends 'starter.html' %}
+
+{% block title %} Room Reservation {{servid}} {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+
+{% block body %}
+{% load static %}
+{% include 'modal.html' with user=user %}
+
+<form action='{{ HTTP_HOST }}/reservation/roomentry{{rooms|length}}{{adate}}{{ddate}}' method='post'
+    class="needs-validation my-4 container" novalidate>
+    {% csrf_token %}
+    <div class="container-fluid my-4">
+
+        <div class="row">
+            <div class="col-3">
+                <img src="{% static 'img/emp.png' %}" class="d-block mx-auto" width="150" height="150"
+                    alt="reservation logo"><br />
+                <h1 class="display-4 text-center mb-4">Room List</h1>
+            </div>
+            <div class="col-8 container">
+                <p class="display-4">List of All Available Rooms</p>
+                <table class="table table-hover table-striped table-bordered w-20">
+                    <thead class="thead-dark text-center">
+                        <tr>
+                            <th scope="row">Room No</th>
+                            <th scope="row">Room Type</th>
+                            <th scope="row">Room Rent</th>
+                            <th scope="row">Room Capacity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for room in rooms %}
+                        <tr>
+                            <td>{{room.room_id}}</td>
+                            <td>{{room.rtype}}</td>
+                            <td>{{room.rent}}</td>
+                            <td>{{room.capacity}}</td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="{{room.num}}"
+                                        value="{{room.room_id}}" id="defaultCheck{{room.num}}">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Rent this room
+                                    </label>
+                                </div>
+
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                   Confirm Reservation
+                </button>
+            
+                <!-- Modal -->
+                <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning">
+                                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                This Action Can't Be Undone.
+                            </div>
+                            <div class="modal-footer container justify-content-center col-5">
+                                <button type="submit" class="btn btn-primary">YES</button>
+                                <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+</form>
+{% endblock %}

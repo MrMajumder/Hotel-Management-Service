@@ -15,6 +15,8 @@ name = ''
 email = ''
 role = ''
 today = str(time.strftime("%Y-%m-%d"))
+adate = ''
+ddate = ''
 #roles can be customer, staff, manager, director, (admin?)
 
 def getuser():

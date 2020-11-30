@@ -60,6 +60,14 @@
 <!--form section-->
 <form action='{{ HTTP_HOST }}/editform/' method='post' class="needs-validation my-4 container" novalidate>
     {% csrf_token %}
+    <div class="col-md-4 mb-3" >
+        <label for="validationCustom01">Old Password</label>
+        <input type="password" class="form-control" name='oldpass' id="NPASS" required>
+        <div class="invalid-feedback">
+            Please provide your old pass.
+        </div>
+        
+    </div>
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
@@ -70,7 +78,7 @@
                 <div class="form-row ">
                     <div class="col-md-6 mb-3">
                         <label for="validationCustom01">First name</label>
-                        <input type="text" class="form-control" name='fname' id="nfname" value="Mark">
+                        <input type="text" class="form-control" name='fname' id="nfname" >
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -78,7 +86,7 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="validationCustom02">Last name</label>
-                        <input type="text" class="form-control" name='lname' id="nlname" value="Otto">
+                        <input type="text" class="form-control" name='lname' id="nlname" >
                         <div class="valid-feedback">
                             Looks good!
                         </div>

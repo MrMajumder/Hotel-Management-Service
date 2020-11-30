@@ -1,14 +1,21 @@
 ---WHY ROOM AC IS INTEGER DATA TYPE
 
-INSERT INTO ROOM VALUES(3, 1, 1, 2, 1, 2, 5000, NULL, 'Personal Suit');
+
 INSERT INTO ROOM VALUES(1, 1, 1, 4, 1, 2, 5000, NULL, 'Family Suit');
 INSERT INTO ROOM VALUES(2, 1, 1, 4, 1, 2, 5000, NULL, 'Family Suit');
-
+INSERT INTO ROOM VALUES(3, 1, 1, 4, 1, 2, 5000, NULL, 'Family Suit');
+INSERT INTO ROOM VALUES(4, 1, 1, 2, 1, 2, 2000, NULL, 'Personal Suit');
+INSERT INTO ROOM VALUES(5, 1, 1, 2, 1, 2, 2000, NULL, 'Personal Suit');
+INSERT INTO ROOM VALUES(6, 1, 1, 2, 1, 2, 2000, NULL, 'Personal Suit');
 
 
 INSERT INTO SERVICES VALUES(1, 'Food Service', 100, 'bla bla', NULL, 'Food Service');
 INSERT INTO SERVICES VALUES(2, 'Food Service', 100, 'bla bla', NULL, 'Food Service');
 INSERT INTO SERVICES VALUES(3, 'Food Service', 100, 'bla bla', NULL, 'Food Service');
+
+INSERT INTO SERVICES VALUES(4, 'Laundry Service', 100, 'bla bla', NULL, 'Laundry Service');
+INSERT INTO SERVICES VALUES(5, 'Laundry Service', 100, 'bla bla', NULL, 'Laundry Service');
+INSERT INTO SERVICES VALUES(6, 'Laundry Service', 100, 'bla bla', NULL, 'Laundry Service');
 
 
 

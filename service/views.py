@@ -56,9 +56,9 @@ def cr_service(request):
     data = sorted(data, key=lambda item: int(item['servid']))
 
     if returnval == 1:
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'srsuccess': True})
+        return render(request, 'service/cusservhome.html', {'login' : conf.login, 'data' : data, 'user' : conf.getuser(), 'srsuccess': True})
     elif returnval == 2:
-        return render(request, 'service/cusservhome.html', {'login' : conf.login, 'data' : data, 'user' : conf.getuser()})
+        return render(request, 'service/cusservhome.html', {'login' : conf.login, 'rprob': True, 'data' : data, 'user' : conf.getuser()})
     return render(request, 'service/cusservhome.html', {'login' : conf.login, 'data' : data,  'sprob': True, 'user' : conf.getuser()})
 
 
