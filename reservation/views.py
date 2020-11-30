@@ -64,7 +64,7 @@ def cr_reserve(request):
     print(ddate)
     id = int(conf.user_id)
     cursor = connection.cursor()
-    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 0" % id)
+    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 1" % id)
     cursor.execute(sql)
     table = cursor.fetchall()
 
@@ -142,7 +142,7 @@ def roomentry(request, id, adate, ddate):
     cursor.close()
     id = int(conf.user_id)
     cursor = connection.cursor()
-    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 0" % id)
+    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE = 1" % id)
     cursor.execute(sql)
     table = cursor.fetchall()
 
@@ -169,5 +169,9 @@ def canreserv(request, id):
     if suc == 1:
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'rcancel': True})
     return render(request, 'reservation/resview.html', {'login' : conf.login, 'resid' : id, 'user' : conf.getuser()}) 
+
+
+
+
 
         

@@ -398,3 +398,18 @@ def getbilltable(resid):
 
     data['services'] = sorted(data['services'], key=lambda item: int(item['servid']))
     return data
+
+
+
+def update_server(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser()})
+    cursor = connection.cursor()
+    order_count = cursor.var(int).var
+    cursor.callproc("UPDATE_SERVER_DATE", [order_count])
+    suc = order_count.getvalue()
+    cursor.close()
+    print('HELLO THERE')
+    print(suc)
+    if(suc == 1):
+        return render(request, 'index.html', {'login' : conf.login, 'server' : True, 'user' : conf.getuser()})

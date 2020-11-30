@@ -202,7 +202,7 @@ def soloser(request, id):
 def com(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'customer/complaint.html', {'login' : conf.login, 'data' : [2, 4, 6, 8, 10], 'user' : conf.getuser()})
+    return render(request, 'customer/complaint.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def fcom(request):
     if(conf.login == False):
