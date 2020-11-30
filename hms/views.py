@@ -53,7 +53,7 @@ def insert(request):
 
     if(conf.role == 'manager' or conf.role == 'director'):
         position = request.POST.get('position', '')
-        if(position == "MANAGER"):
+        if(position == "Manager"):
             permission = 2
         else:
             permission = 3
@@ -149,7 +149,7 @@ def enter_account(request):
     cursor.close()
 #  hashing.verify_password(r[1], password)
     for r in result:
-        if(r[0] == email and  hashing.verify_password(r[1], password) and r[2] == Atype):
+        if(r[0] == email and hashing.verify_password(r[1], password) and r[2] == Atype):
             
             conf.role = 'customer'
             conf.login = True
@@ -286,7 +286,7 @@ def newinsert(request):
 
     if(conf.role == 'manager' or conf.role == 'director'):
         position = request.POST.get('position', '')
-        if(position == "MANAGER"):
+        if(position == "Manager"):
             permission = 2
         else:
             permission = 3

@@ -75,7 +75,7 @@
                 </div>
 
 
-                <div class="tab-pane fade show active" id="creres" role="tabpanel" aria-labelledby="crerestab">
+                <div class="tab-pane fade  {%if prob.guest or prob.room or prob.date %}show active{% else %}{% endif %}" id="creres" role="tabpanel" aria-labelledby="crerestab">
                     
                     
                     {% if room %}
