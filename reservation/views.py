@@ -89,6 +89,9 @@ def cr_reserve(request):
     # suc = order_count.getvalue()
     ADate = (str("\'"+adate+"\'"))
     DDate = (str("\'"+ddate+"\'"))
+    print('in the reserve section')
+    print(ADate)
+    print(DDate)
     cursor.close()
     cursor = connection.cursor()
     sql = ("SELECT ROOM_ID, CAPACITY, ROOM_TYPE, RENT FROM ROOM WHERE ROOM_ID NOT IN (SELECT B.ROOM_ID FROM BOOKED_ROOMS B, RESERVATION R WHERE R.RESERVATION_ID = B.RESERVATION_ID AND ROOM_SEARCH(B.ROOM_ID, %s, %s) <> %s AND (R.RESERVATION_ACTIVE = %s OR R.RESERVATION_ACTIVE = %s))" % (ADate, DDate, 1, 0, 1))
@@ -127,13 +130,27 @@ def cr_reserve(request):
 def roomentry(request, id, adate, ddate):
     cursor = connection.cursor()
     num = 0
+    ADate = (str("\'"+conf.adate+"\'"))
+    DDate = (str("\'"+conf.ddate+"\'"))
+    print('youoyoo')
+    print(ADate)
+    print(DDate)
     for x in range(id):
         rid = request.POST.get(str(x+1), '')
         if rid != "":
             print(rid)
-            order_count = cursor.var(int).var
-            cursor.callproc("NEW_RESERV_ENTRYS", [conf.user_id, conf.adate, conf.ddate, num, int(rid), order_count])
-            num = order_count.getvalue()
+            sql = ("SELECT ROOM_SEARCH(%s, %s, %s) FROM DUAL" % (int(rid), ADate, DDate))
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            print(result)
+            returnval = result[0][0]
+            print(returnval)
+            print(conf.adate)
+            print(conf.ddate)
+            if(returnval == 1):
+                order_count = cursor.var(int).var
+                cursor.callproc("NEW_RESERV_ENTRYS", [conf.user_id, conf.adate, conf.ddate, num, int(rid), order_count])
+                num = order_count.getvalue()
 
     # cursor = connection.cursor()
     # order_count = cursor.var(int).var
@@ -168,7 +185,45 @@ def canreserv(request, id):
     cursor.close()
     if suc == 1:
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'rcancel': True})
-    return render(request, 'reservation/resview.html', {'login' : conf.login, 'resid' : id, 'user' : conf.getuser()}) 
+    cursor = connection.cursor()
+    sql = ("SELECT A.ARRIVAL_DATE, A.DEPARTURE_DATE, A.RESERVATION_ACTIVE, A.USER_ID, B.* FROM RESERVATION A, (SELECT N.ROOM_ID, N.RESERVATION_ID, M.ROOM_TYPE, M.CAPACITY FROM ROOM M, BOOKED_ROOMS N WHERE M.ROOM_ID = N.ROOM_ID) B WHERE A.RESERVATION_ID = B.RESERVATION_ID AND A.RESERVATION_ID = %s" % (id))
+    cursor.execute(sql)
+    roomtable = cursor.fetchall()
+    sql = ("SELECT M.ACTION_ID, M.SERVICE_ID, O.RESERVATION_ID, N.NAME, M.ROOM_ID, M.SERVICE_ACTIVE FROM ROOM_HB_SERV_RECEIVES M, SERVICES N, HOTEL_BILL O WHERE M.SERVICE_ID = N.SERVICE_ID AND O.BILL_ID = M.BILL_ID AND O.RESERVATION_ID = %s" %(id))
+    cursor.execute(sql)
+    servicetable = cursor.fetchall()
+    cursor.close()
+
+    res = {}
+    res['resid'] = roomtable[0][5]
+    res['arrivaldate'] = roomtable[0][0].date()
+    res['departuredate'] = roomtable[0][1].date()
+    res['resactive'] = roomtable[0][2]
+
+    room = []
+    for row in roomtable:
+        r = {}
+        r['roomid'] = row[4]
+        r['type'] = row[6]
+        r['capacity'] = row[7]
+        room.append(r)
+
+    res['rooms'] = sorted(room, key=lambda item: int(item['roomid']))
+    
+    service = []
+       
+    for row in servicetable:
+        s = {}
+        s['actionid'] = row[0]
+        s['serviceid'] = row[1]
+        s['roomid'] = row[4]
+        s['name'] = row[3]
+        s['isactive'] = row[5]
+        service.append(s)
+
+    res['services'] = sorted(service, key=lambda item: int(item['serviceid']))
+
+    return render(request, 'reservation/resview.html', {'login' : conf.login, 'res' : res, 'user' : conf.getuser(), 'cancelu' : True}) 
 
 
 
