@@ -13,6 +13,15 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
+{% if deleteu %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+  <strong>Account Deletion Unsuccessful!!</strong> Please clear all your reservations.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+
 {% if sign %}
 <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
     <strong>Congratulations!</strong> Signup Successful.

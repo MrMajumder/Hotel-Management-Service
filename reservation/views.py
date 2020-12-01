@@ -60,8 +60,7 @@ def cr_reserve(request):
     roomt = request.POST.get('room_t', 'default')
     adate = request.POST.get('a_date', 'default')
     ddate = request.POST.get('d_date', 'default')
-    print(adate)
-    print(ddate)
+    
     id = int(conf.user_id)
     cursor = connection.cursor()
     sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE IN (0, 1, 2, 3)" % id)
@@ -89,24 +88,17 @@ def cr_reserve(request):
     # suc = order_count.getvalue()
     ADate = (str("\'"+adate+"\'"))
     DDate = (str("\'"+ddate+"\'"))
-    print('in the reserve section')
-    print(ADate)
-    print(DDate)
     cursor.close()
     cursor = connection.cursor()
     sql = ("SELECT ROOM_ID, CAPACITY, ROOM_TYPE, RENT FROM ROOM WHERE ROOM_ID NOT IN (SELECT B.ROOM_ID FROM BOOKED_ROOMS B, RESERVATION R WHERE R.RESERVATION_ID = B.RESERVATION_ID AND ROOM_SEARCH(B.ROOM_ID, %s, %s) <> %s AND (R.RESERVATION_ACTIVE = %s OR R.RESERVATION_ACTIVE = %s))" % (ADate, DDate, 1, 0, 1))
     if roomt != "":
-        print(roomt)
         e = (str("\'"+roomt+"\'"))
         sql = sql + " AND ROOM_TYPE = " + e
 
-    print(sql)
 
     cursor.execute(sql)
     result = cursor.fetchall()
-    print(result)
     cursor.close()
-    print('reservation e eseche he he he')
     dict_result = []
     num = 0
     for r in result:
@@ -132,9 +124,7 @@ def roomentry(request, id, adate, ddate):
     num = 0
     ADate = (str("\'"+conf.adate+"\'"))
     DDate = (str("\'"+conf.ddate+"\'"))
-    print('youoyoo')
-    print(ADate)
-    print(DDate)
+
     for x in range(id):
         rid = request.POST.get(str(x+1), '')
         if rid != "":
@@ -142,11 +132,7 @@ def roomentry(request, id, adate, ddate):
             sql = ("SELECT ROOM_SEARCH(%s, %s, %s) FROM DUAL" % (int(rid), ADate, DDate))
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
             returnval = result[0][0]
-            print(returnval)
-            print(conf.adate)
-            print(conf.ddate)
             if(returnval == 1):
                 order_count = cursor.var(int).var
                 cursor.callproc("NEW_RESERV_ENTRYS", [conf.user_id, conf.adate, conf.ddate, num, int(rid), order_count])

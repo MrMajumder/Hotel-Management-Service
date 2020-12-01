@@ -139,7 +139,7 @@ def cdelete(request):
             conf.login = False
             conf.user_id = conf.username = conf.name = conf.email = conf.role = ''
         return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser(), 'delete' : True})
-    return render(request, 'delete.html', {'login' : conf.login, 'user' : conf.getuser(), 'employee' : False, 'deleteu': True}) 
+    return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'employee' : False, 'deleteu': True}) 
 
 def edit(request):
     if(conf.login == False):
