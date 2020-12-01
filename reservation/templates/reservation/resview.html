@@ -12,6 +12,15 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
+{% if cancelu %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+    <strong>This is an ongoing Reservation!!</strong> You can't cancel it now.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+
 <form action='{{ HTTP_HOST }}/reservation/creserv{{res.resid}}/' method='post' class="needs-validation my-4 container" novalidate>
     {% csrf_token %}
     <div class="modal fade" id="cancelmodal" data-backdrop="static" tabindex="-1" role="dialog"
@@ -44,7 +53,7 @@
         <div class="col-3 d-flex flex-column">
             <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto my-4" width="100" height="100"
                 alt="username"><br />
-            <p class="text text-right display-4">Resrvation {{res.resid}}:<br>Details</p>
+            <p class="text text-right display-4">Reservation {{res.resid}}:<br>Details</p>
             {% if res.resactive == 0 or res.resactive == 1 %}
             <button type="button" class="btn btn-{% if res.resactive == 0 %}secondary{% else %}success{% endif %} mb-3">
                 {% if res.resactive == 0 %}Pending

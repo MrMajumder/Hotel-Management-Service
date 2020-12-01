@@ -19,6 +19,23 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
+{% elif room %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Reservation Unsuccessful.</strong> Chosen Room is not available at this moment
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% elif date %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Reservation Unsuccessful.</strong> You have chosen a invalid date.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 {% endif %}
 <div class="container-fluid my-4">
 
@@ -29,23 +46,27 @@
             <h1 class="display-4 text-right mb-4">Reservation Menu</h1>
             <div class="nav flex-column nav-pills text-right" id="v-pills-tab" role="tablist"
                 aria-orientation="vertical">
-                <a class="nav-link {%if prob.guest or prob.room or prob.date %}{% else %} active{% endif %}" id="actrestab" data-toggle="pill" href="#actres" role="tab"
-                    aria-controls="actres" aria-selected="true">Active Reservations</a>
-                <a class="nav-link {%if prob.guest or prob.room or prob.date %}active{% else %}{% endif %}" id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
+                <a class="nav-link {%if prob.guest or prob.room or prob.date %}{% else %} active{% endif %}"
+                    id="actrestab" data-toggle="pill" href="#actres" role="tab" aria-controls="actres"
+                    aria-selected="true">Active Reservations</a>
+                <a class="nav-link {%if prob.guest or prob.room or prob.date %}active{% else %}{% endif %}"
+                    id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
                     aria-selected="false">Create Reservation</a>
             </div>
         </div>
 
         <div class="container col-8">
             <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade {%if prob.guest or prob.room or prob.date %}{% else %}show active{% endif %}" id="actres" role="tabpanel" aria-labelledby="actrestab">
+                <div class="tab-pane fade {%if prob.guest or prob.room or prob.date %}{% else %}show active{% endif %}"
+                    id="actres" role="tabpanel" aria-labelledby="actrestab">
                     <h4>Active Reservations: <h5 class="display-4 text-left mb-4">{{data|length}}</h5>
                     </h4>
 
                     <div class="row">
                         {% for res in data %}
                         <div class="col-4">
-                            <div class="card border-{% if res.isactive == 0 %}secondary{% elif res.isactive == 1 %}success{% elif res.isactive == 2 %}danger{% else %}info{% endif %} mb-3">
+                            <div
+                                class="card border-{% if res.isactive == 0 %}secondary{% elif res.isactive == 1 %}success{% elif res.isactive == 2 %}danger{% else %}info{% endif %} mb-3">
                                 <div class="card-header font-weight-bold">
                                     Reservation : {{res.resid}}
                                 </div>
@@ -74,29 +95,14 @@
                 </div>
 
 
-                <div class="tab-pane fade  {%if prob.guest or prob.room or prob.date %}show active{% else %}{% endif %}" id="creres" role="tabpanel" aria-labelledby="crerestab">
-                    
-                    
-                    {% if room %}
-                    <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-
-                        <strong>Reservation Unsuccessful.</strong> Chosen Room is not available at this moment
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    {% elif date %}
-                    <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-
-                        <strong>Reservation Unsuccessful.</strong> You have chosen a invalid date.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                <div class="tab-pane fade  {%if prob.guest or prob.room or prob.date %}show active{% else %}{% endif %}"
+                    id="creres" role="tabpanel" aria-labelledby="crerestab">
 
 
-                    {% else %}
+
+
+
+
                     <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
 
                         <strong>Please fill up the form.</strong>
@@ -104,7 +110,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    {% endif %}
+
 
 
 
@@ -122,7 +128,7 @@
 
                             <div class="col-md-2 mb-6">
                                 <label for="exampleFormControlSelect1">Room Type</label>
-                                <select class="form-control" name="room_t" id="exampleFormControlSelect10" >
+                                <select class="form-control" name="room_t" id="exampleFormControlSelect10">
                                     <option> </option>
                                     <option>Personal Suit</option>
                                     <option>Family Suit</option>
@@ -149,7 +155,7 @@
                         <div class="form-row">
                             <div class="col-md-6 mb-5">
                                 <label for="validationCustom03">Arrival Date</label>
-                                <input type="date" name='a_date'  class = "form-control" id="validationCustom000" required>
+                                <input type="date" name='a_date' class="form-control" id="validationCustom000" required>
                                 <div class="invalid-feedback">
                                     Please provide a valid date.
                                 </div>
@@ -157,7 +163,7 @@
                             </div>
                             <div class="col-md-6 mb-5">
                                 <label for="validationCustom03">Departure Date</label>
-                                <input type="date" name='d_date'  class="form-control" id="validationCustom001" required>
+                                <input type="date" name='d_date' class="form-control" id="validationCustom001" required>
                                 <div class="invalid-feedback">
                                     Please provide a valid date.
                                 </div>
@@ -165,7 +171,7 @@
                         </div>
                         <button class="btn btn-primary" type="submit">Search For Rooms</button>
                         <!-- <button class="btn btn-primary" type="submit">Expense Entry</button> -->
-                        
+
                     </form>
 
                     <script>
