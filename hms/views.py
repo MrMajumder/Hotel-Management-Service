@@ -350,3 +350,56 @@ def update_server(request):
         return render(request, 'index.html', {'login' : conf.login, 'server' : True, 'user' : conf.getuser()})
 
 
+
+def newinsert1(request):
+    if(conf.login and (conf.role != 'manager' and conf.role != 'director')):
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    name = request.POST.get('user', 'default')
+    lastname = request.POST.get('lastn', 'default')
+    password = request.POST.get('pass', 'default')
+    repassword = request.POST.get('repass', 'default')
+    email = request.POST.get('email', 'default')
+    phnumber = request.POST.get('phnumber', 'default')
+    city = request.POST.get('city', '')
+    country = request.POST.get('country', '')
+    house = request.POST.get('house', '')
+    road = request.POST.get('road', '')
+    position = request.POST.get('position', '')
+    salary = request.POST.get('salary', '')
+    workd = request.POST.get('workd', '')
+    idcard = request.POST.get('idcard', '')
+    credit = request.POST.get('creditcard', '')
+    passport = request.POST.get('passport', '')
+    permission = ''
+    if(conf.role != 'manager' and conf.role != 'director'):
+        conf.role_set('customer')
+
+    if(conf.role == 'manager' or conf.role == 'director'):
+        if(position == "Manager"):
+            permission = 2
+        else:
+            permission = 3
+        
+    if(password == repassword):
+        cursor = connection.cursor()
+        password = hashing.hash_password(password)
+        role = 'customer'
+        if(conf.role == 'manager' or conf.role == 'director'):
+            role = 'employee'
+        order_count = cursor.var(int).var
+        cursor.callproc("INSERT_ACCOUNTHOLDER", [email, name, lastname, password, house, road, city, country, role, idcard, credit, passport, conf.user_id, position, workd, permission, salary,order_count])
+        suc = order_count.getvalue()
+        if suc == 0:
+            if(conf.login == True and (conf.role == 'manager' or conf.role == 'director')):
+                return render(request, 'signup.html', {'login': conf.login, 'user': conf.getuser(), 'ementry': True, 'exist': True})
+            return render(request, 'signup.html', {'exist': True})
+        phnumber = funcs.split(phnumber)
+        for i in phnumber:
+            s = funcs.rspace(i)
+            cursor.callproc("NEW_PH_NUMBER_INSERT", [int(s)])
+        cursor.close()
+        if(conf.role == 'manager' or conf.role == 'director'):
+            return render(request, 'index.html', {'login': conf.login, 'esign': True, 'user': conf.getuser()})
+        return render(request, 'index.html', {'login': conf.login, 'sign': True, 'user': conf.getuser()})
+
+    return render(request, 'signup.html', {'login': conf.login, 'sign': False, 'user': conf.getuser()})
