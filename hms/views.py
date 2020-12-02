@@ -73,49 +73,32 @@ def enter_account(request):
     password = request.POST.get('password', 'default')
     Atype = request.POST.get('AcCheck', 'default')
     cursor = connection.cursor()
-    sql = "SELECT * FROM LOG_IN"
+    sql = "SELECT * FROM LOG_IN "
+    e = (str("\'"+(email)+"\'"))
+    sql = ("SELECT A.*, B.* ")
+    if(Atype == 'employee'):
+         sql = sql + ", (SELECT PERMISSION FROM EMPLOYEE WHERE EMPLOYEE.USER_ID = B.USER_ID) "
+    sql = sql + (" FROM LOG_IN A, ACCOUNT_HOLDER B WHERE A.LOGIN_EMAIL = B.LOGIN_EMAIL AND A.LOGIN_EMAIL = %s" %(e))
     cursor.execute(sql)
-    result = cursor.fetchall()
+    r = cursor.fetchall()
     cursor.close()
-#  hashing.verify_password(r[1], password)
-    for r in result:
-        if(r[0] == email and hashing.verify_password(r[1], password) and r[2] == Atype):
-            
-            conf.role = 'customer'
-            conf.login = True
-            cursor = connection.cursor()
-            e = (str("\'"+(r[0])+"\'"))
-            sql = ("SELECT * FROM ACCOUNT_HOLDER WHERE LOGIN_EMAIL=%s" %e)
-           
-            try:
-                cursor.execute(sql)
-            except :
-                return render(request, 'login.html', {'login' : conf.login, 'user' : conf.getuser()})
-            us = cursor.fetchall()
-            conf.user_id = us[0][0]
-            conf.username = us[0][2]
-            conf.name = us[0][2] + ' ' + us[0][3]
-            conf.email = us[0][1]
-            print(Atype)
-            if(Atype == 'employee'):
-                conf.role = Atype
-                print(conf.role)
-                sql = ("SELECT PERMISSION FROM EMPLOYEE WHERE USER_ID=%s" %
-                       us[0][0])
-                cursor.execute(sql)
-                mi = cursor.fetchall()
-                print(mi)
-                print(mi[0][0])
-                if(mi[0][0] == '1'):
-                    conf.role = 'director'
-                if(mi[0][0] == '2'):
-                    conf.role = 'manager'
-                    print(conf.role)
-            cursor.close()
+    
+    if(r[0][0] == email and hashing.verify_password(r[0][1], password) and r[0][2] == Atype):
+        
+        conf.role = Atype
+        conf.login = True
+        conf.user_id = r[0][3]
+        conf.email = r[0][4]
+        conf.username = r[0][5]
+        conf.name = r[0][5] + ' ' + r[0][6]
+        
+        if(Atype == 'employee'):
+            if(r[0][11] == '1'):
+                conf.role = 'director'
+            if(r[0][11] == '2'):
+                conf.role = 'manager'
 
-            #conf.userenter(us[0][0], r[1], us[0][2], em[0])
-            #print('this is name after doing log in ', conf.name)
-            return render(request, 'index.html', {'login' : conf.login, 'logins' : True, 'user' : conf.getuser()})
+        return render(request, 'index.html', {'login' : conf.login, 'logins' : True, 'user' : conf.getuser()})
     return render(request, 'login.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 
@@ -134,7 +117,6 @@ def cdelete(request):
     num = order_count.getvalue()
     cursor.close()
     if num == 1:
-        print('account deleted successfully')
         if(conf.login):
             conf.login = False
             conf.user_id = conf.username = conf.name = conf.email = conf.role = ''
@@ -171,12 +153,9 @@ def cedit(request):
     sql = "SELECT L.LOGIN_PASSWORD FROM LOG_IN L, ACCOUNT_HOLDER A WHERE L.LOGIN_EMAIL = A.LOGIN_EMAIL AND A.USER_ID = %s" % int(conf.user_id)
     cursor.execute(sql)
     result = cursor.fetchall()
-    print(result)
-    print(result[0][0])
     cursor.close()
 
     if conf.role == 'customer':
-        
         cus = True
     
     if(password == repassword and  hashing.verify_password(result[0][0], opass)):
@@ -344,8 +323,6 @@ def update_server(request):
     cursor.callproc("UPDATE_SERVER_DATE", [order_count])
     suc = order_count.getvalue()
     cursor.close()
-    print('HELLO THERE')
-    print(suc)
     if(suc == 1):
         return render(request, 'index.html', {'login' : conf.login, 'server' : True, 'user' : conf.getuser()})
 

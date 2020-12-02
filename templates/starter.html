@@ -12,13 +12,8 @@
 
     <title>{% block title %} {% endblock %}</title>
     <style>
-        {
-            % block style %
-        }
-
-        {
-            % endblock %
-        }
+        {% block style %}
+        {% endblock %}
     </style>
 </head>
 
@@ -28,7 +23,7 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
         <div class="container-fluid">
             <a href="/" class="navbar-brand">
-                <img src="{% static 'img/logo.png' %}" height='100' width='100' class="d-inline-block mx-3" alt="logo">
+                <img src="{% static 'img/logo.png' %}" height='100' width='100' class="d-inline-block " alt="logo">
                 <!-- <h4 class='text-light d-inline-block'>Hard Rock Hotel</h4> -->
             </a>
 
@@ -42,7 +37,7 @@
                     {% if user.role == "director" %}
                     <li class="nav-item active">
                         <form action='{{ HTTP_HOST }}/updateserver/' class="form-inline">
-                            <button class="btn btn-outline-success" type="submit">Update Server Utilites</button>
+                            <button class="btn btn-outline-success mx-2" type="submit">Update Server Utilites</button>
                             
                         </form>
                         <!-- <a class="nav-link" href="/">Update Server Utilites<span class="sr-only">(current)</span></a> -->
@@ -67,9 +62,9 @@
             <img src="{% static 'img/user.png' %}" class="mx-2" alt="" width="30" height="30" data-toggle="modal"
                 data-target="#usermodal">
             {% else %}
-            <form class="form-inline my-2 my-lg-0">
-                <a class="btn btn-dark my-2 mx-2 my-sm-0" href="{{ HTTP_HOST }}/login/" role="button">Log In</a>
-                <a class="btn btn-primary my-2 my-sm-0" href="{{ HTTP_HOST }}/signup/" role="button">Sign Up</a>
+            <form class="form-inline">
+                <a class="btn btn-dark my-2 mx-2 " href="{{ HTTP_HOST }}/login/" role="button">Log In</a>
+                <a class="btn btn-primary my-2" href="{{ HTTP_HOST }}/signup/" role="button">Sign Up</a>
             </form>
             {% endif %}
             {% endblock navshow %}
