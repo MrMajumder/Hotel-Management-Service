@@ -183,9 +183,8 @@ def cedit(request):
         if(password != ""):
             password = hashing.hash_password(password)
         cursor = connection.cursor()
-        cursor.callproc("EDIT_ACCOUNT", [conf.user_id, name, lastname, password, house, road, city, country, idcard, credit, passport, conf.role])
+        cursor.callproc("EDIT_ACCOUNT", [conf.user_id, name, lastname, password, house, road, city, country, idcard, credit, passport, phnumber, conf.role])
         if phnumber != "":
-            cursor.callproc("PH_NUMBER_DELETE", [conf.user_id])
             phnumber = funcs.split(phnumber)
             for i in phnumber:
                 s = funcs.rspace(i)
