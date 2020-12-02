@@ -11,6 +11,16 @@
 {% block body %}
 {% load static %}
 {% include 'modal.html' with user=user %}
+
+{% if completesuccess %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    Service Completed Successfully.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+
 <form action='{{ HTTP_HOST }}/service/ca_serve{{service.servid}}/' method='post' class="needs-validation my-4 container"
     novalidate>
     {% csrf_token %}
@@ -52,14 +62,21 @@
             <button type="button" class="btn btn-success my-2">
                 Active &#10004;
             </button>
+            {% if user.role != 'customer' %}
+            <form class="form d-flex flex-column">
+                <a class="btn btn-warning my-2" role="button" href="{{ HTTP_HOST }}/service/completion/{{service.actionid}}/">
+                  Mark As Completed
+                </a>
+            </form>
+            {% endif %}
             <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#cancelmodal">
                 Cancel This Service
             </button>
             {% else %}
             <button type="button" class="btn btn-{% if service.isactive == 3%}success{% else %}danger{% endif%} my-2">
-                {% if service.isactive == 3%}Completed
+                {% if service.isactive == 3 %}Completed
                 {% else %}Canceled
-                {% endif%}
+                {% endif %}
             </button>
             {% endif %}
             
