@@ -72,9 +72,11 @@
             <button type="button" class="btn btn-info my-2">
                 Download Transcript
             </button>
+            {%if data.resactive <= 1 %}
             <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#paymodal">
                 Payment of Dues
             </button>
+            {% endif %}
             {% endif %}
         </div>
         <div class="col-8 container">
@@ -228,5 +230,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
 
 {% endblock %}

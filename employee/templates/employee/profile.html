@@ -17,15 +17,21 @@ word-wrap: break-word;
 {% load static %}
 {% include 'modal.html' with user=user %}
 
-<h1 class="display-2 text-center">Employee Profile</h1>
-<div class="container-fluid">
+<div class="container-fluid my-4">
   <div class="row">
-    <div class="col-4 d-flex flex-column justify-content-center">
-      <img src="{% static 'img/user.png' %}" class="d-block mx-auto" width="350" height="350" alt="username"><br />
+    <div class="col-3 d-flex flex-column">
+      <img src="{% static 'img/user.png' %}" class="d-block mx-auto" width="250" height="250" alt="username"><br />
       <p class="text text-center display-4 mb-0 pb-0">{{allval.name}}</p>
       <p class="text text-center text-secondary">{{allval.email}}</p>
+      {% if user.user_id == allval.user_id %}
+      <form class="form d-flex flex-column">
+        <a class="btn btn-primary text-white my-2" role="button" href="{{ HTTP_HOST }}/edition/">
+          Edit Account Info
+        </a>
+      </form>
+      {% endif %}
     </div>
-    <div class="col-8">
+    <div class="col-8 container">
       <p class="display-4">Employee Information</p>
       <table class="table table-hover table-striped table-bordered w-20">
         <thead class="thead-dark text-center">

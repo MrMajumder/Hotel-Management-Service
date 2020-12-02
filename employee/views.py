@@ -61,7 +61,7 @@ def resmanage(request, id):
             if(depdate):
                 sql = sql + " DEPARTURE_DATE <= TO_DATE(" + str("\'" + depdate + "\', 'YYYY-MM-DD') ")
                 msg = msg + " departure date <= " + str("\"" + depdate + "\", ")
-            if(restype and depdate):
+            if(restype and restype != 'All' and depdate):
                 sql = sql + " AND "
             if(restype == 'Active'):
                 sql = sql + "  RESERVATION_ACTIVE = 1 "
@@ -78,6 +78,7 @@ def resmanage(request, id):
             else:
                 msg = msg + " type = All "
     cursor = connection.cursor()
+    print('baler dynamic sql ta dekhe nao ', sql)
     cursor.execute(sql)
     table = cursor.fetchall()
     cursor.close()
@@ -95,7 +96,7 @@ def resmanage(request, id):
 
     return render(request, 'reservation/allres.html', {'login' : conf.login,'data' : data, 'msg' : msg, 'user' : conf.getuser()})
 
-def servmanage(request, id):
+def servmanage(request, id, scancel=None):
     if(conf.login == False or id > 1 or id < 0):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
 
@@ -151,7 +152,7 @@ def servmanage(request, id):
 
     data = sorted(data, key=lambda item: int(item['servid']))
 
-    return render(request, 'service/allserv.html', {'login' : conf.login,'data' : data, 'msg' : msg, 'user' : conf.getuser()})
+    return render(request, 'service/allserv.html', {'login' : conf.login,'data' : data, 'msg' : msg,  'scancel': scancel, 'user' : conf.getuser()})
 
 def empreg(request):
     if(conf.login == False):
