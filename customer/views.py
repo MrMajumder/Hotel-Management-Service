@@ -162,7 +162,7 @@ def his(request, id):
             ser['billid'] = row[2]
             ser['isactive'] = row[3]
             ser['actionid'] = row[4]
-            ser['servdate'] = row[5]
+            ser['servdate'] = row[5].date()
             data.append(ser)
 
         data = sorted(data, key=lambda item: int(item['servid']))

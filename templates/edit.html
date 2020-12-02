@@ -46,38 +46,37 @@
 {% endif %}
 
 
-<div class="container-fluid">
+<div class="container-fluid my-4">
     <div class="row">
         <!-- justify-content-center -->
-        <div class="col-3 d-flex flex-column">
-            <img src="{% static 'img/reslogo.png' %}" class="d-block mx-auto my-2" width="150" height="150"
+        <div class="col-3 container">
+            <img src="{% static 'img/blankuser.png' %}" class="d-block mx-auto my-2" width="150" height="150"
                 alt="username"><br />
             <p class="text text-center display-4">Edit Profile Menu</p>
 
 
         </div>
-        <div class="container col-8">
+        <div class=" col-8 container">
             <p class="display-4">Edit Options</p>
             <!--form section-->
-            
-            <form action='{{ HTTP_HOST }}/editform/' method='post' class="needs-validation  container" novalidate>
+
+            <form action='{{ HTTP_HOST }}/editform/' method='post' class="needs-validation " novalidate>
                 {% csrf_token %}
-                <div class="col-md-6 mb-3 mx-0">
-                    <label for="validationCustom01">Old Password</label>
+                <div class="col-4 mb-3">
+                    <label for="validationCustom01"><b>Old Password</b></label>
                     <input type="password" class="form-control" name='oldpass' id="NPASS" required>
                     <div class="invalid-feedback">
                         Please provide your old pass.
                     </div>
 
                 </div>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Name change
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown col-6">
+                    <button class="btn btn-secondary col-6 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Name change
+                        </button>
+                    <div class="dropdown-menu col-12" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-item">
-                            <div class="form-row ">
+                            <div class="form-row">
                                 <div class="col-md-6 mb-3">
                                     <label for="validationCustom01">First name</label>
                                     <input type="text" class="form-control" name='fname' id="nfname">
@@ -101,12 +100,12 @@
 
 
 
-                <div class="dropdown my-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                <div class="dropdown my-3 col-6">
+                    <button class="btn btn-secondary col-6 dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Password change
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu col-12" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-item">
                             <div class="form-row">
                                 <div class="col-md-6 mb-3">
@@ -131,33 +130,35 @@
                     </div>
                 </div>
 
-                <div class="dropdown my-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                <div class="dropdown my-3 col-6">
+                    <button class="btn btn-secondary col-6 dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Address change
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu col-12" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-item">
                             <div class="form-row">
 
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="validationCustom02">House No</label>
                                     <input type="text" name='house' class="form-control" id="nhouse">
 
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="validationCustom02">Road No</label>
                                     <input type="text" name='road' class="form-control" id="nroad">
 
                                 </div>
-                                <div class="col-md-3 mb-3">
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
                                     <label for="validationCustom03">City</label>
                                     <input type="text" name='city' class="form-control" id="ncity">
                                     <div class="invalid-feedback">
                                         Please provide a valid city.
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="validationCustom04">Country</label>
                                     <input type="text" name='country' class="form-control" id="ncountry">
                                     <div class="invalid-feedback">
@@ -169,12 +170,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="dropdown my-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                <div class="dropdown my-3 col-6">
+                    <button class="btn btn-secondary col-6 dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Contact Information change
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu col-6" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-item">
                             <div class="form-row">
                                 <div class="col-md-12 mb-6">
@@ -189,25 +190,25 @@
 
 
                 {% if customer %}
-                <div class="dropdown ">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                <div class="dropdown col-6">
+                    <button class="btn btn-secondary col-6 dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Others Information change
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu col-12" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-item">
                             <div class="form-row">
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label for="validationCustom02">Id card no</label>
                                     <input type="number" name='idcard' class="form-control" id="nicard">
 
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label for="validationCustom02">credit card no</label>
                                     <input type="number" name='creditcard' class="form-control" id="ncredit">
 
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label for="validationCustom02">passport no</label>
                                     <input type="number" name='passport' class="form-control" id="npassport">
 
@@ -222,12 +223,11 @@
                 {% endif %}
 
 
-                <button type="button" class="btn btn-primary container justify-content-center col-2 my-3"
-                    data-toggle="modal" data-target="#exampleModal">
-
-                    Confirm Change
-
-                </button>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary col-6 my-3" data-toggle="modal" data-target="#exampleModal">
+                        Confirm Change
+                    </button>
+                </div>
 
                 <!-- Modal -->
                 <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1"
