@@ -162,9 +162,8 @@ def cedit(request):
         if(password != ""):
             password = hashing.hash_password(password)
         cursor = connection.cursor()
-        cursor.callproc("EDIT_ACCOUNT", [conf.user_id, name, lastname, password, house, road, city, country, idcard, credit, passport, conf.role])
+        cursor.callproc("EDIT_ACCOUNT", [conf.user_id, name, lastname, password, house, road, city, country, idcard, credit, passport, phnumber, conf.role])
         if phnumber != "":
-            cursor.callproc("PH_NUMBER_DELETE", [conf.user_id])
             phnumber = funcs.split(phnumber)
             for i in phnumber:
                 s = funcs.rspace(i)
@@ -178,72 +177,6 @@ def cedit(request):
     
 
     
-
-
-
-
-def newinsert(request):
-    if(conf.login and (conf.role != 'manager' and conf.role != 'director')):
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    name = request.POST.get('user', 'default')
-    lastname = request.POST.get('lastn', 'default')
-    password = request.POST.get('pass', 'default')
-    repassword = request.POST.get('repass', 'default')
-    email = request.POST.get('email', 'default')
-    phnumber = request.POST.get('phnumber', 'default')
-    city = request.POST.get('city', '')
-    country = request.POST.get('country', '')
-    house = request.POST.get('house', '')
-    road = request.POST.get('road', '')
-    if(conf.role != 'manager' and conf.role != 'director'):
-        conf.role_set('customer')
-
-    if(conf.role == 'manager' or conf.role == 'director'):
-        position = request.POST.get('position', '')
-        if(position == "Manager"):
-            permission = 2
-        else:
-            permission = 3
-        salary = request.POST.get('salary', '')
-        workd = request.POST.get('workd', '')
-        print(position)
-        
-    else:
-        idcard = request.POST.get('idcard', '')
-        credit = request.POST.get('creditcard', '')
-        passport = request.POST.get('passport', '')
-
-    if(password == repassword):
-        cursor = connection.cursor()
-        password = hashing.hash_password(password)
-        role = 'customer'
-        if(conf.role == 'manager' or conf.role == 'director'):
-            role = 'employee'
-        
-        order_count = cursor.var(int).var
-        cursor.callproc("INSERT_ACCOUNTHOLDER", [email, name, lastname, password, house, road, city, country, role, order_count])
-        suc = order_count.getvalue()
-        if suc == 0:
-            if(conf.login == True and (conf.role == 'manager' or conf.role == 'director')):
-                return render(request, 'signup.html', {'login': conf.login, 'user': conf.getuser(), 'ementry': True, 'exist': True})
-            return render(request, 'signup.html', {'exist': True})
-        phnumber = funcs.split(phnumber)
-        for i in phnumber:
-            s = funcs.rspace(i)
-            cursor.callproc("NEW_PH_NUMBER_INSERT", [int(s)])
-
-        if(conf.role == 'manager' or conf.role == 'director'):
-            cursor.callproc("INSERT_EMPLOYEE", [conf.user_id,  position, workd, permission, salary])
-            
-        else:
-            cursor.callproc("INSERT_CUSTOMER", [idcard, credit, passport])
-        cursor.close()
-        if(conf.role == 'manager' or conf.role == 'director'):
-            return render(request, 'index.html', {'login': conf.login, 'esign': True, 'user': conf.getuser()})
-        return render(request, 'index.html', {'login': conf.login, 'sign': True, 'user': conf.getuser()})
-
-    return render(request, 'signup.html', {'login': conf.login, 'sign': False, 'user': conf.getuser()})
-
 def billshow(request, resid):
     if(conf.login == False):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
