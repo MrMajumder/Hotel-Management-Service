@@ -79,7 +79,7 @@
                             <div class="form-row">
                                 <div class="col-md-6 mb-3">
                                     <label for="validationCustom01">First name</label>
-                                    <input type="text" class="form-control" name='fname' id="nfname">
+                                    <input type="text" class="form-control" name='fname' id="nfname" value="{{data.firstname}}">
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -87,7 +87,7 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label for="validationCustom02">Last name</label>
-                                    <input type="text" class="form-control" name='lname' id="nlname">
+                                    <input type="text" class="form-control" name='lname' id="nlname" value="{{data.lastname}}">
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -141,47 +141,57 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label for="validationCustom02">House No</label>
-                                    <input type="text" name='house' class="form-control" id="nhouse">
-
+                                    <input type="text" name='house' class="form-control" id="nhouse" value="{{data.house}}">
                                 </div>
+
                                 <div class="col-md-6 mb-3">
                                     <label for="validationCustom02">Road No</label>
-                                    <input type="text" name='road' class="form-control" id="nroad">
-
+                                    <input type="text" name='road' class="form-control" id="nroad" value="{{data.road}}">
                                 </div>
+
                             </div>
                             <div class="form-row">
+
                                 <div class="col-md-6 mb-3">
                                     <label for="validationCustom03">City</label>
-                                    <input type="text" name='city' class="form-control" id="ncity">
+                                    <input type="text" name='city' class="form-control" id="ncity" value="{{data.city}}">
                                     <div class="invalid-feedback">
                                         Please provide a valid city.
                                     </div>
                                 </div>
+
                                 <div class="col-md-6 mb-3">
                                     <label for="validationCustom04">Country</label>
-                                    <input type="text" name='country' class="form-control" id="ncountry">
+                                    <input type="text" name='country' class="form-control" id="ncountry" value="{{data.country}}">
                                     <div class="invalid-feedback">
                                         Please provide a valid Country.
                                     </div>
                                 </div>
+
                             </div>
 
                         </div>
                     </div>
                 </div>
+
                 <div class="dropdown my-3 col-6">
                     <button class="btn btn-secondary col-6 dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Contact Information change
                     </button>
-                    <div class="dropdown-menu col-6" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu col-12" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-item">
                             <div class="form-row">
-                                <div class="col-md-12 mb-6">
+                                {% if data.phno|length > 0 %}
+                                {% for ph in data.phno %}
+                                <div class="col-md-6 mb-6">
                                     <label for="validationCustom01"> New Phone number</label>
-                                    <input type="text" name='phnumber1' class="form-control" id="nphone">
+                                    <input type="text" name='phnumber1' class="form-control" id="nphone" value="0{{ph.ph}}">
                                 </div>
+                                {% endfor %}
+                                {% else %}
+                                <p><i>No Phone Numbers To Show</i></p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -189,7 +199,7 @@
 
 
 
-                {% if customer %}
+                {% if data.role == 'customer' %}
                 <div class="dropdown col-6 my-3">
                     <button class="btn btn-secondary col-6 dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

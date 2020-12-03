@@ -18,68 +18,79 @@
 
 {% endif %}
 
-{% if sign %}
-<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-    <strong>Profile Edit Unsuccessful!</strong>Choosen Employee Doesn't Exist.
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
 
-    
-</div>
-{% else %}
-<div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-    <strong>Please fill up the form.</strong>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-    
-</div>
-{% endif %}
-
-
-<div class="container text-center">
-    <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="100" height="100">
-    <h1 class="display-4 text-center">Edit Employee Profile</h1>
-</div>
-
-<!--form section-->
-<form action='{{ HTTP_HOST }}/signsuccess/' method='post' class="needs-validation my-4 container" novalidate>
-    {% csrf_token %}
-
-
-    <div class="form-row ">
-
-        <div class="col-md-6 mb-3">
-            <label for="validationCustom02">User Id</label>
-            <input type="number" name='id' class="form-control" id="validationCustom110000" required>
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="col-3 d-flex flex-column">
+            <img class="d-block mx-auto" src="{% static 'img/emp.png' %}" alt="" width="150" height="150">
+            <h1 class="display-4 text-center">Edit Work Description</h1>
         </div>
 
+        <div class="col-8 container">
+            {% if sign %}
+            <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+                <strong>Profile Edit Unsuccessful!</strong>Choosen Employee Doesn't Exist.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 
-        <div class="col-md-6 mb-3">
-            <label for="exampleFormControlSelect1">Working Position Change</label>
-            <select class="form-control" name="position" id="exampleFormControlSelect1">
-                <option>WAITER</option>
-                <option>ACCOUNTANT</option>
-                <option>LAUNDRY SERVICER</option>
-                <option>FOOD DELIVARY MAN</option>
-                <option>MANAGER</option>
-                <option>HE HE! BOLBO NA</option>
-            </select>
-        </div>
 
-        <div class="col-md-6 mb-3">
-            <label for="validationCustom02">SALARY CHANGE</label>
-            <input type="number" name='salary' class="form-control" id="validationCustom116" required>
+            </div>
+            {% else %}
+            <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+                <strong>Please fill up the form.</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 
+            </div>
+            {% endif %}
+
+
+
+            <h1 class="display-4">Edit Work Description of:</h1>
+            <h2 class="lead text-center mb-4">{{data.name}} <i>(Employee ID: {{data.empid}})</i></h2>
+            <form action='#' method='post' class="needs-validation my-4" novalidate>
+                {% csrf_token %}
+                <div class="form-row ">
+                    <div class="col-md-5 mb-3">
+                        <label for="validationCustom02">Employee ID</label>
+                        <input type="number" readonly name='id' class="form-control" id="validationCustom110000"
+                            value="{{data.empid}}" required>
+                    </div>
+
+                    <div class="col-md-7 mb-3">
+                        <label for="exampleFormControlSelect1">Change Position: <i class="text-secondary">(previous
+                                position: {{data.position}})</i></label>
+                        <select class="form-control" name="position" id="exampleFormControlSelect1">
+                            <option></option>
+                            <option>Food Service</option>
+                            <option>Laundry Service</option>
+                            <option>Accountant</option>
+                            <option>Manager</option>
+                            <option>HE HE! BOLBO NA 😜</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-5 mb-3">
+                        <label for="validationCustom02">New Salary</label>
+                        <input type="number" name='salary' placeholder="Previous Salary: {{data.prevsal}}"
+                            class="form-control" id="validationCustom116" required>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label for="validationCustom02">New Work Description</label>
+                        <input type="text" name='salary' placeholder="Previous description: {{data.workdesc}}"
+                            class="form-control" id="validationCustom116" required>
+                    </div>
+
+                </div>
+                <button class="btn btn-primary my-3" type="submit">Confirm Change</button>
+            </form>
         </div>
     </div>
+</div>
 
-
-
-
-    <button class="btn btn-primary my-3" type="submit">Confirm Change</button>
-</form>
 
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
