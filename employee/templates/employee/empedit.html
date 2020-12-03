@@ -27,16 +27,8 @@
         </div>
 
         <div class="col-8 container">
-            {% if sign %}
-            <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                <strong>Profile Edit Unsuccessful!</strong>Choosen Employee Doesn't Exist.
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-
-
-            </div>
-            {% else %}
+            
+            
             <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
                 <strong>Please fill up the form.</strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -44,7 +36,6 @@
                 </button>
 
             </div>
-            {% endif %}
 
 
 
@@ -63,10 +54,10 @@
                         <label for="exampleFormControlSelect1">Change Position: <i class="text-secondary">(previous
                                 position: {{data.position}})</i></label>
                         <select class="form-control" name="poschange" id="exampleFormControlSelect1">
-                            <option></option>
+                            <option>No change</option>
                             <option>Food Service</option>
                             <option>Laundry Service</option>
-                            <option>Accountant</option>
+                            <option>Cleaning Service</option>
                             <option>Manager</option>
                             <option>HE HE! BOLBO NA 😜</option>
                         </select>
@@ -75,13 +66,13 @@
                     <div class="col-md-5 mb-3">
                         <label for="validationCustom02">New Salary</label>
                         <input type="number" name='salary' placeholder="Previous Salary: {{data.prevsal}}"
-                            class="form-control" id="validationCustom116" required>
+                            class="form-control" id="validationCustom116" min = '0'>
                     </div>
 
                     <div class="col-md-12 mb-3">
                         <label for="validationCustom02">New Work Description</label>
-                        <input type="text" name='salary' placeholder="Previous description: {{data.workdesc}}"
-                            class="form-control" id="validationCustom116" required>
+                        <input type="text" name='workd' placeholder="Previous description: {{data.workdesc}}"
+                            class="form-control" id="validationCustom117" >
                     </div>
 
                 </div>

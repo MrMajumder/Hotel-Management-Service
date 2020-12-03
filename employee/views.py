@@ -239,12 +239,16 @@ def eprochange(request):
     empid = request.POST.get('id', '')
     salary = request.POST.get('salary', '')
     poschange = request.POST.get('poschange', '')
+    workd = request.POST.get('workd', '')
     if(poschange == "No change"):
         poschange = ''
     cursor = connection.cursor()
-    cursor.callproc("EMP_PROFILE_EDIT", [empid, salary, poschange])
+    cursor.callproc("EMP_PROFILE_EDIT", [empid, salary, poschange, workd])
     cursor.close()
-    return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser(), 'prsuccess' : True})
+    # return render(request, 'employee/profile/'+empid+'/.html', {'login' : conf.login, 'user' : conf.getuser(), 'prsuccess' : True})
+    dict_result = getemployeedata(int(empid))
+    
+    return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result, 'epsuccess' : True})
 
 
     
