@@ -214,7 +214,7 @@ def serveEx(request):
 def empsalaryentry(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    empid = request.POST.get('empid', '')
+    empid = request.POST.get('id', '')
     salary = request.POST.get('salary', '')
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
 

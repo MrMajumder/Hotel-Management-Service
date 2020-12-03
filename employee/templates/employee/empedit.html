@@ -50,7 +50,7 @@
 
             <h1 class="display-4">Edit Work Description of:</h1>
             <h2 class="lead text-center mb-4">{{data.name}} <i>(Employee ID: {{data.empid}})</i></h2>
-            <form action='#' method='post' class="needs-validation my-4" novalidate>
+            <form action='{{ HTTP_HOST }}/employee/empprochange/' method='post' class="needs-validation my-4" novalidate>
                 {% csrf_token %}
                 <div class="form-row ">
                     <div class="col-md-5 mb-3">
@@ -62,7 +62,7 @@
                     <div class="col-md-7 mb-3">
                         <label for="exampleFormControlSelect1">Change Position: <i class="text-secondary">(previous
                                 position: {{data.position}})</i></label>
-                        <select class="form-control" name="position" id="exampleFormControlSelect1">
+                        <select class="form-control" name="poschange" id="exampleFormControlSelect1">
                             <option></option>
                             <option>Food Service</option>
                             <option>Laundry Service</option>
