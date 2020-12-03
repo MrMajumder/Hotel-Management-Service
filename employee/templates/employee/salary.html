@@ -17,7 +17,7 @@
 {% include 'modal.html' with user=user %}
 {% if salary %}
 <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-    <strong>Salary Payment Unsuccessful!</strong> The employee is not present in the employee list.
+    <strong>Salary Payment Successful!</strong> 
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -52,7 +52,7 @@
 </div>
 
 <!--form section-->
-<form action='{{ HTTP_HOST }}/signsuccess/' method='post' class="needs-validation my-4 container" novalidate>
+<form action='{{ HTTP_HOST }}/employee/empsalaryentry/' method='post' class="needs-validation my-4 container" novalidate>
     {% csrf_token %}
 
 
@@ -60,12 +60,12 @@
 
         <div class="col-md-6 mb-5">
             <label for="validationCustom01">User Id of the Employee</label>
-            <input type="number" name='id' class="form-control" id="validationCustom101" required>
+            <input type="number" name='empid' class="form-control" id="eidd" required>
 
         </div>
         <div class="col-md-6 mb-6">
             <label for="validationCustom101">Salary</label>
-            <input type="number" name='salary' class="form-control" id="validationCustom100" required>
+            <input type="number" min = "0" name='salary' class="form-control" id="salpay" required>
 
         </div>
     </div>

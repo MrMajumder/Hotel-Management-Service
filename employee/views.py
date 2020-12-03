@@ -190,9 +190,21 @@ def hoteloverview(request):
 def expense(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    today = str(time.strftime("%Y-%m-%d"))
-    print(today)
-    return render(request, 'employee/expense.html', {'login' : conf.login, 'mindate':today, 'user' : conf.getuser()})
+    return render(request, 'employee/expense.html', {'login' : conf.login, 'mindate':conf.today, 'user' : conf.getuser()})
+
+
+def exentry(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    extype = request.POST.get('extype', '')
+    exdes = request.POST.get('exdes', 'default')
+    excost = request.POST.get('excost', 'default')
+    exdate = request.POST.get('exdate', 'default')
+    cursor = connection.cursor()
+    cursor.callproc("NEW_EXPENSE_ENTRY", [conf.user_id, excost, extype, exdes, exdate])
+    cursor.close()
+    return render(request, 'employee/expense.html', {'login' : conf.login, 'mindate':conf.today, 'user' : conf.getuser(), 'exsuccess' : True})
+
 
 def eattend(request):
     if(conf.login == False):
@@ -220,6 +232,13 @@ def empsalary(request):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
 
+def empsalaryentry(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    empid = request.POST.get('empid', '')
+    salary = request.POST.get('salary', '')
+    return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
+
 def mansalary(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
@@ -229,6 +248,19 @@ def eproedit(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+def eprochange(request):
+    if(conf.login == False):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    empid = request.POST.get('id', '')
+    salary = request.POST.get('salary', '')
+    poschange = request.POST.get('poschange', '')
+    if(poschange == "No change"):
+        poschange = ''
+    cursor = connection.cursor()
+    cursor.callproc("EMP_PROFILE_EDIT", [empid, salary, poschange])
+    cursor.close()
+    return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser(), 'prsuccess' : True})
 
 def empdetails(request, id):
     if(conf.login == False):

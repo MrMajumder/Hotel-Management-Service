@@ -18,9 +18,9 @@
 
 {% endif %}
 
-{% if sign %}
-<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-    <strong>Profile Edit Unsuccessful!</strong>Choosen Employee Doesn't Exist.
+{% if prsuccess %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Profile Edit Successful!</strong>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -44,7 +44,7 @@
 </div>
 
 <!--form section-->
-<form action='{{ HTTP_HOST }}/signsuccess/' method='post' class="needs-validation my-4 container" novalidate>
+<form action='{{ HTTP_HOST }}/employee/empprochange/' method='post' class="needs-validation my-4 container" novalidate>
     {% csrf_token %}
 
 
@@ -52,25 +52,24 @@
 
         <div class="col-md-6 mb-3">
             <label for="validationCustom02">User Id</label>
-            <input type="number" name='id' class="form-control" id="validationCustom110000" required>
+            <input type="number" name='id' class="form-control" id="uidddd" required>
         </div>
 
 
         <div class="col-md-6 mb-3">
             <label for="exampleFormControlSelect1">Working Position Change</label>
-            <select class="form-control" name="position" id="exampleFormControlSelect1">
-                <option>WAITER</option>
-                <option>ACCOUNTANT</option>
-                <option>LAUNDRY SERVICER</option>
-                <option>FOOD DELIVARY MAN</option>
-                <option>MANAGER</option>
-                <option>HE HE! BOLBO NA</option>
+            <select class="form-control" name="poschange" id="poschange">
+                <option>No change</option>
+                <option>Manager</option>
+                <option>Food Service</option>
+                <option>Laundry Service</option>
+                <option>Cleaning Service</option>
             </select>
         </div>
 
         <div class="col-md-6 mb-3">
             <label for="validationCustom02">SALARY CHANGE</label>
-            <input type="number" name='salary' class="form-control" id="validationCustom116" required>
+            <input type="number" name='salary' min = '0' class="form-control" id="salchange" >
 
         </div>
     </div>
@@ -78,7 +77,31 @@
 
 
 
-    <button class="btn btn-primary my-3" type="submit">Confirm Change</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Confirm Change
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer container justify-content-center col-5">
+                    <button type="submit" class="btn btn-primary">YES</button>
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
 
 <script>
