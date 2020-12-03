@@ -123,12 +123,12 @@ def cdelete(request):
         return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser(), 'delete' : True})
     return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'employee' : False, 'deleteu': True}) 
 
-def edit(request):
+def edit(request, uid):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    if(conf.role == 'customer'):
-        return render(request, 'edit.html', {'login' : conf.login, 'customer' : True, 'user' : conf.getuser()})
-    return render(request, 'edit.html', {'login' : conf.login,  'user' : conf.getuser()})
+    data = getbasicuserinfo(uid)
+    data['role'] = conf.role 
+    return render(request, 'edit.html', {'login' : conf.login, 'data' : data, 'user' : conf.getuser()})
 
 
 def cedit(request):
@@ -177,8 +177,6 @@ def cedit(request):
         
     else:
         return render(request, 'edit.html', {'login' : conf.login,  'customer' : cus, 'user' : conf.getuser(), 'unsuccess' : True})
-    
-
     
 def billshow(request, resid):
     if(conf.login == False):
@@ -319,3 +317,28 @@ def newinsert1(request):
         return render(request, 'index.html', {'login': conf.login, 'sign': True, 'user': conf.getuser()})
 
     return render(request, 'signup.html', {'login': conf.login, 'sign': False, 'user': conf.getuser()})
+
+
+def getbasicuserinfo(id):
+    cursor = connection.cursor()
+    sql = "SELECT A.FIRST_NAME, A.LAST_NAME, A.HOUSE_NO, A.ROAD_NO, A.CITY, A.COUNTRY, B.PH_NUMBER FROM ACCOUNT_HOLDER A, ACCOUNT_HOLDER_PHNUMBER B WHERE A.USER_ID = B.USER_ID AND A.USER_ID = " + str(id)
+    cursor.execute(sql)
+    table = cursor.fetchall()
+    cursor.close()
+
+    data = {}
+    data['firstname'] = table[0][0]
+    data['lastname'] = table[0][1]
+    data['house'] = table[0][2]
+    data['road'] = table[0][3]
+    data['city'] = table[0][4]
+    data['country'] = table[0][5]
+
+    phno = []
+    for r in table:
+        ph = {}
+        ph['ph'] = r[6]
+        phno.append(ph)
+
+    data['phno'] = phno
+    return data

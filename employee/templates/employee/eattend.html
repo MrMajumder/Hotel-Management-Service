@@ -12,6 +12,13 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
-<h1>service management</h1>this is a employee attendance page....
+<h1>Employee Attendance</h1>this is a employee attendance page....
+
+<p>This page receives data of only one employee (whose attendance has to be registered) in the following manner</p>
+<p>{data.empid} : {{data.empid}}</p>
+<p>{data.name} : {{data.name}}</p>
+<p>{data.position} : {{data.position}}</p>
+<p>{data.prevsal} : {{data.prevsal}}</p>
+<p>{data.workdesc} : {{data.workdesc}}</p>
 
 {% endblock %}

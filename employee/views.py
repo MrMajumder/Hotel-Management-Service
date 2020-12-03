@@ -7,40 +7,16 @@ import time
 
 # Create your views here.
 def profile(request, id):
-    if(conf.login == False):
+    if(conf.login == False or conf.role == 'customer'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
 
     id = int(id)
-    cursor = connection.cursor()
-    sql = ("SELECT * FROM ACCOUNT_HOLDER X, ACCOUNT_HOLDER_PHNUMBER Y, EMPLOYEE Z WHERE X.USER_ID=%s AND X.USER_ID = Y.USER_ID AND X.USER_ID = Z.USER_ID" % id)
-    cursor.execute(sql)
-    acholder = cursor.fetchall()
-
-    cursor.close()
-    dict_result = {} 
+    dict_result = getemployeedata(id)
     
-    dict_result['user_id'] = acholder[0][0]
-    dict_result['email'] = acholder[0][1]
-    dict_result['name'] = acholder[0][2] + ' ' + acholder[0][3]
-    dict_result['house_no'] = acholder[0][4]
-    dict_result['road_no'] = acholder[0][5]
-    dict_result['city'] = acholder[0][6]
-    dict_result['country'] = acholder[0][7]
-    dict_result['manager_id'] = acholder[0][11]
-    dict_result['position'] = acholder[0][12]
-    dict_result['work_description'] = acholder[0][13]
-    dict_result['salary'] = acholder[0][15]
-
-    ph_no = []
-    for ph in acholder:
-        num = ph[9]
-        row = {'phone_no' : num}
-        ph_no.append(row)
-    dict_result['phone_nums'] = ph_no
     return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result})
 
 def resmanage(request, id):
-    if(conf.login == False or id > 1 or id < 0):
+    if(conf.login == False or conf.role == 'customer'  or conf.role == 'employee' or id > 1 or id < 0):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
 
     sql = ("SELECT RESERVATION_ID, RESERVATION_ACTIVE, ARRIVAL_DATE, DEPARTURE_DATE, USER_ID FROM RESERVATION ")
@@ -78,7 +54,6 @@ def resmanage(request, id):
             else:
                 msg = msg + " type = All "
     cursor = connection.cursor()
-    print('baler dynamic sql ta dekhe nao ', sql)
     cursor.execute(sql)
     table = cursor.fetchall()
     cursor.close()
@@ -96,8 +71,8 @@ def resmanage(request, id):
 
     return render(request, 'reservation/allres.html', {'login' : conf.login,'data' : data, 'msg' : msg, 'user' : conf.getuser()})
 
-def servmanage(request, id, scancel=None):
-    if(conf.login == False or id > 1 or id < 0):
+def servmanage(request, id, scancel = None):
+    if(conf.login == False or conf.role == 'customer' or id > 1 or id < 0):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
 
     sql = "SELECT * FROM ROOM_HB_SERV_RECEIVES "
@@ -133,7 +108,6 @@ def servmanage(request, id, scancel=None):
     else:
         if(conf.role != 'manager' and conf.role != 'director'):
             sql = sql + " WHERE EMP_ID = " + str(conf.user_id)
-    print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
     table = cursor.fetchall()
@@ -154,19 +128,24 @@ def servmanage(request, id, scancel=None):
 
     return render(request, 'service/allserv.html', {'login' : conf.login,'data' : data, 'msg' : msg,  'scancel': scancel, 'user' : conf.getuser()})
 
-def empreg(request):
-    if(conf.login == False):
+def empmanage(request, mode):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or mode < 0 or mode > 1):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/empreg.html', {'login' : conf.login, 'user' : conf.getuser()})
-
-def empmanage(request):
-    if(conf.login == False):
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    
     id = int(conf.user_id)
-    cursor = connection.cursor()
     sql = "SELECT X.USER_ID, (X.FIRST_NAME || ' ' || X.LAST_NAME), Y.POSITION FROM ACCOUNT_HOLDER X, EMPLOYEE Y WHERE X.USER_ID = Y.USER_ID AND X.USER_ID <>" + str(id)
+    msg = "Showing results for : all employees "
     if(conf.role == 'manager'):
         sql = sql + " AND Y.MANAGER_ID = " + str(id)
+        msg = msg + "under manager id : " + str(id) 
+    
+    if(mode == 1):
+        emptype = request.POST.get('emptype', '')
+        if(emptype != 'All'):
+            sql = sql + " AND Y.POSITION = " + str("\'" + emptype + "\'")
+        msg = msg + " and employee type: " + str(emptype)
+    
+    cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
     cursor.close()
@@ -180,7 +159,13 @@ def empmanage(request):
         row = {'user_id': user_id, 'name': name, 'position': position}
         dict_result.append(row)
     
-    return render(request, 'employee/empmanage.html', {'login' : conf.login, 'employees': dict_result, 'user' : conf.getuser()})
+    dict_result = sorted(dict_result, key=lambda item: int(item['user_id']))
+    
+    return render(request, 'employee/empmanage.html', {'login' : conf.login, 'employees': dict_result, 'msg' : msg, 'user' : conf.getuser()})
+
+#---------------------------
+#This  part is untouched yet
+#---------------------------
 
 def hoteloverview(request):
     if(conf.login == False):
@@ -206,11 +191,6 @@ def exentry(request):
     return render(request, 'employee/expense.html', {'login' : conf.login, 'mindate':conf.today, 'user' : conf.getuser(), 'exsuccess' : True})
 
 
-def eattend(request):
-    if(conf.login == False):
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/eattend.html', {'login' : conf.login, 'user' : conf.getuser()})
-
 def fire(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
@@ -227,10 +207,9 @@ def serveEx(request):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/serveEx.html', {'login' : conf.login, 'user' : conf.getuser()})
 
-def empsalary(request):
-    if(conf.login == False):
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
+#---------------------------
+#This bottom part is updated
+#---------------------------
 
 def empsalaryentry(request):
     if(conf.login == False):
@@ -239,15 +218,20 @@ def empsalaryentry(request):
     salary = request.POST.get('salary', '')
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
 
-def mansalary(request):
-    if(conf.login == False):
+def eattend(request, empid):
+    if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
 
-def eproedit(request):
-    if(conf.login == False):
+    data = getemployeeworkinfo(empid)
+
+    return render(request, 'employee/eattend.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data})
+
+def empsalary(request, empid):
+    if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser()})
+    
+    data = getemployeeworkinfo(empid)
+    return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data})
 
 def eprochange(request):
     if(conf.login == False):
@@ -262,8 +246,61 @@ def eprochange(request):
     cursor.close()
     return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser(), 'prsuccess' : True})
 
-def empdetails(request, id):
-    if(conf.login == False):
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/empdetails.html', {'login' : conf.login, 'empid' : id, 'user' : conf.getuser()})
+
     
+
+
+def eproedit(request, empid):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee'):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    
+    data = getemployeeworkinfo(empid)
+
+    return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data})
+
+def getemployeeworkinfo(empid):
+    cursor = connection.cursor()
+    sql = "SELECT X.USER_ID, (X.FIRST_NAME || ' ' || X.LAST_NAME), Y.POSITION, Y.BASE_SALARY, Y.WORK_DESCRIPTION FROM ACCOUNT_HOLDER X, EMPLOYEE Y WHERE X.USER_ID = Y.USER_ID AND X.USER_ID =" + str(empid)
+    cursor.execute(sql)
+    table = cursor.fetchall()
+    cursor.close()
+
+    data = {}
+    data['empid'] = table[0][0]
+    data['name'] = table[0][1]
+    data['position'] = table[0][2]
+    data['prevsal'] = table[0][3]
+    data['workdesc'] = table[0][4]
+
+    return data
+
+def getemployeedata(id):
+    cursor = connection.cursor()
+    sql = ("SELECT * FROM ACCOUNT_HOLDER X, ACCOUNT_HOLDER_PHNUMBER Y, EMPLOYEE Z WHERE X.USER_ID=%s AND X.USER_ID = Y.USER_ID AND X.USER_ID = Z.USER_ID" % id)
+    cursor.execute(sql)
+    acholder = cursor.fetchall()
+
+    cursor.close()
+    dict_result = {} 
+    
+    dict_result['user_id'] = acholder[0][0]
+    dict_result['email'] = acholder[0][1]
+    dict_result['name'] = acholder[0][2] + ' ' + acholder[0][3]
+    dict_result['house_no'] = acholder[0][4]
+    dict_result['road_no'] = acholder[0][5]
+    dict_result['city'] = acholder[0][6]
+    dict_result['country'] = acholder[0][7]
+    dict_result['manager_id'] = acholder[0][11]
+    dict_result['position'] = acholder[0][12]
+    dict_result['work_description'] = acholder[0][13]
+    dict_result['salary'] = acholder[0][15]
+
+    ph_no = []
+    for ph in acholder:
+        num = ph[9]
+        row = {'phone_no' : num}
+        ph_no.append(row)
+    dict_result['phone_nums'] = ph_no
+
+    return dict_result
+

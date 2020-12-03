@@ -51,30 +51,8 @@
                                     class="text-light">Profile</a>
                             </td>
                         </tr>
-                        {% if user.role == "director" or user.role == "manager" %}
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/resmanage/0/" class="text-light">Reservation & Services Management</a>
-                            </td>
-                        </tr>
-                        {% endif %}
-                        {% if user.role == "manager" %}
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/expense/" class="text-light">Hotel expenses entry</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/eattend/" class="text-light">Employee Attendence</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/empsalary/" class="text-light">Salary Payment of
-                                    Employees</a></td>
-                        </tr>
-                        {% endif %}
+
                         {% if user.role == "employee" %}
-                        <!-- <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/servEx/" class="text-light">Service Executed</a></td>
-                        </tr> -->
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/servmanage/0/" class="text-light">Manage Services</a>
                             </td>
@@ -82,40 +60,49 @@
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/workh/" class="text-light">Work History</a></td>
                         </tr>
-                        
-                        <!-- <tr>
-                            <td><a href="{{ HTTP_HOST }}/edition/" class="text-light">Edit Your Account</a></td>
-                        </tr> -->
                         {% endif %}
+
                         {% if user.role == "manager" or user.role == "director" %}
                         <tr>
-                            <td><a href="{{ HTTP_HOST }}/signup/" class="text-light">Employee Registration</a></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/empmanage/" class="text-light">Managed Employees</a>
+                            <td><a href="{{ HTTP_HOST }}/employee/resmanage/0/" class="text-light">Reservation & Services Management</a>
                             </td>
                         </tr>
                         <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/empproedit/" class="text-light">Edit Employee Profile</a></td>
+                            <td><a href="{{ HTTP_HOST }}/employee/empmanage/0/" class="text-light">Employee Management</a>
+                            </td>
+                        </tr>
+
+                        {% if user.role == "manager" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/expense/" class="text-light">Hotel expenses entry</a>
+                            </td>
                         </tr>
                         <!-- <tr>
-                            <td><a href="{{ HTTP_HOST }}/edition/" class="text-light">Edit Your Account</a></td>
+                            <td><a href="{{ HTTP_HOST }}/employee/eattend/" class="text-light">Employee Attendence</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/empsalary/" class="text-light">Salary Payment of
+                                    Employees</a></td>
                         </tr> -->
                         {% endif %}
+
                         {% if user.role == "director" %}
-                        <tr>
+                        <!-- <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/fire/" class="text-light">Fire a Employee.</a></td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/hoteloverview/" class="text-light">Hotel Overview</a>
                             </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/mansalary/" class="text-light">Salary Payment of Managers</a></td>
-                        </tr>
+                        </tr> -->
+                        {% endif %}
+                        {% endif %}
                         {% endif %}
                     </tbody>
-                    {% endif %}
+                    
                 </table>
             </div>
             <div class="modal-footer ">
