@@ -41,7 +41,7 @@
 
             <h1 class="display-4">Edit Work Description of:</h1>
             <h2 class="lead text-center mb-4">{{data.name}} <i>(Employee ID: {{data.empid}})</i></h2>
-            <form action='{{ HTTP_HOST }}/employee/empprochange/' method='post' class="needs-validation my-4" novalidate>
+            <form action='{{ HTTP_HOST }}/employee/empprochange/{{data.empid}}/' method='post' class="needs-validation my-4" novalidate>
                 {% csrf_token %}
                 <div class="form-row ">
                     <div class="col-md-5 mb-3">
@@ -55,9 +55,11 @@
                                 position: {{data.position}})</i></label>
                         <select class="form-control" name="poschange" id="exampleFormControlSelect1">
                             <option>No change</option>
+                            {% if data.position != 'Manager' %}
                             <option>Food Service</option>
                             <option>Laundry Service</option>
                             <option>Cleaning Service</option>
+                            {% endif %}
                             <option>Manager</option>
                             <option>HE HE! BOLBO NA 😜</option>
                         </select>
@@ -91,11 +93,11 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                ...
+                                Change Employee Work Data for Employee : {{data.empid}}
                             </div>
                             <div class="modal-footer container justify-content-center col-5">
-                                <button type="submit" class="btn btn-primary">YES</button>
-                                <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
+                                <button type="submit" class="btn btn-primary">Confirm</button>
+                                <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                 
                             </div>
                         </div>

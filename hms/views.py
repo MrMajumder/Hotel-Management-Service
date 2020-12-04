@@ -135,34 +135,35 @@ def cedit(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
    
-    cus = False
-    opass = request.POST.get('oldpass', '')
-    name = request.POST.get('fname', 'default')
-    lastname = request.POST.get('lname', 'default')
-    password = request.POST.get('pass', 'default')
-    repassword = request.POST.get('repass', 'default')
-    phnumber = request.POST.get('phnumber1', 'default')
-    city = request.POST.get('city', '')
-    country = request.POST.get('country', '')
-    house = request.POST.get('house', '')
-    road = request.POST.get('road', '')
-    idcard = request.POST.get('idcard', '')
-    credit = request.POST.get('creditcard', '')
-    passport = request.POST.get('passport', '')
+    opass       = request.POST.get('oldpass', '')
+    name        = request.POST.get('fname', 'default')
+    lastname    = request.POST.get('lname', 'default')
+    password    = request.POST.get('pass', 'default')
+    repassword  = request.POST.get('repass', 'default')
+    phnumber    = request.POST.get('phnumber1', 'default')
+    city        = request.POST.get('city', '')
+    country     = request.POST.get('country', '')
+    house       = request.POST.get('house', '')
+    road        = request.POST.get('road', '')
+    idcard      = request.POST.get('idcard', '')
+    credit      = request.POST.get('creditcard', '')
+    passport    = request.POST.get('passport', '')
+    
     cursor = connection.cursor()
     sql = "SELECT L.LOGIN_PASSWORD FROM LOG_IN L, ACCOUNT_HOLDER A WHERE L.LOGIN_EMAIL = A.LOGIN_EMAIL AND A.USER_ID = %s" % int(conf.user_id)
     cursor.execute(sql)
     result = cursor.fetchall()
     cursor.close()
 
-    if conf.role == 'customer':
-        cus = True
+    data = getbasicuserinfo(int(conf.user_id))
+    data['role'] = conf.role 
     
     if(password == repassword and  hashing.verify_password(result[0][0], opass)):
         if(password != ""):
             password = hashing.hash_password(password)
         cursor = connection.cursor()
         cursor.callproc("EDIT_ACCOUNT", [conf.user_id, name, lastname, password, house, road, city, country, idcard, credit, passport, phnumber, conf.role])
+        
         if phnumber != "":
             phnumber = funcs.split(phnumber)
             for i in phnumber:
@@ -173,10 +174,11 @@ def cedit(request):
         if name != '':
             conf.username = name
 
-        return render(request, 'edit.html', {'login' : conf.login, 'customer' : cus, 'user' : conf.getuser(), 'success' : True})
+        
+        return render(request, 'edit.html', {'login' : conf.login, 'data' : data, 'user' : conf.getuser(), 'success' : True})
         
     else:
-        return render(request, 'edit.html', {'login' : conf.login,  'customer' : cus, 'user' : conf.getuser(), 'unsuccess' : True})
+        return render(request, 'edit.html', {'login' : conf.login, 'data' : data, 'user' : conf.getuser(), 'unsuccess' : True})
     
 def billshow(request, resid):
     if(conf.login == False):
@@ -186,7 +188,6 @@ def billshow(request, resid):
     data = getbilltable(resid)
     
     return render(request, 'billinfo.html', {'login' : conf.login, 'data' : data, 'user' : conf.getuser()})
-    
 
 def billpay(request, resid):
     if(conf.login == False):
@@ -250,8 +251,6 @@ def getbilltable(resid):
     data['services'] = sorted(data['services'], key=lambda item: int(item['servid']))
     return data
 
-
-
 def update_server(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser()})
@@ -262,8 +261,6 @@ def update_server(request):
     cursor.close()
     if(suc == 1):
         return render(request, 'index.html', {'login' : conf.login, 'server' : True, 'user' : conf.getuser()})
-
-
 
 def newinsert1(request):
     if(conf.login and (conf.role != 'manager' and conf.role != 'director')):

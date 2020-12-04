@@ -22,5 +22,5 @@ urlpatterns = [
     path('empsalary/', views.empsalary, name = 'employeesalary'),
     path('empsalaryentry/', views.empsalaryentry, name = 'employeesalaryentry'),
     path('empproedit/', views.eproedit, name = 'employeerprofileEdit'),
-    path('empprochange/', views.eprochange, name = 'employeerprofilechange'),
+    path('empprochange/<int:id>/', views.eprochange, name = 'employeerprofilechange'),
 ]

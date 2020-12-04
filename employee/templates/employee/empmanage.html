@@ -36,6 +36,11 @@
                 method='post' class="needs-validation my-4 container" novalidate>
                 {% csrf_token %}
                 <div class="form-row">
+                    <div class="col-12 my-3">
+                        <label for="validationCustom02">Employee ID</label>
+                        <input type="number" name='empid' placeholder="Ex: 10001"
+                            class="form-control" id="validationCustom116" min = '0'>
+                    </div>
                     <div class="form-group col-12">
                         <label for="emptype">Employee Position</label>
                         <select class="form-control" name="emptype" id="emptype">

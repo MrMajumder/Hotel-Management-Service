@@ -133,7 +133,7 @@ def empmanage(request, mode):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     
     id = int(conf.user_id)
-    sql = "SELECT X.USER_ID, (X.FIRST_NAME || ' ' || X.LAST_NAME), Y.POSITION FROM ACCOUNT_HOLDER X, EMPLOYEE Y WHERE X.USER_ID = Y.USER_ID AND X.USER_ID <>" + str(id)
+    sql = "SELECT X.USER_ID, (X.FIRST_NAME || ' ' || X.LAST_NAME), Y.POSITION FROM ACCOUNT_HOLDER X, EMPLOYEE Y WHERE X.USER_ID = Y.USER_ID AND X.LOGIN_EMAIL IS NOT NULL AND X.USER_ID <>" + str(id)
     msg = "Showing results for : all employees "
     if(conf.role == 'manager'):
         sql = sql + " AND Y.MANAGER_ID = " + str(id)
@@ -141,9 +141,13 @@ def empmanage(request, mode):
     
     if(mode == 1):
         emptype = request.POST.get('emptype', '')
+        empid = request.POST.get('empid', '')
         if(emptype != 'All'):
             sql = sql + " AND Y.POSITION = " + str("\'" + emptype + "\'")
         msg = msg + " and employee type: " + str(emptype)
+        if(empid != ''):
+            sql = sql + " AND X.USER_ID = " + str(empid)
+            msg = msg + " and employee id : " + str(empid)
     
     cursor = connection.cursor()
     cursor.execute(sql)
@@ -233,7 +237,7 @@ def empsalary(request, empid):
     data = getemployeeworkinfo(empid)
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data})
 
-def eprochange(request):
+def eprochange(request, id):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     empid = request.POST.get('id', '')
@@ -246,6 +250,8 @@ def eprochange(request):
     cursor.callproc("EMP_PROFILE_EDIT", [empid, salary, poschange, workd])
     cursor.close()
     # return render(request, 'employee/profile/'+empid+'/.html', {'login' : conf.login, 'user' : conf.getuser(), 'prsuccess' : True})
+    if(empid == ''):
+        empid = id
     dict_result = getemployeedata(int(empid))
     
     return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result, 'epsuccess' : True})
