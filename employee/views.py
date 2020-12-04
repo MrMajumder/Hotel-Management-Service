@@ -214,7 +214,6 @@ def empsalary(request, empid):
 
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data})
 
-
 def eproedit(request, empid):
     if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
