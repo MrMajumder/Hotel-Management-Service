@@ -17,7 +17,8 @@ role = ''
 today = str(time.strftime("%Y-%m-%d"))
 adate = ''
 ddate = ''
+ncount = ''
 #roles can be customer, staff, manager, director, (admin?)
 
 def getuser():
-    return {'user_id' : user_id, 'username' : username, 'name' : name, 'email' : email, 'role' : role}
+    return {'user_id' : user_id, 'username' : username, 'name' : name, 'email' : email, 'role' : role, 'ncount' : ncount}

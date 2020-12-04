@@ -71,6 +71,16 @@
                             <td><a href="{{ HTTP_HOST }}/employee/empmanage/0/" class="text-light">Employee Management</a>
                             </td>
                         </tr>
+                        <tr>
+                            {%if user.ncount > 0 %}
+                                <td><a href="{{ HTTP_HOST }}/employee/complain/" class="text-danger font-weight-bold">Complaint Management</a>
+                                    <p class = "text-warning mb-0">[you have {{user.ncount}} new complain]</p>
+                                </td>
+                            {% else %}
+                                <td><a href="{{ HTTP_HOST }}/employee/complain/" class="text-light">Complaint Management</a>
+                                </td>
+                            {% endif %}
+                        </tr>
 
                         {% if user.role == "manager" %}
                         <tr>

@@ -24,4 +24,6 @@ urlpatterns = [
     path('empsalaryentry/', views.empsalaryentry, name = 'employeesalaryentry'),
     path('empproedit/', views.eproedit, name = 'employeerprofileEdit'),
     path('empprochange/', views.eprochange, name = 'employeerprofilechange'),
+    path('complain/', views.comp, name = 'complains'),
+    path('comresolve<int:id>/', views.comresolve, name = 'complainsresolve'),
 ]

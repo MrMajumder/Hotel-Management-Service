@@ -81,7 +81,7 @@ def enter_account(request):
     sql = sql + (" FROM LOG_IN A, ACCOUNT_HOLDER B WHERE A.LOGIN_EMAIL = B.LOGIN_EMAIL AND A.LOGIN_EMAIL = %s" %(e))
     cursor.execute(sql)
     r = cursor.fetchall()
-    cursor.close()
+    
     
     if(r and r[0][0] == email and hashing.verify_password(r[0][1], password) and r[0][2] == Atype):
         
@@ -97,8 +97,16 @@ def enter_account(request):
                 conf.role = 'director'
             if(r[0][11] == '2'):
                 conf.role = 'manager'
+        if(conf.role == 'manager' or conf.role == 'director'):
+            sql = "SELECT COUNT(*) FROM COMPLAIN WHERE CHECKK = 0"
+            cursor.execute(sql)
+            r = cursor.fetchall()
+            print(r)
+            conf.ncount = r[0][0]
 
+        cursor.close()
         return render(request, 'index.html', {'login' : conf.login, 'logins' : True, 'user' : conf.getuser()})
+    cursor.close()
     return render(request, 'login.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 

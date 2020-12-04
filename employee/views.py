@@ -128,7 +128,7 @@ def servmanage(request, id, scancel = None):
 
     return render(request, 'service/allserv.html', {'login' : conf.login,'data' : data, 'msg' : msg,  'scancel': scancel, 'user' : conf.getuser()})
 
-def empmanage(request, mode):
+def empmanage(request, mode, fire = None):
     if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or mode < 0 or mode > 1):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     
@@ -161,13 +161,13 @@ def empmanage(request, mode):
     
     dict_result = sorted(dict_result, key=lambda item: int(item['user_id']))
     
-    return render(request, 'employee/empmanage.html', {'login' : conf.login, 'employees': dict_result, 'msg' : msg, 'user' : conf.getuser()})
+    return render(request, 'employee/empmanage.html', {'login' : conf.login, 'employees': dict_result, 'msg' : msg, 'fire' : fire, 'user' : conf.getuser()})
 
 #---------------------------
 #This  part is untouched yet
 #---------------------------
 
-def hoteloverview(request):
+def hoteloverview(request, ent = None, delete = None):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     sql = "SELECT ROOM_ID, ROOM_TYPE, CAPACITY FROM ROOM"
@@ -186,7 +186,7 @@ def hoteloverview(request):
         dict_result.append(row)
     
     dict_result = sorted(dict_result, key=lambda item: int(item['room_id']))
-    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser(), 'rooms' : dict_result})
+    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser(), 'rooms' : dict_result, 'delete' : delete, 'ent' : ent})
 
 def expense(request):
     if(conf.login == False):
@@ -216,7 +216,7 @@ def fire(request, id):
     output = inputt.getvalue()
     cursor.close()
     if output == 1:
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'fire' : True})
+        return empmanage(request, 0, True)
     else:
         dict_result = getemployeedata(int(id))
         return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result, 'fire' : True})
@@ -239,8 +239,8 @@ def serveEx(request):
 def empsalaryentry(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    empid = request.POST.get('id', '')
-    salary = request.POST.get('salary', '')
+    # empid = request.POST.get('id', '')
+    # salary = request.POST.get('salary', '')
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def eattend(request, empid):
@@ -293,7 +293,7 @@ def roomdelete(request, id):
     cursor = connection.cursor()
     cursor.callproc("ROOM_DELETE", [id])
     cursor.close()
-    return hoteloverview(request)
+    return hoteloverview(request, False, True)
 
 def roomform(request):
     if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
@@ -314,7 +314,41 @@ def roomentry(request):
     cursor = connection.cursor()
     cursor.callproc("ROOM_ENTRY", [build, floor, capacity, bed, rent, rtype])
     cursor.close()
-    return hoteloverview(request)
+    return hoteloverview(request, True, False)
+
+
+def comp(request, alert = None):
+    cursor = connection.cursor()
+    sql = "SELECT * FROM COMPLAIN WHERE CHECKK = 0"
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    cursor.close()
+
+    dict_result = []
+
+    for r in result:
+        comp_id = r[0]
+        cus_id = r[1]
+        complain = r[2]
+        comtype = r[3]
+        cdate = r[4]
+        row = {'comp_no': comp_id, 'cusid': cus_id, 'complain': complain, 'comtype' : comtype, 'compdate' : cdate}
+        dict_result.append(row)
+    
+
+    conf.ncount = len(dict_result)
+    dict_result = sorted(dict_result, key=lambda item: int(item['comp_no']))
+    return render(request, 'employee/complains.html', {'login' : conf.login, 'user' : conf.getuser(), 'complains' : dict_result, 'alert' : alert})
+
+def comresolve(request, id):
+    cursor = connection.cursor()
+    sql = ("UPDATE COMPLAIN SET CHECKK = 1 WHERE COMP_ID = %s" %int(id))
+    print(sql)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    return comp(request, True)
+
 
 
 def getemployeeworkinfo(empid):

@@ -15,7 +15,14 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
-
+{% if fire %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+    <strong>The employee is fired from the hotel.</strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
 <div class="container-fluid my-4">
 
     <div class="row">

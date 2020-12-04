@@ -1,6 +1,6 @@
 {% extends 'starter.html' %}
 
-{% block title %} signup {% endblock %}
+{% block title %} Hotel Overview {% endblock %}
 
 {% block style %} {% endblock %}
 
@@ -15,6 +15,22 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
+
+{% if delete %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Room Deletion Successful!</strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% elif ent %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Room Entry Successful!</strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
 
 <div class="container-fluid my-4">
 
