@@ -45,14 +45,14 @@
       <p class="text text-center text-secondary">{{allval.email}}</p>
       {% if user.user_id == allval.user_id %}
       <form class="form d-flex flex-column">
-        <a class="btn btn-primary text-white my-2" role="button" href="{{ HTTP_HOST }}/edition/">
+        <a class="btn btn-primary text-white my-2" role="button" href="{{ HTTP_HOST }}/edition/{{allval.user_id}}/">
           Edit Account Info
         </a>
         <button type="button" class="btn btn-danger my-2" data-toggle="modal" data-target="#delmodal">
           Delete Account
         </button>
-        {% endif %}
       </form>
+      {% endif %}
     </div>
     <div class="container col-8">
       <p class="display-4">Customer Profile Information</p>

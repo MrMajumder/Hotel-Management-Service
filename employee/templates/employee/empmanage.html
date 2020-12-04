@@ -1,6 +1,6 @@
 {% extends 'starter.html' %}
 
-{% block title %} signup {% endblock %}
+{% block title %} Employee Management {% endblock %}
 
 {% block style %} {% endblock %}
 
@@ -15,6 +15,24 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
+{% if fire %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+    <strong>The employee is fired from the hotel.</strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% elif esign %}
+
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Employee Registration Successful!</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+{% endif %}
 
 <div class="container-fluid my-4">
 
@@ -23,10 +41,51 @@
             <img src="{% static 'img/emp.png' %}" class="d-block mx-auto" width="150" height="150"
                 alt="reservation logo"><br />
             <h1 class="display-4 text-center mb-4">Employee Management List</h1>
+
+            <form class="form d-flex flex-column">
+                <a class="btn btn-primary text-white my-2" role="button" href="{{ HTTP_HOST }}/signup/">
+                    Register a New Employee
+                </a>
+            </form>
+
+            <p class="mt-5 text-center"><b><u><i>Advanced Search:</i></u></b></p>
+            
+            <form action="{% if user.role == 'customer' %}{{ HTTP_HOST }}/customer/history/3/{% else %}{{ HTTP_HOST }}/employee/empmanage/1/{% endif %}"
+                method='post' class="needs-validation my-4 container" novalidate>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-12 my-3">
+                        <label for="validationCustom02">Employee ID</label>
+                        <input type="number" name='empid' placeholder="Ex: 10001"
+                            class="form-control" id="validationCustom116" min = '0'>
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="emptype">Employee Position</label>
+                        <select class="form-control" name="emptype" id="emptype">
+                            <option>All</option>
+                            <option>Food Service</option>
+                            <option>Laundry Service</option>
+                            <option>Cleaning Service</option>
+                            <option>Manager</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary mx-auto my-2 " type="submit">Search</button>
+                </div>
+                
+            </form>
+
         </div>
         <div class="col-8 container">
             <p class="display-4">List of All Employees Managed</p>
+            <p><i class="text-secondary">{{msg}}</i></p>
             <table class="table table-hover table-striped table-bordered w-20">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="4">Employees Found: {{employees|length}}</th>
+                    </tr>
+                </thead>
                 <thead class="thead-dark text-center">
                     <tr>
                         <th scope="row">User ID</th>
@@ -35,7 +94,7 @@
                         <th scope="row">View Details</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-center">
                     {% if employees|length > 0 %}
                     {% for employee in employees %}
                     <tr>

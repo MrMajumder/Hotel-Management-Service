@@ -8,32 +8,9 @@ from datetime import datetime
 def index(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    id = int(conf.user_id)
-    cursor = connection.cursor()
-    sql = ("SELECT X.*, Y.*, Z.* FROM ACCOUNT_HOLDER X, ACCOUNT_HOLDER_PHNUMBER Y, CUSTOMER Z WHERE X.USER_ID=%s AND X.USER_ID = Y.USER_ID AND X.USER_ID = Z.USER_ID;" % id )
-    cursor.execute(sql)
-    acholder = cursor.fetchall()
-
-    cursor.close()
-    dict_result = {} 
     
-    dict_result['user_id'] = acholder[0][0]
-    dict_result['email'] = acholder[0][1]
-    dict_result['name'] = acholder[0][2] + ' ' + acholder[0][3]
-    dict_result['house_no'] = acholder[0][4]
-    dict_result['road_no'] = acholder[0][5]
-    dict_result['city'] = acholder[0][6]
-    dict_result['country'] = acholder[0][7]
-    dict_result['id_card_no'] = acholder[0][11]
-    dict_result['passport_no'] = acholder[0][12]
-    dict_result['credit_card_no'] = acholder[0][13]
-
-    ph_no = []
-    for ph in acholder:
-        num = ph[9]
-        row = {'phone_no' : num}
-        ph_no.append(row)
-    dict_result['phone_nums'] = ph_no
+    id = int(conf.user_id)
+    dict_result = getcustomerdata(id)
 
     return render(request, 'customer/index.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result})
 
@@ -169,7 +146,6 @@ def his(request, id):
 
         return render(request, 'service/allserv.html', {'login' : conf.login,'data' : data, 'msg' : msg, 'user' : conf.getuser()})
 
-
 def ser(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
@@ -210,10 +186,39 @@ def fcom(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     complain = request.POST.get('comp', 'default')
+    comtype = request.POST.get('ctype', 'default')
     cursor = connection.cursor()
-    cursor.callproc("NEW_COMPLAIN", [conf.user_id, complain])
+    cursor.callproc("NEW_COMPLAIN", [conf.user_id, complain, comtype])
     cursor.close()
     return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'comp' : True})
 
+def getcustomerdata(id):
+    cursor = connection.cursor()
+    sql = ("SELECT X.*, Y.*, Z.* FROM ACCOUNT_HOLDER X, ACCOUNT_HOLDER_PHNUMBER Y, CUSTOMER Z WHERE X.USER_ID=%s AND X.USER_ID = Y.USER_ID AND X.USER_ID = Z.USER_ID;" % id )
+    cursor.execute(sql)
+    acholder = cursor.fetchall()
+
+    cursor.close()
+    dict_result = {} 
+    
+    dict_result['user_id'] = acholder[0][0]
+    dict_result['email'] = acholder[0][1]
+    dict_result['name'] = acholder[0][2] + ' ' + acholder[0][3]
+    dict_result['house_no'] = acholder[0][4]
+    dict_result['road_no'] = acholder[0][5]
+    dict_result['city'] = acholder[0][6]
+    dict_result['country'] = acholder[0][7]
+    dict_result['id_card_no'] = acholder[0][11]
+    dict_result['passport_no'] = acholder[0][12]
+    dict_result['credit_card_no'] = acholder[0][13]
+
+    ph_no = []
+    for ph in acholder:
+        num = ph[9]
+        row = {'phone_no' : num}
+        ph_no.append(row)
+    dict_result['phone_nums'] = ph_no
+
+    return dict_result
 
 

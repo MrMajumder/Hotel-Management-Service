@@ -1,0 +1,123 @@
+{% extends 'starter.html' %}
+
+{% block title %} Room Form {% endblock %}
+
+{% block style %} {% endblock %}
+
+{%block navshows %}
+{%block navshow %}
+{% with login=login %} {{block.super}} {% endwith %}
+{%endblock navshow %}
+{%endblock navshows %}
+
+
+{% block body %}
+{% load static %}
+{% if ementry %}
+{% include 'modal.html' with user=user %}
+{% endif %}
+
+
+
+
+<div class="container text-center">
+    <img class="mt-2 mb-0" src="{% static 'img/logo.png' %}" alt="" width="200" height="200">
+
+    <h3 class="display-4 mb-5">
+        Room Entry Form
+    </h3>
+ 
+</div>
+
+<!--form section-->
+<form action='{{ HTTP_HOST }}/employee/roomentry/' method='post' class="needs-validation my-4 container" novalidate>
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="exampleFormControlSelect1">Room Type</label>
+            <select class="form-control" name="rtype" id="exampleFormControlSelect1">
+                <option>Family Suit</option>
+                <option>Executive Suit</option>
+                <option>Personal Suit</option> 
+            </select>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="validationCustom02">Rent</label>
+            <input type="number" class="form-control" min = '1000' name='rent' id="validationCustom02" maxlength="100" placeholder="RENT" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="validationCustom04">Floor No</label>
+            <input type="number" name='floor' min='0' class="form-control" maxlength="100" id="floor" required>
+            
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="validationCustom04">Building No</label>
+            <input type="number" name='building' min='0' class="form-control" maxlength="100" id="building" required>
+        </div>
+
+
+    </div>
+
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="validationCustom04">Capacity</label>
+            <input type="number" name='capa' min='1' class="form-control" maxlength="100" id="capa" required>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label for="validationCustom02">Number of Beds</label>
+            <input type="number" name='bed' min='1' class="form-control" maxlength="10" id="beds" required>
+
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Confirm Room Entry
+     </button>
+ 
+     <!-- Modal -->
+     <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header bg-warning">
+                     <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <div class="modal-body">
+                     This Action Can't Be Undone.
+                 </div>
+                 <div class="modal-footer container justify-content-center col-5">
+                     <button type="submit" class="btn btn-primary">YES</button>
+                     <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
+                     
+                 </div>
+             </div>
+         </div>
+     </div>
+</form>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

@@ -43,83 +43,76 @@
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/customer/complain/" class="text-light">Complain</a></td>
                         </tr>
-                        <!-- <tr>
-                            <td><a href="{{ HTTP_HOST }}/deletion/" class="text-light">Delete Your Account</a></td>
+
+                        {% else %}
+                        <tr>
+                            <td>
+                                <a href="{{ HTTP_HOST }}/employee/profile/{{user.user_id}}/"
+                                    class="text-light">Profile</a>
+                            </td>
+                        </tr>
+
+                        {% if user.role == "employee" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/servmanage/0/" class="text-light">Manage Services</a>
+                            </td>
                         </tr>
                         <tr>
-                            <td><a href="{{ HTTP_HOST }}/edition/" class="text-light">Edit Your Account</a></td>
-                        </tr> -->
+                            <td><a href="{{ HTTP_HOST }}/employee/workh/" class="text-light">Work History</a></td>
+                        </tr>
+                        {% endif %}
 
+                        {% if user.role == "manager" or user.role == "director" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/resmanage/0/" class="text-light">Reservation & Services Management</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/empmanage/0/" class="text-light">Employee Management</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            {%if user.ncount > 0 %}
+                                <td><a href="{{ HTTP_HOST }}/employee/complain/" class="text-danger font-weight-bold">Complaint Management</a>
+                                    <p class = "text-warning mb-0">[you have {{user.ncount}} new complain]</p>
+                                </td>
+                            {% else %}
+                                <td><a href="{{ HTTP_HOST }}/employee/complain/" class="text-light">Complaint Management</a>
+                                </td>
+                            {% endif %}
+                        </tr>
+
+                        {% if user.role == "manager" %}
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/expense/" class="text-light">Hotel expenses entry</a>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/eattend/" class="text-light">Employee Attendence</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/empsalary/" class="text-light">Salary Payment of
+                                    Employees</a></td>
+                        </tr> -->
+                        {% endif %}
+
+                        {% if user.role == "director" %}
+                        <!-- <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/fire/" class="text-light">Fire a Employee.</a></td>
+                        </tr> -->
+                        <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/hoteloverview/0/" class="text-light">Hotel Overview</a>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td><a href="{{ HTTP_HOST }}/employee/mansalary/" class="text-light">Salary Payment of Managers</a></td>
+                        </tr> -->
+                        {% endif %}
+                        {% endif %}
+                        {% endif %}
                     </tbody>
-                    {% else %}
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/profile/{{user.user_id}}/" class="text-light">Profile</a></td>
-                    </tr>
-                    {% if user.role == "director" or user.role == "manager" %}
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/resmanage/0/" class="text-light">Reservation Management</a>
-                        </td>
-                    </tr>
-                    {% endif %}
-                    {% if user.role == "manager" %}
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/expense/" class="text-light">Hotel expenses entry</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/eattend/" class="text-light">Employee Attendence</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/empsalary/" class="text-light">Salary Payment of
-                                Employees</a></td>
-                    </tr>
-                    {% endif %}
-                    {% if user.role == "employee" %}
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/servEx/" class="text-light">Service Executed</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/workh/" class="text-light">Work History</a></td>
-                    </tr>
-                    {% endif %}
-                    {% if user.role == "employee"%}
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/servmanage/0/" class="text-light">Services Management</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/edition/" class="text-light">Edit Your Account</a></td>
-                    </tr>
-                    {% endif %}
-                    {% if user.role == "manager" or user.role == "director" %}
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/signup/" class="text-light">Employee Registration</a></td>
-                    </tr>
-                    {% endif %}
-                    {% if user.role == "manager" or user.role == "director" %}
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/empmanage/" class="text-light">Managed Employees</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/empproedit/" class="text-light">Edit Employee Profile</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/edition/" class="text-light">Edit Your Account</a></td>
-                    </tr>
-                    {% endif %}
-                    {% if user.role == "director" %}
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/fire/" class="text-light">Fire a Employee.</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/hoteloverview/" class="text-light">Hotel Overview</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="{{ HTTP_HOST }}/employee/mansalary/" class="text-light">Salary Payment of
-                                Managers</a></td>
-                    </tr>
-                    {% endif %}
-                    </tbody>
-                    {% endif %}
+                    
                 </table>
             </div>
             <div class="modal-footer ">

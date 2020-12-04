@@ -16,14 +16,22 @@
 
 {% include 'modal.html' with user=user %}
 
+{% if exsuccess %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
 
+    <strong>Expense Entry Sucessfull.</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
 <div class="container text-center">
     <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="100" height="100">
     <h1 class="display-4 text-center">Hotel Expense Bill</h1>
 </div>
 
 <!--form section-->
-<form action='{{ HTTP_HOST }}/signsuccess/' method='post' class="needs-validation my-4 container" novalidate>
+<form action='{{ HTTP_HOST }}/employee/exentry/' method='post' class="needs-validation my-4 container" novalidate>
     {% csrf_token %}
 
 
@@ -31,9 +39,9 @@
 
         <div class="col-md-6 mb-6">
             <label for="exampleFormControlSelect1">Expense Type</label>
-            <select class="form-control" name="extype" id="exampleFormControlSelect1" required>
-                <option>FURNITURE</option>
-                <option>DAILY COMMODITIES</option>
+            <select class="form-control" name="extype" id="exoption" required>
+                <option>Furniture</option>
+                <option>Daily Commodities</option>
                 <option>BLA BLA </option>
                 <option>BLA BLA</option>
                 <option>BLA BLA</option>
@@ -41,7 +49,7 @@
         </div>
         <div class="col-md-6 mb-6">
             <label for="validationCustom101">Description</label>
-            <input type="text" name='edes' class="form-control" id="validationCustom100" required>
+            <input type="text" name='exdes' class="form-control" id="exdes" required>
 
         </div>
     </div>
@@ -49,12 +57,12 @@
     <div class="form-row">
         <div class="col-md-6 mb-5">
             <label for="validationCustom01">Cost</label>
-            <input type="text" name='cost' class="form-control" id="validationCustom101" required>
+            <input type="number" name='excost' min = "0" class="form-control" id="excost" required>
 
         </div>
         <div class="col-md-6 mb-5">
             <label for="validationCustom03">Bill Date</label>
-            <input type="date" min="{{mindate}}" max ="{{mindate}}"  name='bdate' class="form-control" id="validationCustom102" required>
+            <input type="date" min="{{mindate}}" max ="{{mindate}}"  name='exdate' class="form-control" id="exdate" required>
             <div class="invalid-feedback">
                 Please provide a valid date.
             </div>
