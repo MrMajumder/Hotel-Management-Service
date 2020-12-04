@@ -18,11 +18,11 @@ word-wrap: break-word;
 {% include 'modal.html' with user=user %}
 
 
-{% if fire %}
-<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-  <strong>Employee Firing Unsuccessful!</strong> The staff is not present in the employee list.
+{% if epsuccess %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+  <strong>Employee Profile Edir Successful.</strong>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
+      <span aria-hidden="true">&times;</span>
   </button>
 
 </div>

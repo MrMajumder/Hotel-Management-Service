@@ -27,16 +27,8 @@
         </div>
 
         <div class="col-8 container">
-            {% if sign %}
-            <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                <strong>Profile Edit Unsuccessful!</strong>Choosen Employee Doesn't Exist.
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-
-
-            </div>
-            {% else %}
+            
+            
             <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
                 <strong>Please fill up the form.</strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -44,13 +36,12 @@
                 </button>
 
             </div>
-            {% endif %}
 
 
 
             <h1 class="display-4">Edit Work Description of:</h1>
             <h2 class="lead text-center mb-4">{{data.name}} <i>(Employee ID: {{data.empid}})</i></h2>
-            <form action='#' method='post' class="needs-validation my-4" novalidate>
+            <form action='{{ HTTP_HOST }}/employee/empprochange/' method='post' class="needs-validation my-4" novalidate>
                 {% csrf_token %}
                 <div class="form-row ">
                     <div class="col-md-5 mb-3">
@@ -62,11 +53,11 @@
                     <div class="col-md-7 mb-3">
                         <label for="exampleFormControlSelect1">Change Position: <i class="text-secondary">(previous
                                 position: {{data.position}})</i></label>
-                        <select class="form-control" name="position" id="exampleFormControlSelect1">
-                            <option></option>
+                        <select class="form-control" name="poschange" id="exampleFormControlSelect1">
+                            <option>No change</option>
                             <option>Food Service</option>
                             <option>Laundry Service</option>
-                            <option>Accountant</option>
+                            <option>Cleaning Service</option>
                             <option>Manager</option>
                             <option>HE HE! BOLBO NA 😜</option>
                         </select>
@@ -75,21 +66,50 @@
                     <div class="col-md-5 mb-3">
                         <label for="validationCustom02">New Salary</label>
                         <input type="number" name='salary' placeholder="Previous Salary: {{data.prevsal}}"
-                            class="form-control" id="validationCustom116" required>
+                            class="form-control" id="validationCustom116" min = '0'>
                     </div>
 
                     <div class="col-md-12 mb-3">
                         <label for="validationCustom02">New Work Description</label>
-                        <input type="text" name='salary' placeholder="Previous description: {{data.workdesc}}"
-                            class="form-control" id="validationCustom116" required>
+                        <input type="text" name='workd' placeholder="Previous description: {{data.workdesc}}"
+                            class="form-control" id="validationCustom117" >
                     </div>
 
                 </div>
-                <button class="btn btn-primary my-3" type="submit">Confirm Change</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Confirm Change
+                </button>
+            
+                <!-- Modal -->
+                <div class="modal fade container justify-content-center col-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning">
+                                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                ...
+                            </div>
+                            <div class="modal-footer container justify-content-center col-5">
+                                <button type="submit" class="btn btn-primary">YES</button>
+                                <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
 </div>
+
+
+
+
+    
 
 
 <script>

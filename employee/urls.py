@@ -14,8 +14,13 @@ urlpatterns = [
     
     path('hoteloverview/', views.hoteloverview, name='emphoteloverview'),
     path('expense/', views.expense, name = 'hotelexpenses'),
+    path('exentry/', views.exentry, name = 'hotelexpenseentry'),
+    path('eattend/', views.eattend, name = 'employeeattendence'),
     path('fire/', views.fire, name = 'employeefire'),
     path('workh/', views.workh, name = 'workhistory'),
     path('servEx/', views.serveEx, name = 'serviceExecuted'),
-    
+    path('empsalary/', views.empsalary, name = 'employeesalary'),
+    path('empsalaryentry/', views.empsalaryentry, name = 'employeesalaryentry'),
+    path('empproedit/', views.eproedit, name = 'employeerprofileEdit'),
+    path('empprochange/', views.eprochange, name = 'employeerprofilechange'),
 ]
