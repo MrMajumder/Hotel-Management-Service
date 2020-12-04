@@ -186,8 +186,9 @@ def fcom(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     complain = request.POST.get('comp', 'default')
+    comtype = request.POST.get('ctype', 'default')
     cursor = connection.cursor()
-    cursor.callproc("NEW_COMPLAIN", [conf.user_id, complain])
+    cursor.callproc("NEW_COMPLAIN", [conf.user_id, complain, comtype])
     cursor.close()
     return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'comp' : True})
 

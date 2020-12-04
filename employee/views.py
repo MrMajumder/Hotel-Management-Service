@@ -171,7 +171,7 @@ def empmanage(request, mode, fire = None, esign = None):
 #This  part is untouched yet
 #---------------------------
 
-def hoteloverview(request, id):
+def hoteloverview(request, id, ent = None, delete = None):
     if(conf.login == False or conf.role == 'customer' or conf.role == 'employee' or id < 0 or id > 5):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     
@@ -263,14 +263,14 @@ def hoteloverview(request, id):
         sql = "SELECT A.BILL_ID, B.BILL_DATE, A.EXPENSE_TYPE, A.DESCRIPTION, A.USER_ID, B.COST FROM EXPENSES A, BILL B WHERE A.BILL_ID = B.BILL_ID"
         msg = "Showing results for expense records "
 
-        if(id == 3):
+        if(id == 5):
             billid = request.POST.get('billid', '')
             empid = request.POST.get('empid', '')
             date = request.POST.get('date', '')
             if(billid):
                 sql = sql + " AND A.BILL_ID = " + str(billid)
                 msg = msg + " and bill id : " + str(billid)
-            if(billid):
+            if(empid):
                 sql = sql + " AND A.USER_ID = " + str(empid)
                 msg = msg + " and employee id : " + str(empid)
             if(date):
@@ -302,7 +302,7 @@ def hoteloverview(request, id):
         data['totalcost'] = totalcost
         mode = 'expense'
 
-    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data, 'mode' : mode, 'msg' : msg})
+    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data, 'mode' : mode, 'msg' : msg, 'delete' : delete, 'ent' : ent})
 
 def expense(request):
     if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
@@ -354,8 +354,8 @@ def serveEx(request):
 def empsalaryentry(request):
     if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    empid = request.POST.get('id', '')
-    salary = request.POST.get('salary', '')
+    # empid = request.POST.get('id', '')
+    # salary = request.POST.get('salary', '')
     return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def eattend(request, empid):
@@ -410,7 +410,7 @@ def roomdelete(request, id):
     cursor = connection.cursor()
     cursor.callproc("ROOM_DELETE", [id])
     cursor.close()
-    return hoteloverview(request, 0)
+    return hoteloverview(request, 0, False, True)
 
 def roomform(request):
     if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
@@ -431,7 +431,41 @@ def roomentry(request):
     cursor = connection.cursor()
     cursor.callproc("ROOM_ENTRY", [build, floor, capacity, bed, rent, rtype])
     cursor.close()
-    return hoteloverview(request, 0)
+    return hoteloverview(request, 0, True, False)
+
+
+def comp(request, alert = None):
+    cursor = connection.cursor()
+    sql = "SELECT * FROM COMPLAIN WHERE CHECKK = 0"
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    cursor.close()
+
+    dict_result = []
+
+    for r in result:
+        comp_id = r[0]
+        cus_id = r[1]
+        complain = r[2]
+        comtype = r[3]
+        cdate = r[4]
+        row = {'comp_no': comp_id, 'cusid': cus_id, 'complain': complain, 'comtype' : comtype, 'compdate' : cdate}
+        dict_result.append(row)
+    
+
+    conf.ncount = len(dict_result)
+    dict_result = sorted(dict_result, key=lambda item: int(item['comp_no']))
+    return render(request, 'employee/complains.html', {'login' : conf.login, 'user' : conf.getuser(), 'complains' : dict_result, 'alert' : alert})
+
+def comresolve(request, id):
+    cursor = connection.cursor()
+    sql = ("UPDATE COMPLAIN SET CHECKK = 1 WHERE COMP_ID = %s" %int(id))
+    print(sql)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    return comp(request, True)
+
 
 
 def getemployeeworkinfo(empid):
