@@ -6,14 +6,14 @@ from datetime import datetime
 import time 
 
 # Create your views here.
-def profile(request, id):
+def profile(request, id, fire = None):
     if(conf.login == False or conf.role == 'customer'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
 
     id = int(id)
     dict_result = getemployeedata(id)
     
-    return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result})
+    return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result, 'fire' : fire})
 
 def resmanage(request, id):
     if(conf.login == False or conf.role == 'customer'  or conf.role == 'employee' or id > 1 or id < 0):
@@ -128,7 +128,7 @@ def servmanage(request, id, scancel = None):
 
     return render(request, 'service/allserv.html', {'login' : conf.login,'data' : data, 'msg' : msg,  'scancel': scancel, 'user' : conf.getuser()})
 
-def empmanage(request, mode):
+def empmanage(request, mode, fire = None, esign = None):
     if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or mode < 0 or mode > 1):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     
@@ -165,25 +165,153 @@ def empmanage(request, mode):
     
     dict_result = sorted(dict_result, key=lambda item: int(item['user_id']))
     
-    return render(request, 'employee/empmanage.html', {'login' : conf.login, 'employees': dict_result, 'msg' : msg, 'user' : conf.getuser()})
+    return render(request, 'employee/empmanage.html', {'login' : conf.login, 'employees': dict_result, 'msg' : msg, 'user' : conf.getuser(), 'fire' : fire, 'esign' : esign})
 
 #---------------------------
 #This  part is untouched yet
 #---------------------------
 
-def hoteloverview(request):
-    if(conf.login == False):
+def hoteloverview(request, id):
+    if(conf.login == False or conf.role == 'customer' or conf.role == 'employee' or id < 0 or id > 5):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser()})
+    
+    if(id < 2):     #rooms, id = 0: all, id = 1: query
+        sql = "SELECT ROOM_ID, ROOM_TYPE, CAPACITY, RESERVATION_ID FROM ROOM"
+        msg = "Showing results for rooms "
+        
+        if(id == 1):
+            roomtype = request.POST.get('roomtype', '')
+            vacancy = request.POST.get('vacancy', '')
+            if((roomtype and roomtype != 'All') or (vacancy and vacancy != 'All')):
+                sql = sql + " WHERE "
+                msg = msg + " where "
+            if(roomtype != 'All'):
+                sql = sql + " ROOM_TYPE = " + str("\'" + roomtype + "\'")
+                msg = msg + " room type : " + str(roomtype)
+            else:
+                msg = msg + "room type : All "
+            if((roomtype and roomtype != 'All') and (vacancy and vacancy != 'All')):
+                sql = sql + " AND "
+                msg = msg + " and "
+            if(vacancy == 'Vacant'):
+                sql = sql + " RESERVATION_ID IS NULL "
+                msg = msg + " room type : vacant "
+            elif(vacancy == "Not Vacant"):
+                sql = sql + " RESERVATION_ID IS NOT NULL "
+                msg = msg + " room type : not vacant " 
+            else:
+                msg = msg + "room type : All "
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        cursor.close()
+
+        data = []
+
+        for r in result:
+            room_id     = r[0]
+            rtype       = r[1]
+            capacity    = r[2]
+            vacant      = r[3]
+            row = {'room_id': room_id, 'type': rtype, 'capacity': capacity, 'isvacant' : vacant}
+            data.append(row)
+        
+        data = sorted(data, key=lambda item: int(item['room_id']))
+        mode = 'room'
+    elif(id < 4):   #income, id = 2: all, id = 3: query
+        sql = "SELECT A.BILL_ID, B.BILL_DATE, A.RESERVATION_ID, B.COST, A.DUE, (B.COST - A.DUE) FROM HOTEL_BILL A, BILL B WHERE A.BILL_ID = B.BILL_ID"
+        msg = "Showing results for income records "
+
+        if(id == 3):
+            billid = request.POST.get('billid', '')
+            date = request.POST.get('date', '')
+            msg = msg + " where "
+            if(billid):
+                sql = sql + " AND A.BILL_ID = " + str(billid)
+                msg = msg + "bill id : " + str(billid)
+            if(date):
+                sql = sql + " AND TRUNC(B.BILL_DATE) = TO_DATE(" + str("\'" + date + "\', 'YYYY-MM-DD') ")
+                msg = msg + " bill date = " + str("\"" + date + "\"")
+            
+        
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        cursor.close()
+
+        record = []
+        totalcost = 0
+
+        for r in result:
+            d = {}
+            d['billid'] = r[0]
+            d['date'] = r[1].date()
+            d['resid'] = r[2]
+            d['cost'] = r[3]
+            d['due'] = r[4]
+            d['income'] = r[5]
+            totalcost = totalcost + int(r[5])
+            record.append(d)
+        
+        record = sorted(record, key=lambda item: int(item['billid']))
+        data = {}
+        data['data'] = record
+        data['totalcost'] = totalcost
+        mode = 'income'
+    else:           #expense, id = 4: all, id = 5: query
+        sql = "SELECT A.BILL_ID, B.BILL_DATE, A.EXPENSE_TYPE, A.DESCRIPTION, A.USER_ID, B.COST FROM EXPENSES A, BILL B WHERE A.BILL_ID = B.BILL_ID"
+        msg = "Showing results for expense records "
+
+        if(id == 3):
+            billid = request.POST.get('billid', '')
+            empid = request.POST.get('empid', '')
+            date = request.POST.get('date', '')
+            if(billid):
+                sql = sql + " AND A.BILL_ID = " + str(billid)
+                msg = msg + " and bill id : " + str(billid)
+            if(billid):
+                sql = sql + " AND A.USER_ID = " + str(empid)
+                msg = msg + " and employee id : " + str(empid)
+            if(date):
+                sql = sql + " AND TRUNC(B.BILL_DATE) = TO_DATE(" + str("\'" + date + "\', 'YYYY-MM-DD') ")
+                msg = msg + " and bill date = " + str("\"" + date + "\"")
+        
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        cursor.close()
+
+        record = []
+        totalcost = 0
+
+        for r in result:
+            d = {}
+            d['billid'] = r[0]
+            d['date'] = r[1].date()
+            d['type'] = r[2]
+            d['desc'] = r[3]
+            d['uid'] = r[4]
+            d['cost'] = r[5]
+            totalcost = totalcost + int(r[5])
+            record.append(d)
+        
+        record = sorted(record, key=lambda item: int(item['billid']))
+        data = {}
+        data['data'] = record
+        data['totalcost'] = totalcost
+        mode = 'expense'
+
+    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data, 'mode' : mode, 'msg' : msg})
 
 def expense(request):
-    if(conf.login == False):
+    if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     return render(request, 'employee/expense.html', {'login' : conf.login, 'mindate':conf.today, 'user' : conf.getuser()})
 
 
 def exentry(request):
-    if(conf.login == False):
+    if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     extype = request.POST.get('extype', '')
     exdes = request.POST.get('exdes', 'default')
@@ -195,10 +323,18 @@ def exentry(request):
     return render(request, 'employee/expense.html', {'login' : conf.login, 'mindate':conf.today, 'user' : conf.getuser(), 'exsuccess' : True})
 
 
-def fire(request):
-    if(conf.login == False):
+def fire(request, id):
+    if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/fire.html', {'login' : conf.login, 'user' : conf.getuser()})
+    cursor = connection.cursor()
+    inputt = cursor.var(int).var
+    cursor.callproc("FIRE_EMPLOYEE", [id, inputt])
+    output = inputt.getvalue()
+    cursor.close()
+    if output == 1:
+        return empmanage(request, 0, True, False)
+    else:
+        return profile(request, int(id), True)
     
 
 def workh(request):
@@ -216,7 +352,7 @@ def serveEx(request):
 #---------------------------
 
 def empsalaryentry(request):
-    if(conf.login == False):
+    if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     empid = request.POST.get('id', '')
     salary = request.POST.get('salary', '')
@@ -265,8 +401,38 @@ def eproedit(request, empid):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     
     data = getemployeeworkinfo(empid)
-
     return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data})
+
+
+def roomdelete(request, id):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    cursor = connection.cursor()
+    cursor.callproc("ROOM_DELETE", [id])
+    cursor.close()
+    return hoteloverview(request, 0)
+
+def roomform(request):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'employee/roomform.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+
+def roomentry(request):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+    rtype = request.POST.get('rtype', '')
+    rent = request.POST.get('rent', '')
+    floor = request.POST.get('floor', '')
+    build = request.POST.get('building', '')
+    capacity = request.POST.get('capa', '')
+    bed = request.POST.get('bed', '')
+    cursor = connection.cursor()
+    cursor.callproc("ROOM_ENTRY", [build, floor, capacity, bed, rent, rtype])
+    cursor.close()
+    return hoteloverview(request, 0)
+
 
 def getemployeeworkinfo(empid):
     cursor = connection.cursor()
@@ -289,10 +455,8 @@ def getemployeedata(id):
     sql = ("SELECT * FROM ACCOUNT_HOLDER X, ACCOUNT_HOLDER_PHNUMBER Y, EMPLOYEE Z WHERE X.USER_ID=%s AND X.USER_ID = Y.USER_ID AND X.USER_ID = Z.USER_ID" % id)
     cursor.execute(sql)
     acholder = cursor.fetchall()
-
     cursor.close()
     dict_result = {} 
-    
     dict_result['user_id'] = acholder[0][0]
     dict_result['email'] = acholder[0][1]
     dict_result['name'] = acholder[0][2] + ' ' + acholder[0][3]

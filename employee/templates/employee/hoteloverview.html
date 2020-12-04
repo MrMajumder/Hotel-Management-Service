@@ -4,14 +4,304 @@
 
 {% block style %} {% endblock %}
 
+{%block navshows %}
 {%block navshow %}
 {% with login=login %} {{block.super}} {% endwith %}
 {%endblock navshow %}
+{%endblock navshows %}
+
 
 {% block body %}
 {% load static %}
 {% include 'modal.html' with user=user %}
 
-<h1>hotel overview</h1>directors can see total income, expense, etc of their hotel
+
+<div class="container-fluid my-4">
+
+    <div class="row">
+        <div class="col-3 d-flex flex-column">
+            <img src="{% if mode == 'room' %}{% static 'img/room.png' %}{% else %}{% static 'img/bill.png' %}{% endif %}" class="d-block mx-auto" width="150" height="150"
+                alt="reservation logo"><br />
+            <h1 class="display-4 text-center mb-4">
+                {% if mode == 'room' %}Room{% elif mode == 'income' %}Income{% else %}Expense{% endif %} List</h1>
+
+            {% if mode == 'room' %}
+            <button type="button" class="btn btn-success active mb-2">
+                <i>Currently viewing:</i> Room Management
+            </button>
+            <form class="form d-flex flex-column">
+                <a class="btn btn-primary text-white mb-4" role="button" href="{{ HTTP_HOST }}/employee/roomform/">
+                    New Room Entry
+                </a>
+            </form>
+            <div class="modal-footer container"></div>
+            {% else %}
+            <form class="form d-flex flex-column">
+                <a class="btn btn-primary text-white mb-2" role="button"
+                    href="{{ HTTP_HOST }}/employee/hoteloverview/0/">
+                    <i>Switch mode:</i> Room Management
+                </a>
+            </form>
+            {% endif %}
+
+            {% if mode == 'income' %}
+            <button type="button" class="btn btn-success active mb-2">
+                <i>Currently viewing:</i> Income
+            </button>
+            {% else %}
+            <form class="form d-flex flex-column">
+                <a class="btn btn-primary text-white mb-2" role="button"
+                    href="{{ HTTP_HOST }}/employee/hoteloverview/2/">
+                    <i>Switch mode:</i> Income
+                </a>
+            </form>
+            {% endif %}
+
+            {% if mode == 'expense' %}
+            <button type="button" class="btn btn-success active mb-2">
+                <i>Currently viewing:</i> Expenses
+            </button>
+            {% else %}
+            <form class="form d-flex flex-column">
+                <a class="btn btn-primary text-white mb-2" role="button"
+                    href="{{ HTTP_HOST }}/employee/hoteloverview/4/">
+                    <i>Switch mode:</i> Expenses
+                </a>
+            </form>
+            {% endif %}
+
+            <p class="mt-5 text-center"><b><u><i>Filters:</i></u></b></p>
+
+            {% if mode == 'room' %}
+
+            <form action="{{ HTTP_HOST }}/employee/hoteloverview/1/" method='post'
+                class="needs-validation my-4 container" novalidate>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <label for="restype">Room Type</label>
+                        <select class="form-control" name="roomtype" id="roomtype">
+                            <option>All</option>
+                            <option>Family Suit</option>
+                            <option>Personal Suit</option>
+                            <option>Executive Suit</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="restype">Room Type</label>
+                        <select class="form-control" name="vacancy" id="vacancy">
+                            <option>All</option>
+                            <option>Vacant</option>
+                            <option>Not Vacant</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary mx-auto my-2 " type="submit">Search</button>
+                </div>
+
+            </form>
+
+            {% elif mode == 'income' %}
+
+            <form action="{{ HTTP_HOST }}/employee/hoteloverview/3/" method='post'
+                class="needs-validation my-4 container" novalidate>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-12 my-3">
+                        <label for="validationCustom02">Bill ID</label>
+                        <input type="number" name='billid' placeholder="Ex: 1001" class="form-control"
+                            id="validationCustom116" min='0'>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="datearr">Date of Bill</label>
+                        <input type="date" name="date" class="form-control" id="date" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid date.
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary mx-auto my-2 " type="submit">Search</button>
+                </div>
+
+            </form>
+
+            {% else %}
+
+            <form action="{{ HTTP_HOST }}/employee/hoteloverview/5/" method='post'
+                class="needs-validation my-4 container" novalidate>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-6 my-3">
+                        <label for="validationCustom02">Bill ID</label>
+                        <input type="number" name='billid' placeholder="Ex: 1001" class="form-control"
+                            id="validationCustom116" min='0'>
+                    </div>
+
+                    <div class="col-6 my-3">
+                        <label for="validationCustom02">Employee ID</label>
+                        <input type="number" name='empid' placeholder="Ex: 10001" class="form-control"
+                            id="validationCustom116" min='0'>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="datearr">Date of Bill</label>
+                        <input type="date" name="date" class="form-control" id="date" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid date.
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary mx-auto my-2 " type="submit">Search</button>
+                </div>
+
+            </form>
+
+            {% endif %}
+
+
+
+        </div>
+        <div class="col-8 container">
+            <p class="display-4">List of All
+                {% if mode == 'room' %}Rooms{% elif mode == 'income' %}Incomes{% else %}Expenses{% endif %}</p>
+            <p><i class="text-secondary">{{msg}}</i></p>
+            <table class="table table-hover table-striped table-bordered w-20">
+
+                {% if mode == 'room' %}
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="5">Rooms Found: {{data|length}}</th>
+                    </tr>
+                </thead>
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row">Room ID</th>
+                        <th scope="row">Room Type</th>
+                        <th scope="row">Capacity</th>
+                        <th scope="row">Vacancy</th>
+                        <th scope="row">Overview</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% if data|length > 0 %}
+                    {% for room in data %}
+                    <tr>
+                        <td>{{room.room_id}}</td>
+                        <td>{{room.type}}</td>
+                        <td>{{room.capacity}}</td>
+                        <td class="text-center table-{% if room.isvacant %}danger{% else %}success{% endif %}">
+                            {% if room.isvacant %}Not Vacant
+                            {% else %}Vacant
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <form class="form-inline">
+                                <a class="btn btn-primary text-white mx-auto" role="button"
+                                    href="{{ HTTP_HOST }}/room/{{room.room_id}}/">
+                                    View Details
+                                </a>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr class="text-center">
+                        <td colspan="5"> <i class="text-secondary">No rooms found</i></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+
+
+                {% elif mode == 'income' %}
+
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="6">Income Records Found: {{data.data|length}}</th>
+                    </tr>
+                </thead>
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row">Bill ID</th>
+                        <th scope="row">Date Created</th>
+                        <th scope="row">Reservation ID</th>
+                        <th scope="row">Cost</th>
+                        <th scope="row">Due</th>
+                        <th scope="row">Income</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% if data.data|length > 0 %}
+                    {% for r in data.data %}
+                    <tr>
+                        <td>{{r.billid}}</td>
+                        <td>{{r.date}}</td>
+                        <td>{{r.resid}}</td>
+                        <td>{{r.cost}}</td>
+                        <td>{{r.due}}</td>
+                        <td>{{r.income}}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="text-center">
+                        <td colspan="5"> <b>Total Income</b></td>
+                        <td colspan="1"> <b>{{data.totalcost}}</b></td>
+                    </tr>
+                    {% else %}
+                    <tr class="text-center">
+                        <td colspan="6"> <i class="text-secondary">No Income Record Found</i></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+
+
+                {% else %}
+
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="6">Expense Records Found: {{data.data|length}}</th>
+                    </tr>
+                </thead>
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row">Bill ID</th>
+                        <th scope="row">Date Created</th>
+                        <th scope="row">Type</th>
+                        <th scope="row">Description</th>
+                        <th scope="row">Employee ID Accountable</th>
+                        <th scope="row">Expense</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% if data.data|length > 0 %}
+                    {% for r in data.data %}
+                    <tr>
+                        <td>{{r.billid}}</td>
+                        <td>{{r.date}}</td>
+                        <td>{{r.type}}</td>
+                        <td>{{r.desc}}</td>
+                        <td>{{r.uid}}</td>
+                        <td>{{r.cost}}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="text-center">
+                        <td colspan="5"> <b>Total Income</b></td>
+                        <td colspan="1"> <b>{{data.totalcost}}</b></td>
+                    </tr>
+                    {% else %}
+                    <tr class="text-center">
+                        <td colspan="6"> <i class="text-secondary">No Income Record Found</i></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}

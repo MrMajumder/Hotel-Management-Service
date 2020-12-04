@@ -4,6 +4,7 @@ from django.db import connection
 from hms import conf
 from hms import hashing
 from hms import funcs
+from employee import views
 from datetime import datetime
 
 
@@ -310,7 +311,7 @@ def newinsert1(request):
             cursor.callproc("NEW_PH_NUMBER_INSERT", [int(s)])
         cursor.close()
         if(conf.role == 'manager' or conf.role == 'director'):
-            return render(request, 'index.html', {'login': conf.login, 'esign': True, 'user': conf.getuser()})
+            return views.empmanage(request, 0, False, True)
         return render(request, 'index.html', {'login': conf.login, 'sign': True, 'user': conf.getuser()})
 
     return render(request, 'signup.html', {'login': conf.login, 'sign': False, 'user': conf.getuser()})
