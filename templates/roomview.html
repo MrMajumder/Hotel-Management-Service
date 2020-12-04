@@ -27,8 +27,16 @@
             <button type="button" class="btn btn-success mb-3">
                 Vacant &#10004;
             </button>
-
+            {% if user.role == "director" %}
+            <div class="modal-footer container ">
+                <button type="button" class="btn btn-danger mx-auto my-2" data-toggle="modal" data-target="#firemodal">
+                    Delete the Room
+                </button>
+              </div>
             {% endif %}
+            {% endif %}
+           
+
         </div>
         <div class="container col-8">
             <p class="display-4 my-2">Room Information</p>
@@ -97,5 +105,32 @@
         </div>
     </div>
 </div>
+
+<form action='{{ HTTP_HOST }}/employee/roomdelete{{room.roomid}}/' method='post' class="needs-validation my-4 container" novalidate>
+    {% csrf_token %}
+    <div class="modal fade container justify-content-center col-3 " id="firemodal" tabindex="-1"
+      aria-labelledby="firemodallabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header  bg-warning">
+            <h5 class="modal-title " id="firemodallabel">Are you sure?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <b>Delete This Room :</b> <br>
+            Room ID: {{room.roomid}} <br>
+            Room Type : {{room.type}} <br>
+           
+          </div>
+          <div class="modal-footer container ">
+            <button type="submit" class="btn btn-danger">Delete This Room</button>
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 
 {% endblock %}

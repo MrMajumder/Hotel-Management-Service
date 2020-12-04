@@ -170,7 +170,23 @@ def empmanage(request, mode):
 def hoteloverview(request):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser()})
+    sql = "SELECT ROOM_ID, ROOM_TYPE, CAPACITY FROM ROOM"
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    cursor.close()
+
+    dict_result = []
+
+    for r in result:
+        room_id = r[0]
+        rtype = r[1]
+        capacity = r[2]
+        row = {'room_id': room_id, 'type': rtype, 'capacity': capacity}
+        dict_result.append(row)
+    
+    dict_result = sorted(dict_result, key=lambda item: int(item['room_id']))
+    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser(), 'rooms' : dict_result})
 
 def expense(request):
     if(conf.login == False):
@@ -191,10 +207,19 @@ def exentry(request):
     return render(request, 'employee/expense.html', {'login' : conf.login, 'mindate':conf.today, 'user' : conf.getuser(), 'exsuccess' : True})
 
 
-def fire(request):
+def fire(request, id):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/fire.html', {'login' : conf.login, 'user' : conf.getuser()})
+    cursor = connection.cursor()
+    inputt = cursor.var(int).var
+    cursor.callproc("FIRE_EMPLOYEE", [id, inputt])
+    output = inputt.getvalue()
+    cursor.close()
+    if output == 1:
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'fire' : True})
+    else:
+        dict_result = getemployeedata(int(id))
+        return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result, 'fire' : True})
     
 
 def workh(request):
@@ -259,8 +284,38 @@ def eproedit(request, empid):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     
     data = getemployeeworkinfo(empid)
-
     return render(request, 'employee/empedit.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data})
+
+
+def roomdelete(request, id):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    cursor = connection.cursor()
+    cursor.callproc("ROOM_DELETE", [id])
+    cursor.close()
+    return hoteloverview(request)
+
+def roomform(request):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+    return render(request, 'employee/roomform.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+
+def roomentry(request):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+    rtype = request.POST.get('rtype', '')
+    rent = request.POST.get('rent', '')
+    floor = request.POST.get('floor', '')
+    build = request.POST.get('building', '')
+    capacity = request.POST.get('capa', '')
+    bed = request.POST.get('bed', '')
+    cursor = connection.cursor()
+    cursor.callproc("ROOM_ENTRY", [build, floor, capacity, bed, rent, rtype])
+    cursor.close()
+    return hoteloverview(request)
+
 
 def getemployeeworkinfo(empid):
     cursor = connection.cursor()
@@ -283,10 +338,8 @@ def getemployeedata(id):
     sql = ("SELECT * FROM ACCOUNT_HOLDER X, ACCOUNT_HOLDER_PHNUMBER Y, EMPLOYEE Z WHERE X.USER_ID=%s AND X.USER_ID = Y.USER_ID AND X.USER_ID = Z.USER_ID" % id)
     cursor.execute(sql)
     acholder = cursor.fetchall()
-
     cursor.close()
     dict_result = {} 
-    
     dict_result['user_id'] = acholder[0][0]
     dict_result['email'] = acholder[0][1]
     dict_result['name'] = acholder[0][2] + ' ' + acholder[0][3]

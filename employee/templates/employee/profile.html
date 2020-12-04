@@ -20,7 +20,15 @@ word-wrap: break-word;
 
 {% if epsuccess %}
 <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
-  <strong>Employee Profile Edir Successful.</strong>
+  <strong>Employee Profile Edit Successful.</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+  </button>
+
+</div>
+{% elif fire %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+  <strong>Employee Firing Unsuccessful.</strong> The employee may be engaged in a work now.
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
   </button>
@@ -28,7 +36,7 @@ word-wrap: break-word;
 </div>
 {% endif %}
 
-<form action='#' method='post' class="needs-validation my-4 container" novalidate>
+<form action='{{ HTTP_HOST }}/employee/fire{{allval.user_id}}/' method='post' class="needs-validation my-4 container" novalidate>
   {% csrf_token %}
   <div class="modal fade container justify-content-center col-3 " id="firemodal" tabindex="-1"
     aria-labelledby="firemodallabel" aria-hidden="true">
