@@ -38,7 +38,7 @@ def cr_reserve(request):
     DDate = (str("\'"+ddate+"\'"))
     
     cursor = connection.cursor()
-    sql = ("SELECT ROOM_ID, CAPACITY, ROOM_TYPE, RENT FROM ROOM WHERE ROOM_ID NOT IN (SELECT B.ROOM_ID FROM BOOKED_ROOMS B, RESERVATION R WHERE R.RESERVATION_ID = B.RESERVATION_ID AND ROOM_SEARCH(B.ROOM_ID, %s, %s) <> %s AND (R.RESERVATION_ACTIVE = %s OR R.RESERVATION_ACTIVE = %s))" % (ADate, DDate, 1, 0, 1))
+    sql = ("SELECT ROOM_ID, CAPACITY, ROOM_TYPE, RENT FROM ROOM WHERE ROOM_ID NOT IN (SELECT B.ROOM_ID FROM BOOKED_ROOMS B, RESERVATION R WHERE R.RESERVATION_ID = B.RESERVATION_ID AND ROOM_SEARCH(B.ROOM_ID, %s, %s) <> %s AND (R.RESERVATION_ACTIVE = %s OR R.RESERVATION_ACTIVE = %s))ORDER BY ROOM_ID" % (ADate, DDate, 1, 0, 1))
     if roomt != "":
         e = (str("\'"+roomt+"\'"))
         sql = sql + " AND ROOM_TYPE = " + e
