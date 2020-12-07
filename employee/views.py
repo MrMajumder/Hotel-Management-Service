@@ -171,7 +171,7 @@ def empmanage(request, mode, fire = None, esign = None):
 #This  part is untouched yet
 #---------------------------
 
-def hoteloverview(request, id, ent = None, delete = None):
+def hoteloverview(request, id, ent = None, delete = None, update = None):
     if(conf.login == False or conf.role == 'customer' or conf.role == 'employee' or id < 0 or id > 5):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     
@@ -302,7 +302,7 @@ def hoteloverview(request, id, ent = None, delete = None):
         data['totalcost'] = totalcost
         mode = 'expense'
 
-    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data, 'mode' : mode, 'msg' : msg, 'delete' : delete, 'ent' : ent})
+    return render(request, 'employee/hoteloverview.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data, 'mode' : mode, 'msg' : msg, 'delete' : delete, 'ent' : ent, 'update':update})
 
 def expense(request):
     if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
@@ -351,12 +351,6 @@ def serveEx(request):
 #This bottom part is updated
 #---------------------------
 
-def empsalaryentry(request):
-    if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    # empid = request.POST.get('id', '')
-    # salary = request.POST.get('salary', '')
-    return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser()})
 
 def eattend(request, empid):
     if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
@@ -366,12 +360,19 @@ def eattend(request, empid):
 
     return render(request, 'employee/eattend.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data})
 
-def empsalary(request, empid):
+def empsalary(request, id):
     if(conf.login == False or conf.role == 'customer' or conf.role == 'employee'):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    
-    data = getemployeeworkinfo(empid)
-    return render(request, 'employee/salary.html', {'login' : conf.login, 'user' : conf.getuser(), 'data' : data})
+
+    cursor = connection.cursor()
+    out = cursor.var(int).var
+    cursor.callproc("SALARY_PAY", [conf.user_id, id, out])
+    output = out.getvalue()
+    cursor.close()
+    id = int(id)
+    dict_result = getemployeedata(id)
+    return render(request, 'employee/profile.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result, 'fire' : fire, 'output' : output})
+   
 
 def eprochange(request, id):
     if(conf.login == False):
@@ -410,7 +411,7 @@ def roomdelete(request, id):
     cursor = connection.cursor()
     cursor.callproc("ROOM_DELETE", [id])
     cursor.close()
-    return hoteloverview(request, 0, False, True)
+    return hoteloverview(request, 0, False, True, False)
 
 def roomform(request):
     if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
@@ -428,15 +429,26 @@ def roomentry(request):
     build = request.POST.get('building', '')
     capacity = request.POST.get('capa', '')
     bed = request.POST.get('bed', '')
+    ac = request.POST.get('ac','')
     cursor = connection.cursor()
-    cursor.callproc("ROOM_ENTRY", [build, floor, capacity, bed, rent, rtype])
+    cursor.callproc("ROOM_ENTRY", [build, floor, capacity, bed, rent, rtype, ac])
     cursor.close()
-    return hoteloverview(request, 0, True, False)
+    return hoteloverview(request, 0, True, False, False)
 
 
-def comp(request, alert = None):
+def comp(request, id, alert = None):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' ):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     cursor = connection.cursor()
     sql = "SELECT * FROM COMPLAIN WHERE CHECKK = 0"
+
+    if(id == 1):
+        comtype = request.POST.get('comtype', '')
+        if(comtype != 'All'):
+            comtype = (str("\'"+comtype+"\'"))
+            sql = sql + (" AND COMPTYPE = %s" % comtype)
+
+    print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
@@ -459,6 +471,8 @@ def comp(request, alert = None):
     return render(request, 'employee/complains.html', {'login' : conf.login, 'user' : conf.getuser(), 'complains' : dict_result, 'alert' : alert})
 
 def comresolve(request, id):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee'):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     cursor = connection.cursor()
     sql = ("UPDATE COMPLAIN SET CHECKK = 1 WHERE COMP_ID = %s" %int(id))
     print(sql)
@@ -466,6 +480,22 @@ def comresolve(request, id):
     cursor.execute(sql)
     return comp(request, True)
 
+
+def updateroom(request, id):
+    if(conf.login == False  or conf.role == 'customer' or conf.role == 'employee' or conf.role == 'manager'):
+        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
+
+
+    rtype = request.POST.get('roomtype', '')
+    capacity = request.POST.get('capacity', '')
+    air = request.POST.get('air', '')
+    bed = request.POST.get('bed', '')
+    rent = request.POST.get('rent', '')
+    cursor = connection.cursor()
+    cursor.callproc("UPDATE_ROOM", [int(id), rtype, capacity, air, bed, rent])
+    cursor.close()
+    return hoteloverview(request, 0, False, False, True)
+    
 
 
 def getemployeeworkinfo(empid):

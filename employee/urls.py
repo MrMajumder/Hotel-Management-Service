@@ -20,10 +20,11 @@ urlpatterns = [
     path('fire<int:id>/', views.fire, name = 'employeefire'),
     path('workh/', views.workh, name = 'workhistory'),
     path('servEx/', views.serveEx, name = 'serviceExecuted'),
-    path('empsalary/', views.empsalary, name = 'employeesalary'),
-    path('empsalaryentry/', views.empsalaryentry, name = 'employeesalaryentry'),
+    path('empsalary<int:id>/', views.empsalary, name = 'employeesalary'),
     path('empproedit/', views.eproedit, name = 'employeerprofileEdit'),
     path('empprochange/<int:id>/', views.eprochange, name = 'employeerprofilechange'),
-    path('complain/', views.comp, name = 'complains'),
+    path('complain<int:id>/', views.comp, name = 'complains'),
     path('comresolve<int:id>/', views.comresolve, name = 'complainsresolve'),
+    path('updateroom<int:id>/', views.updateroom, name = 'updateroom'),
+
 ]

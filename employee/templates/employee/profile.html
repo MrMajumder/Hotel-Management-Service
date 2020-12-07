@@ -22,21 +22,39 @@ word-wrap: break-word;
 <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
   <strong>Employee Profile Edit Successful.</strong>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
+    <span aria-hidden="true">&times;</span>
   </button>
 
 </div>
+
 {% elif fire %}
 <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
   <strong>Employee Firing Unsuccessful.</strong> The employee may be engaged in a work now.
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
+    <span aria-hidden="true">&times;</span>
+  </button>
+
+</div>
+{% elif output == 0 %}
+<div class="alert alert-warning alert-dismissible fade show mb-0" role="alert">
+  <strong>Salary is already paid.</strong> 
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+
+</div>
+{% elif output == 1 %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+  <strong>Salary Payment Successful.</strong> 
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
   </button>
 
 </div>
 {% endif %}
 
-<form action='{{ HTTP_HOST }}/employee/fire{{allval.user_id}}/' method='post' class="needs-validation my-4 container" novalidate>
+<form action='{{ HTTP_HOST }}/employee/fire{{allval.user_id}}/' method='post' class="needs-validation my-4 container"
+  novalidate>
   {% csrf_token %}
   <div class="modal fade container justify-content-center col-3 " id="firemodal" tabindex="-1"
     aria-labelledby="firemodallabel" aria-hidden="true">
@@ -82,11 +100,33 @@ word-wrap: break-word;
           Edit Work Details
         </a>
       </form>
-      <form class="form d-flex flex-column">
-        <a class="btn btn-primary text-white my-2" role="button"
-          href="{{ HTTP_HOST }}/employee/empsalary/{{allval.user_id}}/">
+      <form action="{{ HTTP_HOST }}/employee/empsalary{{allval.user_id}}/" class="form d-flex flex-column">
+        <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#salary">
           Salary Payment
-        </a>
+        </button>
+        <div class="modal fade container justify-content-center col-3 " id="salary" tabindex="-1"
+          aria-labelledby="firemodallabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header  bg-warning">
+                <h5 class="modal-title " id="firemodallabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <b>Fire This Employee :</b> <br>
+                Employee ID: {{allval.user_id}} <br>
+                Employee Name : {{allval.name}} <br>
+                Employee Position: {{allval.position}}
+              </div>
+              <div class="modal-footer container ">
+                <button type="submit" class="btn btn-primary">Pay salary for this month</button>
+                <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </form>
       <form class="form d-flex flex-column">
         <a class="btn btn-primary text-white my-2" role="button"

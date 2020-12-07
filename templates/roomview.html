@@ -12,6 +12,174 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
+{%if user.role == "director" %}
+
+<form action='{{ HTTP_HOST }}/employee/updateroom{{room.roomid}}/' method='post' class="needs-validation my-4 container" novalidate>
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3 d-flex flex-column">
+                <img src="{% static 'img/room.png' %}" class="d-block mx-auto my-4" width="150" height="150"
+                    alt="username"><br />
+                <p class="text text-center display-4">Room {{room.roomid}}: Details</p>
+                {% if room.reservation_id %}
+                <button type="button" class="btn btn-danger my-3">
+                    Not Vacant &#10060;
+                </button>
+                {% else %}
+                <button type="button" class="btn btn-success my-3">
+                    Vacant &#10004;
+                </button>
+                {% if user.role == "director" %}
+                <button type="button" class="btn btn-danger mb-3" data-toggle="modal" data-target="#firemodal">
+                    Delete the Room
+                </button>
+                {% endif %}
+                {% endif %}
+
+
+            </div>
+            <div class="container col-8">
+                <p class="display-4 my-2">Room Information</p>
+                <table class="table table-hover table-striped table-bordered w-20">
+                    <thead class="thead-dark text-center">
+                        <tr>
+                            <th scope="row" colspan="5">Basic Information</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" colspan="2">Room ID</th>
+                            <td>{{room.roomid}}</td>
+                            <td>
+                                UNCHANGEABLE
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <th scope="row" colspan="2">Room Type</th>
+                            <td>{{room.type}}</td>
+                            <td>
+                                <select class="form-control" placeholder="change room type" name="roomtype"
+                                    id="roomtype1">
+                                    <option selected  value="">No Change/Change Type</option>
+                                    <option>Family Suit</option>
+                                    <option>Personal Suit</option>
+                                    <option>Executive Suit</option>
+                                </select></td>
+
+                        </tr>
+
+                        <tr>
+                            <th scope="row" colspan="2">Capacity</th>
+                            <td>{{room.capacity}} people(s)</td>
+                            <td>
+
+                                <input type="number" name='capacity' class="form-control" placeholder="change capacity"
+                                    id="capacity1">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row" colspan="2">Air Conditioned</th>
+                            <td>{% if room.ac == 1 %}Yes{% else %}No{% endif %}</td>
+                            <td>
+                                <select class="form-control" name="air" placeholder="change it" id="air">
+                                    <option selected  value="">No Change/Change Type</option>
+                                    <option>AC</option>
+                                    <option>NON_AC</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row" colspan="2">Number of Beds</th>
+                            <td>{{room.bed_no}}</td>
+                            <td>
+                                <input type="number" name='bed' placeholder="change number of beds"
+                                    class="form-control" id="bed1">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row" colspan="2">Rent</th>
+                            <td>TK. {{room.rent}}</td>
+                            <td>
+                                <input type="number" name='rent' placeholder="change rent" class="form-control"
+                                    id="rent1" >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row" colspan="2">Reservation ID</th>
+                            <td>{% if room.reservation_id %}{{room.reservation_id}}{% else %}<i
+                                    class="text-secondary">none
+                                    associated</i>{% endif %}</td>
+                            <td>
+                                ....
+                            </td>
+                        </tr>
+
+                    </tbody>
+                    <thead class="thead-dark text-center">
+                        <tr>
+                            <th scope="row" colspan="5">Location of Room</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" colspan="2">Floor</th>
+                            <td>{{room.floor}}</td>
+                            <td>
+                                UNCHANGEABLE
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row" colspan="2">Building</th>
+                            <td>{{room.building}}</td>
+                            <td>
+                                UNCHANGEABLE
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Update Changes
+                </button>
+            
+                <!-- Modal -->
+                <div class="modal fade container justify-content-center col-3 " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header  bg-warning">
+                                <h5 class="modal-title " id="exampleModalLabel">Are you sure?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                ...
+                            </div>
+                            <div class="modal-footer container justify-content-center col-5">
+                                <button type="submit" class="btn btn-primary">YES</button>
+                                <button type="submit" class="btn btn-secondary" data-dismiss="modal">NO</button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+
+{% else %}
 
 <div class="container-fluid">
     <div class="row">
@@ -103,6 +271,9 @@
         </div>
     </div>
 </div>
+
+{% endif %}
+
 
 <form action='{{ HTTP_HOST }}/employee/roomdelete{{room.roomid}}/' method='post' class="needs-validation my-4 container"
     novalidate>

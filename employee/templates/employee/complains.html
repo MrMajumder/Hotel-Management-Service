@@ -27,7 +27,27 @@
             <img src="{% static 'img/complaint.png' %}" class="d-block mx-auto" width="150" height="150"
                 alt="reservation logo"><br />
             <h1 class="display-4 text-center mb-4">Complain List</h1>
+            <form action="{{ HTTP_HOST }}/employee/complain{{1}}/" method='post'
+                class="needs-validation my-4 container" novalidate>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <label for="restype">Complain Type</label>
+                        <select class="form-control" name="comtype" id="comtype1">
+                            <option>All</option>
+                            <option>Reservation</option>
+                            <option>Service</option>
+                            <option>Employee</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary mx-auto my-2 " type="submit">Search</button>
+                </div>
+
+            </form>
         </div>
+        
         {% if complains|length > 0 %}
         <div class="col-8 container">
             <p class="display-4">List of All Complains</p>
