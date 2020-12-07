@@ -55,7 +55,7 @@
             <div class="nav flex-column nav-pills text-right" id="v-pills-tab" role="tablist"
                 aria-orientation="vertical">
                 <a class="nav-link {%if sprob or rprob %}{% else %}active{% endif %}" id="actrestab" data-toggle="pill"
-                    href="#actres" role="tab" aria-controls="actres" aria-selected="true">Pending Services</a>
+                    href="#actres" role="tab" aria-controls="actres" aria-selected="true">Pending/Completed Services</a>
                 <a class="nav-link {%if sprob or rprob %} active{% else %}{% endif %}" id="crerestab" data-toggle="pill"
                     href="#creres" role="tab" aria-controls="creres" aria-selected="false">Create New Service</a>
             </div>
@@ -65,20 +65,22 @@
             <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade {%if sprob or rprob %}{% else %}show active{% endif %}" id="actres"
                     role="tabpanel" aria-labelledby="actrestab">
-                    <h4>Pending Services: <h5 class="display-4 text-left mb-4">{{data|length}}</h5>
+                    <h4>Pending/Completed Services: <h5 class="display-4 text-left mb-4">{{data|length}}</h5>
                     </h4>
 
-                    <div class="row">
+                    <div class="card-deck row">
                         {% for ser in data %}
                         <div class="col-4">
                             <div
                                 class="card border-{% if ser.isactive == 1 %}primary{% elif ser.isactive == 2 %}danger{% else %}success{% endif %} mb-3">
                                 <div class="card-header font-weight-bold">
-                                    Service : {{ser.servid}}
+                                    Service : {{ser.name}}
                                 </div>
+                                <img class="card-img-top mx-auto" src="{% if ser.name == 'Food Service'%}{% static 'img/food.jpg' %}{% elif ser.name == 'Cleaning Service' %}{% static 'img/cleaing.jpg' %}{% else %}{% static 'img/laundry.jpg' %}{% endif %}" alt="reservation" >
                                 <div class="card-body">
                                     <p class="card-text text-justify">
                                         <b>Service Name:</b> {{ser.name}}<br>
+                                        <!-- <b>Description:</b> {{ser.desc}} <br> -->
                                         <b>Delivered To Room:</b> {{ser.roomid}}<br>
                                         <b>Under Reservation ID:</b> {{ser.resid}}<br>
                                     </p>

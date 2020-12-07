@@ -58,7 +58,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/workh/" class="text-light">Work History</a></td>
+                            <td><a href="{{ HTTP_HOST }}/employee/workh/0/" class="text-light">Work History</a></td>
                         </tr>
                         {% endif %}
 
@@ -87,27 +87,16 @@
                             <td><a href="{{ HTTP_HOST }}/employee/expense/" class="text-light">Hotel expenses entry</a>
                             </td>
                         </tr>
-                        <!-- <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/eattend/" class="text-light">Employee Attendence</a>
-                            </td>
-                        </tr>
                         <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/empsalary/" class="text-light">Salary Payment of
-                                    Employees</a></td>
-                        </tr> -->
+                            <td><a href="{{ HTTP_HOST }}/employee/workh/0/" class="text-light">Work History</a></td>
+                        </tr>
                         {% endif %}
 
                         {% if user.role == "director" %}
-                        <!-- <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/fire/" class="text-light">Fire a Employee.</a></td>
-                        </tr> -->
                         <tr>
                             <td><a href="{{ HTTP_HOST }}/employee/hoteloverview/0/" class="text-light">Hotel Overview</a>
                             </td>
                         </tr>
-                        <!-- <tr>
-                            <td><a href="{{ HTTP_HOST }}/employee/mansalary/" class="text-light">Salary Payment of Managers</a></td>
-                        </tr> -->
                         {% endif %}
                         {% endif %}
                         {% endif %}

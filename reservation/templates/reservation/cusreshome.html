@@ -2,7 +2,13 @@
 
 {% block title %} Reservations Management {% endblock %}
 
-{% block style %} {% endblock %}
+{% block style %}
+.card-img-top {
+    width: 25%;
+    height: 5vw;
+    object-fit: cover;
+}
+{% endblock %}
 
 {%block navshow %}
 {% with login=login %} {{block.super}} {% endwith %}
@@ -48,7 +54,7 @@
                 aria-orientation="vertical">
                 <a class="nav-link {%if prob.guest or prob.room or prob.date %}{% else %} active{% endif %}"
                     id="actrestab" data-toggle="pill" href="#actres" role="tab" aria-controls="actres"
-                    aria-selected="true">Active Reservations</a>
+                    aria-selected="true">Active/Pending Reservations</a>
                 <a class="nav-link {%if prob.guest or prob.room or prob.date %}active{% else %}{% endif %}"
                     id="crerestab" data-toggle="pill" href="#creres" role="tab" aria-controls="creres"
                     aria-selected="false">Create Reservation</a>
@@ -59,10 +65,10 @@
             <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade {%if prob.guest or prob.room or prob.date %}{% else %}show active{% endif %}"
                     id="actres" role="tabpanel" aria-labelledby="actrestab">
-                    <h4>Active Reservations: <h5 class="display-4 text-left mb-4">{{data|length}}</h5>
+                    <h4>Active/Pending Reservations: <h5 class="display-4 text-left mb-4">{{data|length}}</h5>
                     </h4>
 
-                    <div class="row">
+                    <div class="card-deck row">
                         {% for res in data %}
                         <div class="col-4">
                             <div
@@ -70,8 +76,9 @@
                                 <div class="card-header font-weight-bold">
                                     Reservation : {{res.resid}}
                                 </div>
+                                <img class="card-img-top mx-auto my-2" src="{% if res.isactive == 0%}{% static 'img/pending.png' %}{% else %}{% static 'img/reslogo.png' %}{% endif %}" alt="reservation" height="50">
                                 <div class="card-body">
-                                    <p class="card-text text-justify">
+                                    <p class="card-text text-justify text-{% if res.isactive == 0%}dark{% else %}success{% endif %}">
                                         <b>Reservation ID:</b> {{res.resid}} <br>
                                         <b>Arrival Date:</b> {{res.arrivaldate}} <br>
                                         <b>Depart Date:</b> {{res.departuredate}} <br>
