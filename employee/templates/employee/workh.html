@@ -12,6 +12,89 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
-<h1>Work History</h1>this is a Work History page....
+<div class="container-fluid my-4">
+
+    <div class="row">
+        <div class="col-3 d-flex flex-column">
+            <img src="{% static 'img/serlogo.png' %}" class="d-block mx-auto" width="150" height="150"
+                alt="service logo"><br />
+            
+            <h1 class="display-4 text-center mb-4">Salary History</h1>
+
+            <p class="mt-5 text-center"><b><u><i>Filters:</i></u></b></p>
+            
+            <form action="{{ HTTP_HOST }}/employee/workh/1/"
+                method='post' class="needs-validation my-4 container" novalidate>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-md-7 mb-3">
+                        <label for="exampleFormControlSelect1">Select Month</label>
+                        <select class="form-control" name="month" id="exampleFormControlSelect1">
+                            <option></option>
+                            <option>January</option>
+                            <option>February</option>
+                            <option>March</option>
+                            <option>April</option>
+                            <option>May</option>
+                            <option>June</option>
+                            <option>July</option>
+                            <option>August</option>
+                            <option>September</option>
+                            <option>October</option>
+                            <option>November</option>
+                            <option>December</option>
+                        </select>
+                    </div>
+                    <div class="col-12 my-3">
+                        <label for="validationCustom02">Year</label>
+                        <input type="number" name='year' placeholder="Ex: 2020"
+                            class="form-control" id="validationCustom116" min = '0'>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary mx-auto my-2 " type="submit">Search</button>
+                </div>
+                
+            </form>
+        </div>
+        <div class="col-8 container">
+            <p class="display-4">List of All Salary Payments</p>
+            <p><i class="text-secondary">{{msg}}</i></p>
+            <table class="table table-hover table-striped table-bordered w-20">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row" colspan="3">Salary Records found: {{data.data|length}}</th>
+                    </tr>
+                </thead>
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="row">Month</th>
+                        <th scope="row">Year</th>
+                        <th scope="row">Received Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if data.data|length == 0 %}
+                    <tr class=" text-center">
+                        <td colspan="3"><i class="text-secondary">No Records To Show</i></td>
+                    </tr>
+                    {% else %}
+                    {% for sal in data.data %}
+                    <tr>
+                        <td class="text-center">{{sal.month}}</td>
+                        <td class="text-center">{{sal.year}}</td>
+                        <td class="text-center">{{sal.salary}}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="text-center">
+                        <td colspan="2"> <b>Total Income</b></td>
+                        <td colspan="1"> <b>{{data.totalcost}}</b></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

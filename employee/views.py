@@ -337,10 +337,45 @@ def fire(request, id):
         return profile(request, int(id), True)
     
 
-def workh(request):
-    if(conf.login == False):
+def workh(request, id):
+    if(conf.login == False or conf.role == 'customer' or id < 0 or id > 1):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
-    return render(request, 'employee/workh.html', {'login' : conf.login, 'user' : conf.getuser()})
+    
+    
+    sql = "SELECT * FROM WORK_HISTORY WHERE USER_ID = " + str(conf.user_id)
+    msg = "Showing results for salary records "
+    
+    if(id == 1):
+        month = request.POST.get('month', '')
+        year = request.POST.get('year', '')
+        if(month or year):
+            if(month):
+                sql = sql + " AND MONTH = " + str("\'" + month + "\'")
+                msg = msg + " , month : " + str(month)
+            if(year):
+                sql = sql + " AND YEAR = " + str("\'" + year + "\'")
+                msg = msg + " , year : " + str(year)
+
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    cursor.close()
+    dic = {}
+    data = []
+    totalcost = 0
+
+    for r in result:
+        month       = r[1]
+        year        = r[2]
+        salary      = r[3]
+        row = {'month': month, 'year': year, 'salary': salary}
+        totalcost = totalcost + int(r[3])
+        data.append(row)
+    
+    data = sorted(data, key=lambda item: int(item['room_id']))
+    dic['data'] = data
+    dic['totalcost'] = totalcost
+    return render(request, 'employee/workh.html', {'login' : conf.login, 'data' : data, 'msg' : msg, 'user' : conf.getuser()})
 
 def serveEx(request):
     if(conf.login == False):
