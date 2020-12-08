@@ -128,12 +128,12 @@ word-wrap: break-word;
           </div>
         </div>
       </form>
-      <form class="form d-flex flex-column">
+      <!-- <form class="form d-flex flex-column">
         <a class="btn btn-primary text-white my-2" role="button"
           href="{{ HTTP_HOST }}/employee/eattend/{{allval.user_id}}/">
           Employee Attendance
         </a>
-      </form>
+      </form> -->
       {% if user.role == 'director' %}
       <button type="button" class="btn btn-danger my-2" data-toggle="modal" data-target="#firemodal">
         Fire This Employee
