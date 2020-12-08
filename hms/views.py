@@ -322,7 +322,8 @@ def newinsert1(request):
         if(conf.role == 'manager' or conf.role == 'director'):
             return views.empmanage(request, 0, False, True)
         return render(request, 'index.html', {'login': conf.login, 'sign': True, 'user': conf.getuser()})
-
+    if(conf.role == 'manager' or conf.role == 'director'):
+        return render(request, 'signup.html', {'login': conf.login, 'user': conf.getuser(), 'ementry': True, 'empu': True})
     return render(request, 'signup.html', {'login': conf.login, 'sign': False, 'user': conf.getuser()})
 
 

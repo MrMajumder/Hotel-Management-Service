@@ -33,6 +33,14 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
+{% elif empu %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+
+    <strong>Employee Registration Unsuccessful.</strong>Please recheck the password or other details.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 {% else %}
 <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
     <strong>Signup Unsuccessful!</strong> Please recheck your password.
