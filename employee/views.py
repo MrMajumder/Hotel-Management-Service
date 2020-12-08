@@ -4,6 +4,7 @@ from django.db import connection
 from hms import conf
 from datetime import datetime
 import time 
+from hms import views
 
 # Create your views here.
 def profile(request, id, fire = None):
@@ -26,7 +27,7 @@ def resmanage(request, id):
         depdate = request.POST.get('depdate', '')
         restype = request.POST.get('restype', '')
 
-        if(arrdate or depdate or restype):
+        if(arrdate or depdate or (restype and restype != 'All')):
             msg = msg + " with"
             sql = sql + " WHERE "
             if(arrdate):
@@ -372,10 +373,9 @@ def workh(request, id):
         totalcost = totalcost + int(r[3])
         data.append(row)
     
-    data = sorted(data, key=lambda item: int(item['room_id']))
     dic['data'] = data
     dic['totalcost'] = totalcost
-    return render(request, 'employee/workh.html', {'login' : conf.login, 'data' : data, 'msg' : msg, 'user' : conf.getuser()})
+    return render(request, 'employee/workh.html', {'login' : conf.login, 'data' : dic, 'msg' : msg, 'user' : conf.getuser()})
 
 def serveEx(request):
     if(conf.login == False):
@@ -501,7 +501,7 @@ def comp(request, id, alert = None):
         dict_result.append(row)
     
 
-    conf.ncount = len(dict_result)
+    
     dict_result = sorted(dict_result, key=lambda item: int(item['comp_no']))
     return render(request, 'employee/complains.html', {'login' : conf.login, 'user' : conf.getuser(), 'complains' : dict_result, 'alert' : alert})
 
@@ -513,6 +513,7 @@ def comresolve(request, id):
     print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
+    conf.ncount -= 1
     return comp(request, True)
 
 
@@ -529,7 +530,7 @@ def updateroom(request, id):
     cursor = connection.cursor()
     cursor.callproc("UPDATE_ROOM", [int(id), rtype, capacity, air, bed, rent])
     cursor.close()
-    return hoteloverview(request, 0, False, False, True)
+    return views.roomdetails(request, int(id), True)
     
 
 

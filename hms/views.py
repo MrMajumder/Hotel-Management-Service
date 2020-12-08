@@ -6,6 +6,7 @@ from hms import hashing
 from hms import funcs
 from employee import views
 from datetime import datetime
+from customer import views as cusview
 
 
 def index(request):
@@ -37,7 +38,7 @@ def login(request):
     else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-def roomdetails(request, id):
+def roomdetails(request, id, update=None):
     if(conf.login == False):
         return render(request, 'login.html', {'login': conf.login, 'alerttoggle': True, 'user': conf.getuser()})
 
@@ -57,7 +58,7 @@ def roomdetails(request, id):
     room['reservation_id'] = row[0][7]
     room['type'] = row[0][8]
 
-    return render(request, 'roomview.html', {'login': conf.login, 'alerttoggle': True, 'room' : room, 'user': conf.getuser()})
+    return render(request, 'roomview.html', {'login': conf.login, 'alerttoggle': True, 'room' : room, 'user': conf.getuser(), 'update' : update})
 
 def logout(request):
     if(conf.login):
@@ -130,7 +131,7 @@ def cdelete(request):
             conf.login = False
             conf.user_id = conf.username = conf.name = conf.email = conf.role = ''
         return render(request, 'index.html', {'login': conf.login, 'user': conf.getuser(), 'delete' : True})
-    return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'employee' : False, 'deleteu': True}) 
+    return cusview.index(request, True)
 
 def edit(request, uid):
     if(conf.login == False):

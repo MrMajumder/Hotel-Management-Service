@@ -10,6 +10,17 @@
 {% load static %}
 {% include 'modal.html' with user=user %}
 
+{% if deleteu %}
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+  <strong>Account Deletion Unsuccessful!!</strong> Please clear all your reservations.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+
+
+
 <form action='{{ HTTP_HOST }}/delete/' method='post' class="needs-validation" novalidate>
   {% csrf_token %}
   <div class="modal fade container justify-content-center col-3" id="delmodal" tabindex="-1"

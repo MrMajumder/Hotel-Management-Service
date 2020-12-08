@@ -103,7 +103,9 @@ def canreserv(request, id):
     suc = order_count.getvalue()
     cursor.close()
     if suc == 1:
-        return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser(), 'rcancel': True})
+        data = getallres()
+        return render(request, 'reservation/cusreshome.html', {'login' : conf.login, 'data' : data, 'mindate' : conf.today, 'date': True, 'user' : conf.getuser(), 'rcancel' : True})
+        
     
     res = getres(id)
 
@@ -153,7 +155,7 @@ def getres(id):
 def getallres():
     id = int(conf.user_id)
     cursor = connection.cursor()
-    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE IN (0, 1, 2, 3)" % id)
+    sql = ("SELECT * FROM RESERVATION WHERE USER_ID=%s AND RESERVATION_ACTIVE IN (0, 1)" % id)
     cursor.execute(sql)
     table = cursor.fetchall()
     cursor.close()

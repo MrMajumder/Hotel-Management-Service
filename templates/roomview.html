@@ -14,7 +14,16 @@
 
 {%if user.role == "director" %}
 
-<form action='{{ HTTP_HOST }}/employee/updateroom{{room.roomid}}/' method='post' class="needs-validation my-4 container" novalidate>
+
+{% if update %}
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <strong>Room Updated Successfully!</strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+<form action='{{ HTTP_HOST }}/employee/updateroom{{room.roomid}}/' method='post' class="needs-validation" novalidate>
     {% csrf_token %}
     <div class="container-fluid">
         <div class="row">
@@ -162,7 +171,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                ...
+                                Are you sure you want to update this room info?
                             </div>
                             <div class="modal-footer container justify-content-center col-5">
                                 <button type="submit" class="btn btn-primary">YES</button>

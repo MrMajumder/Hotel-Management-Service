@@ -5,14 +5,14 @@ from hms import conf
 import time
 from datetime import datetime
 # Create your views here.
-def index(request):
+def index(request, delete = None):
     if(conf.login == False):
         return render(request, 'index.html', {'login' : conf.login, 'user' : conf.getuser()})
     
     id = int(conf.user_id)
     dict_result = getcustomerdata(id)
 
-    return render(request, 'customer/index.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result})
+    return render(request, 'customer/index.html', {'login' : conf.login, 'user' : conf.getuser(), 'allval' : dict_result, 'deleteu' : delete})
 
 def res(request):
     if(conf.login == False):
