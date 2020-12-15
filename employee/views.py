@@ -372,7 +372,7 @@ def workh(request, id):
         row = {'month': month, 'year': year, 'salary': salary}
         totalcost = totalcost + int(r[3])
         data.append(row)
-    
+    data = sorted(data, key=lambda x: (datetime.strptime(x['month'][:3], '%b'), x['year']))
     dic['data'] = data
     dic['totalcost'] = totalcost
     return render(request, 'employee/workh.html', {'login' : conf.login, 'data' : dic, 'msg' : msg, 'user' : conf.getuser()})
