@@ -514,7 +514,7 @@ def comresolve(request, id):
     cursor = connection.cursor()
     cursor.execute(sql)
     conf.ncount -= 1
-    return comp(request, True)
+    return comp(request, 0, True)
 
 
 def updateroom(request, id):
